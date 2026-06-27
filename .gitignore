@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+/admin/config/config_prod.php
+/config/database_prod.php
+/data
+/legacy_rcslopes

@@ -1,0 +1,302 @@
+/* ==========================================================================
+   RC Slopes — Interface d'administration
+   Styles complémentaires à Bootstrap 5.3
+   ========================================================================== */
+
+:root {
+  --rcs-sidebar-width: 260px;
+  --rcs-topbar-height: 56px;
+  --rcs-dark: #1a1a1a;
+  --rcs-dark-2: #232323;
+  --rcs-accent: #0d6efd;
+}
+
+body {
+  background-color: #f4f5f7;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layout général : topbar fixe + sidebar fixe + contenu                  */
+/* ---------------------------------------------------------------------- */
+
+.rcs-topbar {
+  height: var(--rcs-topbar-height);
+  background-color: var(--rcs-dark);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.rcs-topbar .navbar-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.rcs-layout {
+  display: flex;
+  min-height: calc(100vh - var(--rcs-topbar-height));
+}
+
+.rcs-sidebar {
+  width: var(--rcs-sidebar-width);
+  flex-shrink: 0;
+  background-color: var(--rcs-dark-2);
+  min-height: calc(100vh - var(--rcs-topbar-height));
+  transition: margin-left 0.25s ease;
+}
+
+.rcs-sidebar .nav-link {
+  color: #c9c9c9;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.rcs-sidebar .nav-link i {
+  font-size: 1.05rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.rcs-sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.rcs-sidebar .nav-link.active {
+  background-color: var(--rcs-accent);
+  color: #fff;
+}
+
+.rcs-sidebar .nav-section-title {
+  color: #777;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.8rem 0.9rem 0.3rem;
+}
+
+.rcs-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sidebar responsive : repliable en off-canvas sous le breakpoint lg     */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  .rcs-layout {
+    position: relative;
+  }
+
+  .rcs-sidebar {
+    position: fixed;
+    top: var(--rcs-topbar-height);
+    left: 0;
+    bottom: 0;
+    z-index: 1040;
+    margin-left: calc(-1 * var(--rcs-sidebar-width));
+    overflow-y: auto;
+  }
+
+  .rcs-sidebar.is-open {
+    margin-left: 0;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .rcs-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: var(--rcs-topbar-height) 0 0 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1035;
+  }
+
+  .rcs-sidebar-backdrop.is-open {
+    display: block;
+  }
+
+  .rcs-content {
+    padding: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Cartes / tableaux                                                      */
+/* ---------------------------------------------------------------------- */
+
+.rcs-card {
+  background: #fff;
+  border-radius: 0.6rem;
+  border: 1px solid #e7e8ec;
+}
+
+.table-responsive-wrapper {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #e7e8ec;
+}
+
+.rcs-table thead th {
+  background-color: #f8f9fb;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  border-bottom-width: 1px;
+  white-space: nowrap;
+}
+
+.rcs-table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.rcs-table-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.rcs-badge-role-admin {
+  background-color: #6f42c1;
+}
+
+.rcs-badge-role-editor {
+  background-color: #0d6efd;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Galerie d'images                                                       */
+/* ---------------------------------------------------------------------- */
+
+.rcs-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.rcs-image-card {
+  border: 1px solid #e7e8ec;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+}
+
+.rcs-image-card .rcs-image-thumb {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: #f1f1f1;
+  display: block;
+}
+
+.rcs-image-card .rcs-image-meta {
+  padding: 0.5rem 0.6rem;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.rcs-image-card .rcs-image-actions {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.rcs-image-card .rcs-image-actions .btn {
+  --bs-btn-padding-y: 0.2rem;
+  --bs-btn-padding-x: 0.45rem;
+  font-size: 0.8rem;
+}
+
+.rcs-image-dropzone {
+  border: 2px dashed #c7c9d1;
+  border-radius: 0.6rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #6c757d;
+  background: #fafbfc;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.rcs-image-dropzone.is-dragover {
+  border-color: var(--rcs-accent);
+  background-color: #eef5ff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Login                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.rcs-login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #1a1a1a 0%, #2b2b2b 100%);
+  padding: 1rem;
+}
+
+.rcs-login-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.rcs-login-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+/* ---------------------------------------------------------------------- */
+/* TinyMCE : ajustements pour cohérence visuelle avec Bootstrap           */
+/* ---------------------------------------------------------------------- */
+
+.tox-tinymce {
+  border-radius: 0.4rem !important;
+  border-color: #ced4da !important;
+}
+
+.is-invalid + .tox-tinymce {
+  border-color: #dc3545 !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Divers                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.rcs-required::after {
+  content: " *";
+  color: #dc3545;
+}
+
+.rcs-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #6c757d;
+}
+
+.rcs-empty-state i {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+  color: #c7c9d1;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,155 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #map {
+    height: 100%;
+    width: 100vw;
+}
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f1923;
+    color: #e8edf2;
+    /*height: 100dvh;*/
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0px 20px;
+    background: #162130;
+    border-bottom: 1px solid #1e3048;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+header svg { flex-shrink: 0; }
+
+header h1 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    color: #7ecfff;
+}
+
+header p {
+    font-size: .78rem;
+    color: #6b8aaa;
+    margin-top: 1px;
+}
+
+#map {
+    flex: 1;
+    width: 100%;
+}
+
+/* Petit badge "loading" */
+#status {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15,25,35,.85);
+    color: #7ecfff;
+    font-size: .75rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity .4s;
+}
+#status.hidden { opacity: 0; }
+
+
+.slp_name { font-family: arial; font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+.slp_attr { font-family: arial; font-size: 14px; font-weight: 700; margin-top: 5px; width: 100%; }
+.slp_desc { font-family: arial; font-size: 12px; font-weight: 300; width: 100%; }
+.leaflet-popup-close-button { display: none; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { border: 5px; background: rgba(0, 0, 0, 0.7); color: white; font-size: 15px; font-weight: 700; padding: 5px; }
+.leaflet-popup-tip { background: rgb(131, 220, 26); }
+.slopeDet { font-size: 0px; }
+.slp_btn { border-radius: 5px; border: medium; color: rgb(170, 170, 170); background: rgb(221, 221, 221); width: 120px; text-align: center; padding: 5px; }
+.slp_btn:hover { background: rgb(68, 68, 68); color: rgb(221, 221, 221); font-weight: 700; }
+.capitalize { display: inline; text-transform: capitalize; }
+.rosace { position: relative; }
+.ros_child { position: absolute; top: 0px; }
+.ros_dir { left: 0px; width: 150px; z-index: 10; }
+.ros_cntr { position: absolute; top: 0px; left: 0px; width: 150px; z-index: 11; }
+.addOrient { width: 100%; border: medium; font-size: 10px; color: rgb(170, 170, 170); text-align: center; background: none; }
+.sector { position: relative; }
+.sec_child { position: absolute; top: 0px; }
+.sec_dir { left: 0px; width: 300px; z-index: 10; }
+.sec_cntr { position: absolute; top: 0px; left: 0px; width: 300px; z-index: 11; }
+.btn_route { background: darkred; color: white; border: medium; height: 35px; border-radius: 5px; padding: 5px 10px; font-size: 11px; }
+.btn_edit { background: rgb(15, 81, 131); color: white; height: 35px; border: medium; border-radius: 5px; padding: 5px 10px; font-size: 11px; }
+.fp_form { width: 100px; border-radius: 5px; border: 1px solid rgb(169, 169, 169); }
+.fp_attr { font-size: 10px; }
+.maphelph5 { font-weight: 600; color: rgb(15, 81, 131); margin-top: 20px; }
+
+.windsector {
+    fill: none;
+    stroke-width: 2;
+}
+
+
+.wind-legend {
+    width: 100%;
+    margin-left: auto;
+    height: 40px;
+}
+
+.wind-header {
+    margin-left: auto;
+    height: 40px;
+}
+
+.gauge-container {
+    position: relative;
+    height: 20px;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.gauge-segment {
+    flex: 1;
+    height: 100%;
+}
+
+.other-element {
+    /* background: #e0e0e0; */
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 11px;
+    color: white;
+    font-weight: 500;
+    height: 16px;
+    line-height: 16px;
+}
+
+/* Media query pour écrans >= 768px */
+@media (min-width: 768px) {
+    .wind-legend {
+        width: 50%;
+    }
+}
+
+.sidebar-content {
+    color: #0f1923;
+}
+
+.leaflet-sidebar-header {
+    color: white;
+    font-size: 14px;
+}
+
+.leaflet-sidebar-close {
+    color: red;
+}

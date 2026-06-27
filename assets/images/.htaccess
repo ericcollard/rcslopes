@@ -1,0 +1,18 @@
+# Empêche toute exécution de script dans le répertoire d'images,
+# même si un fichier malveillant parvenait à y être déposé.
+<FilesMatch "\.(php|php\d|phtml|pl|py|cgi|sh|asp|aspx)$">
+    Require all denied
+</FilesMatch>
+
+# Désactive également l'exécution PHP via le moteur lui-même (double protection, Apache+mod_php).
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+Options -ExecCGI -Indexes

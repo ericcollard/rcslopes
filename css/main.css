@@ -1,0 +1,197 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+}
+
+/* Empêche tout scroll sur la page */
+.rc-body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* La navbar garde sa hauteur naturelle */
+.rc-navbar {
+    flex-shrink: 0;
+
+}
+
+.site-name {
+    color: #7ecfff;
+    margin: 0;
+    position: relative;
+}
+
+.site-by {
+    font-size: 0.5rem;
+    position: absolute;
+    right: 0;
+    top:1.5rem;
+}
+
+/* Le bloc principal prend tout l'espace restant */
+.rc-main {
+    flex: 1 1 auto;
+    min-height: 0; /* indispensable pour que flex respecte la hauteur dispo */
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- Logo --- */
+.rc-logo {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+}
+
+@media (max-width: 991.98px) {
+    .rc-logo {
+        width: 40px;
+        height: 30px;
+    }
+}
+
+/* Sur mobile, le menu déplié s'aligne à droite */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* aligne tout le contenu à droite */
+    }
+
+    .navbar-nav {
+        align-items: flex-end; /* aligne chaque item de la liste à droite */
+        width: auto;
+    }
+
+    .navbar-nav .nav-item {
+        text-align: right;
+    }
+
+    /* Le formulaire de recherche mobile (dans le collapse) garde une largeur raisonnable */
+    .navbar-nav .rc-search-input {
+        width: 200px;
+    }
+}
+
+
+
+.rc-search-icon {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+}
+
+#map {
+    position: relative;
+    height: 100%;
+    width: 100%;  /* This means "100% of the width of its container", the .col-md-8 */
+}
+
+svg {
+    width: 60px;
+    height: 60px;
+}
+
+.wind-legend {
+    width: 100%;
+    margin-left: auto;
+    height: 40px;
+}
+
+.gauge-container {
+    position: relative;
+    height: 20px;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.gauge-segment {
+    flex: 1;
+    height: 100%;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 11px;
+    color: black;
+    font-weight: 500;
+    height: 16px;
+    line-height: 16px;
+}
+
+.modal { z-index: 1300; }
+.modal-backdrop { z-index: 1290; }
+
+
+#markerModal h1, #markerModal h2, #markerModal h3, #markerModal h4, #markerModal h5, #markerModal h6 {
+    color: #7ecfff;
+}
+
+#markerModal h1 {
+    font-size: 1.8rem !important;
+}
+
+#markerModal h2 {
+    font-size: 1.6rem !important;
+}
+
+#markerModal h3 {
+    font-size: 1.4rem !important;
+}
+#markerModal h5 {
+    font-size: 1.2rem !important;
+}
+
+#markerModal h6 {
+    font-size: 1.0rem !important;
+}
+
+#markerModalLabel .label {
+    font-size: 1rem;
+}
+
+.slope-forecast {
+    font-size: 0.5rem;
+}
+
+.slope-forecast svg {
+    width: 20px;
+    height: 20px;
+}
+
+.rc-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 1050;
+}
+
+.rc-search-dropdown .dropdown-item {
+    cursor: pointer;
+    white-space: normal;
+}
+
+.rc-search-dropdown .dropdown-item.active,
+.rc-search-dropdown .dropdown-item:hover {
+    background-color: var(--bs-dropdown-link-hover-bg, #f8f9fa);
+}
+
+.rc-search-dropdown .rc-search-empty,
+.rc-search-dropdown .rc-search-loading {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}

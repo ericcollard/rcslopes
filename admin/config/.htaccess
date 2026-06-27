@@ -1,0 +1,3 @@
+# Interdit l'accès direct à ce répertoire et son contenu depuis le navigateur.
+# Ces fichiers ne doivent être que require/include depuis du PHP, jamais ouverts en URL.
+Require all denied
