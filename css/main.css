@@ -195,3 +195,37 @@ svg {
     font-size: 0.875rem;
     color: #6c757d;
 }
+
+
+.leaflet-popup-content-wrapper , .leaflet-popup-tip{
+    background-color: rgb(0 0 0 / 80%) !important;
+    color: white;
+}
+.leaflet-popup-content-wrapper p {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.4rem;
+}
+
+.leaflet-popup-content h2 {
+    color: #7ecfff;
+    font-size: 1.2rem;
+}
+
+.leaflet-popup-close-button {
+    color: white!important;
+}
+
+p.leaflet-popup-meanwind {
+    color: lawngreen;
+}
+
+p.leaflet-popup-minmaxwind {
+    color: coral;
+    text-align: center;
+    width: 100%;
+}
+
+p.leaflet-popup-date {
+
+}

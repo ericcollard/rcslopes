@@ -1,16 +1,4 @@
 
-function feedModalBySlope(slopeId) {
-    fetch('/api/slopes/desc/'+slopeId)
-        .then(r => r.ok ? r.json() : null)
-        .then(json => {
-            if (!json?.data?.title) return;
-            document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
-            document.getElementById("markerModalBody").innerHTML= json.data.html;
-        })
-        .catch(() => {});
-
-}
-
 // Instance Bootstrap réutilisable
 const markerModalEl = document.getElementById('markerModal');
 const markerModal = new bootstrap.Modal(markerModalEl);
@@ -135,8 +123,13 @@ fetch('/api/slopes')
                 if (type == "meteo") {
                     marker = L.marker([lat, lng], {icon: meteo_pnt})   //,  zIndexOffset: -500
                         .addTo(windLayerGroup);
-                    marker.bindPopup(name +"("+slopeId+")<div class='slopeDet'>|"+slopeId+"|"+lat+"|"+lng+"|</div>");
+                    //marker.bindPopup(name +"("+slopeId+")<div class='slopeDet'>|"+slopeId+"|"+lat+"|"+lng+"|</div>");
 
+                    marker.on('click', function () {
+                        feedModalBySlope(slopeId);
+                        markerModal.show();
+                    });
+                    /*
                     marker.on('click', function () {
                         // Ouvre la barre latérale
                         //sidebar.open("home");
@@ -148,6 +141,8 @@ fetch('/api/slopes')
                         // Ferme le popup pour ne pas afficher son contenu
                         this.closePopup();
                     });
+
+                     */
 
                     marker.on('mouseover',function(ev){
                         ev.target.openPopup();
@@ -197,9 +192,7 @@ fetch('/api/stations')
 
                 var wind_measurement_date_ts = wind_measurement_date.getTime();
                 offset = (currentTimestamp - wind_measurement_date_ts)/1000;
-                // console.log(offset);
 
-                //console.log(wind_measurement_date,wind_measurement_date_ts, lastUpdateTs, lastUpdate);
                 if (wind_measurement_date_ts > lastUpdateTs)
                 {
                     lastUpdateTs = wind_measurement_date_ts;
@@ -222,7 +215,7 @@ fetch('/api/stations')
             if (offset < 7000)
             {
                 // on n'affiche le vent que si la mesure date de moins de 2h
-                var svgIcon =generateWindDirectionSVG(wind_heading,wind_speed_avg);
+                var svgIcon = generateWindDirectionSVG(wind_heading,wind_speed_avg);
                 // Encoder le SVG en Data URI
                 var svgUrl = 'data:image/svg+xml;base64,' + btoa(svgIcon);
 
@@ -235,9 +228,11 @@ fetch('/api/stations')
                 });
 
                 const popup = `
-                <strong style="color:#7ecfff">Station Windbird #${station_id}</strong><br>
-                <small>Vent (km/h)  (min)-Moyen-(max) : (${wind_speed_min})-${wind_speed_avg}-(${wind_speed_max})</small><br>
-                <small>Date : ${wind_measurement_date}</small>
+                <h2>Station Windbird #${station_id}</h2>
+                <hr>
+                <p class="leaflet-popup-meanwind">Vent moyen : ${wind_speed_avg} km/h</p>
+                <p class="leaflet-popup-minmaxwind">( Mini: ${wind_speed_min}   -   Maxi : ${wind_speed_max} )</p>
+                <p class="leaflet-popup-date">Date : ${wind_measurement_date}</p>
                 `;
 
                 marker = L.marker([latitude, longitude], {icon: wind_pnt, zIndexOffset: 1000})

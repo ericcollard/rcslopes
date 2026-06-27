@@ -1,3 +1,15 @@
+function feedModalBySlope(slopeId) {
+    fetch('/api/slopes/desc/'+slopeId)
+        .then(r => r.ok ? r.json() : null)
+        .then(json => {
+            if (!json?.data?.title) return;
+            document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
+            document.getElementById("markerModalBody").innerHTML= json.data.html;
+        })
+        .catch(() => {});
+
+}
+
 function generateWindRoseSVG(sectors) {
     // Définition des 16 secteurs de la rose des vents dans l'ordre horaire (secteur 1 = N en haut)
     const allSectors = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
