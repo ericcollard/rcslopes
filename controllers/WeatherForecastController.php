@@ -7,7 +7,6 @@ namespace controllers;
 require_once __DIR__ . '/../models/WeatherForecast.php';
 require_once __DIR__ . '/../helpers/OpenMeteoHelper.php';
 require_once __DIR__ . '/../helpers/CacheHelper.php';
-// require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../controllers/SlopeController.php';
 
 

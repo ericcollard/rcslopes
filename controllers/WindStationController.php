@@ -10,13 +10,17 @@ require_once __DIR__ . '/../helpers/response.php';
 require_once __DIR__ . '/../helpers/CacheHelper.php';
 require_once __DIR__ . '/../helpers/PioupiouHelper.php';
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/config.php';
+//require_once __DIR__ . '/../config/config.php';
 
 use Exception;
 use models\WindStation;
 use helpers\CacheHelper;
 use helpers\PioupiouHelper;
 use function jsonResponse;
+
+define('PIOUPIOU_API_URL', 'http://api.pioupiou.fr/v1/live-with-meta/all');
+define('CACHE_DURATION', 300); // Duration in seconds (toutes les 5 minutes)
+
 
 class WindStationController
 {

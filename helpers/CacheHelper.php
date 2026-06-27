@@ -36,4 +36,3 @@ class CacheHelper {
         return null;
     }
 }
-?>

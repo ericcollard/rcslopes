@@ -60,4 +60,3 @@ class PioupiouHelper {
         return $stations;
     }
 }
-?>
