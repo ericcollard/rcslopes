@@ -111,45 +111,24 @@ fetch('/api/slopes')
                 if (type == "interdit") {
                     marker = L.marker([lat, lng], {icon: interdit_pnt})
                         .addTo(slopesLayerGroup);
-
                 }
 
                 if (type == "parking") {
                     marker = L.marker([lat, lng], {icon: parking_pnt})   //,  zIndexOffset: -500
                         .addTo(parkingLayerGroup);
-
                 }
 
                 if (type == "meteo") {
                     marker = L.marker([lat, lng], {icon: meteo_pnt})   //,  zIndexOffset: -500
                         .addTo(windLayerGroup);
-                    //marker.bindPopup(name +"("+slopeId+")<div class='slopeDet'>|"+slopeId+"|"+lat+"|"+lng+"|</div>");
-
                     marker.on('click', function () {
                         feedModalBySlope(slopeId);
                         markerModal.show();
                     });
-                    /*
-                    marker.on('click', function () {
-                        // Ouvre la barre latérale
-                        //sidebar.open("home");
-                        // récupére les éléments contenu dans le popup du marker
-                        var pops = this.getPopup().getContent().split("|");
-                        var slope_id = pops[1];
-                        var slope_lat = pops[2];
-                        var slope_lng =  pops[3];
-                        // Ferme le popup pour ne pas afficher son contenu
-                        this.closePopup();
-                    });
-
-                     */
-
                     marker.on('mouseover',function(ev){
                         ev.target.openPopup();
                     })
                 }
-
-
             }
         );
 
@@ -222,9 +201,9 @@ fetch('/api/stations')
                 // Créer l'icône Leaflet avec le SVG
                 var wind_pnt = L.icon({
                     iconUrl: svgUrl,
-                    iconSize: [60, 60],      // Taille de l'icône
-                    iconAnchor: [30, 30],    // Point d'ancrage (centre)
-                    popupAnchor: [0, -30]    // Position du popup par rapport à l'icône
+                    iconSize: [30, 30],      // Taille de l'icône
+                    iconAnchor: [15, 15],    // Point d'ancrage (centre)
+                    popupAnchor: [0, -15]    // Position du popup par rapport à l'icône
                 });
 
                 const popup = `

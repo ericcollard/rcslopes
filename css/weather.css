@@ -1,0 +1,56 @@
+table.weather-forecast-table {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+}
+.weather-forecast-wrapper {
+    padding: 0;
+    background-image: url(../assets/bkg1.jpg);
+}
+
+table.weather-forecast-table td {
+    text-align: center;
+}
+
+table.weather-forecast-table tr {
+    background-color: rgba(0,80,200,0.45);
+}
+
+.weather-forecast-table .separation {
+    background-color:transparent;
+    height: 5px;
+}
+
+table.weather-forecast-table .day-cell {
+    text-align: left;
+}
+
+table.weather-forecast-table .day-cell .contend {
+    padding: 5px;
+}
+
+table.weather-forecast-table .day-cell .dayOfWeek {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+table.weather-forecast-table .day-cell .date {
+    font-size: 0.8rem;
+}
+
+table.weather-forecast-table  .hour {
+    text-align: right;
+}
+
+table.weather-forecast-table  img {
+    height: 25px;
+}
+
+table.weather-forecast-table  svg {
+    height: 20px!important;
+}
+
+table.weather-forecast-table .unit {
+    font-size: 0.5rem;
+}

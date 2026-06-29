@@ -56,29 +56,49 @@ ${sectorCircles.join('\n\n')}
 
 function getWindSpeedColor(speed) {
     var color = 'white';
-    if (speed > 5) color = '#5CF1FF';
-    if (speed > 10) color = '#00FFC8';
-    if (speed > 15) color = '#00FF7B';
-    if (speed > 20) color = '#44FF00';
-    if (speed > 25) color = '#C3FF00';
-    if (speed > 30) color = '#FFF200';
-    if (speed > 35) color = '#FFBB00';
-    if (speed > 40) color = '#FF8000';
-    if (speed > 45) color = '#FF3300';
-    if (speed > 50) color = '#FF0080';
-    if (speed > 55) color = '#D000FF';
-    if (speed > 60) color = '#5500FF';
+    if (speed > 2) color = '#00b1c2';
+    if (speed > 5) color = '#00bd92';
+    if (speed > 7) color = '#00b95e';
+    if (speed > 10) color = '#2fb600';
+    if (speed > 12) color = '#96c000';
+    if (speed > 15) color = '#b9b000';
+    if (speed > 17) color = '#c99200';
+    if (speed > 20) color = '#d26700';
+    if (speed > 22) color = '#ff5900';
+    if (speed > 25) color = '#FF3300';
+    if (speed > 27) color = '#FF0080';
+    if (speed > 30) color = '#ff00ae';
+    if (speed > 32) color = '#ff00fb';
+    if (speed > 35) color = '#d000ff';
+    if (speed > 37) color = '#aa00ff';
+    if (speed > 40) color = '#7b00ff';
+    if (speed > 42) color = '#4800ff';
+    if (speed > 45) color = '#1100ff';
     return color;
 }
 
 function generateWindDirectionSVG(heading,speed) {
 
+
+    var svg = '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">' +
+        '<polygon fill="white" stroke="black" stroke-width="0.25" points="18.87,46.68 31.13,46.68 36.14,3.32 13.86,3.32"' + ' transform="rotate(' + (heading) + ',25,25)"'+ '/>' +
+        '<polygon fill="' + getWindSpeedColor(speed) + '" stroke="black" stroke-width="0.25"  points="36.14,3.32 35.14,11.99 14.86,11.99 13.86,3.32"' + ' transform="rotate(' + (heading) + ',25,25)"'+ '/>' +
+        '<polygon fill="' + getWindSpeedColor(speed) + '" stroke="black" stroke-width="0.25"   points="15.86,20.66 34.14,20.66 33.14,29.34 16.86,29.34"' + ' transform="rotate(' + (heading) + ',25,25)"'+ '/>' +
+        '<polygon fill="' + getWindSpeedColor(speed) + '" stroke="black" stroke-width="0.25"   points="32.14,38.01 17.86,38.01 18.87,46.68 31.13,46.68"' + ' transform="rotate(' + (heading) + ',25,25)"'+ '/>' +
+        '</svg>';
+
+    return svg;
+
+    /*
+#E84723
     var svg = '<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">' +
         '<polyline points="30,25 20,25 25,0 30,25" fill="none" stroke="black" ' + ' transform="rotate(' + (heading + 180) + ',25,25)"/>' +
         '<polygon points="30,25 20,25 25,0" style="fill:' + getWindSpeedColor(speed) + '" transform="rotate(' + (heading + 180) + ',25,25)"/>' +
         '<circle r="5" cx="25" cy="25" fill="black" />' +
         '</svg>';
     return svg;
+
+     */
 }
 
 // Génère la jauge avec les couleurs

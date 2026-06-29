@@ -8,45 +8,36 @@ class OpenMeteoHelper {
         $this->apiUrl = $apiUrl;
     }
 
-    public function fetchForSlopes($slopesData) {
 
-        /*
-         *
-         *
-         $slopesData = [
-            ['slope_id' => 1, 'latitude' => 52.52, 'longitude' =>13.41 ],
-            ['slope_id' => 2, 'latitude' => 50.12, 'longitude' =>8.68 ],
-            ['slope_id' => 3, 'latitude' => 53.55, 'longitude' =>9.99 ]
-        ];
-         *
-         *
-         */
+
+    public function fetchForSlopes($slopes) {
+        // --- $slopes est un array de slope
+
+        $numberOfSlopes = count($slopes);
 
         $slopesWeatherData= [];
-
         $url = $this->apiUrl;
 
         $latSetStr = '';
         $longSetStr = '';
-        foreach ($slopesData as $key => $slopeData)
+        // --- construction de l'URL de request
+        $firstReg = true;
+        foreach ($slopes as $slope)
         {
-            if ($key === array_key_first($slopesData)) {
-                // FIRST ELEMENT!
-                $latSetStr.= number_format($slopeData['latitude'], 2, '.', '');
-                $longSetStr.= number_format($slopeData['longitude'], 2, '.', '');
-            }
-            else
+            if (!$firstReg)
             {
-                $latSetStr.= ','.number_format($slopeData['latitude'], 2, '.', '');
-                $longSetStr.= ','.number_format($slopeData['longitude'], 2, '.', '');
+                $latSetStr.= ',';
+                $longSetStr.= ',';
             }
+            $latSetStr.= number_format($slope['lat'], 2, '.', '');
+            $longSetStr.= number_format($slope['lng'], 2, '.', '');
+            $firstReg = false;
         }
 
         $url = $url . 'latitude=' . $latSetStr . '&longitude=' . $longSetStr;
 
+        // --- requetage des données brutes
         $ch = curl_init();
-
-
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -59,12 +50,20 @@ class OpenMeteoHelper {
 
         if ($httpCode == 200 && $response) {
             $apiSlopesWeatherData = json_decode($response, true);
-            foreach ($apiSlopesWeatherData as $key => $apiSlopeWeatherData) {
-                $slopeWeatherData = $apiSlopeWeatherData;
-                $slopeWeatherData['slope_id'] = $slopesData[$key]['slope_id'];
-                $slopesWeatherData[] = $slopeWeatherData;
+            if ($numberOfSlopes > 1)
+            {
+                foreach ($apiSlopesWeatherData as $key => $apiSlopeWeatherData) {
+                    $apiSlopeWeatherData['slopeId'] = $slopes[$key]['slopeId']; // o suppose que les résultats sont dans le même ordre que la requete
+                    $slopesWeatherData[] = $apiSlopeWeatherData;
+                }
             }
-            return $slopesWeatherData;
+            else
+            {
+                $apiSlopesWeatherData['slopeId'] = $slopes[0]['slopeId'];
+                $slopesWeatherData[] = $apiSlopesWeatherData;
+            }
+
+            return $this->formatSlopesData($slopesWeatherData);
         }
         else
         {
@@ -75,48 +74,52 @@ class OpenMeteoHelper {
         return null;
     }
 
-    public function formatSlopesData($slopesWeatherData) {
-        $slopesData = [];
 
-        if (isset($slopesWeatherData) && is_array($slopesWeatherData)) {
-            foreach ($slopesWeatherData as $slopeWeatherData) {
 
-                $slopeData = [
-                    'slope_id' => $slopeWeatherData['slope_id'],
-                    'latitude' => $slopeWeatherData['latitude'] ?? null,
-                    'longitude' => $slopeWeatherData['longitude'] ?? null,
+    /*
+     *   FORMATTAGE DES DONNEES METEO
+     *   On en profite par filtrer pour ne garder que 1 heure sur 2, et en journée uniquement
+     */
+    public function formatSlopesData($slopesRawWeatherData) {
+        $slopesWeatherData = [];
+
+        if (isset($slopesRawWeatherData) && is_array($slopesRawWeatherData)) {
+            foreach ($slopesRawWeatherData as $slopeRawWeatherData) {
+                $slopeWeatherData = [
+                    'slopeId' => $slopeRawWeatherData['slopeId'],
+                    'lat' => $slopeRawWeatherData['latitude'] ?? null,
+                    'lng' => $slopeRawWeatherData['longitude'] ?? null,
                 ];
 
                 $weatherDataSet = [];
-                foreach ($slopeWeatherData['hourly']['time'] as $key => $timeStr) {
-                    $wind_heading = $slopeWeatherData['hourly']['wind_direction_10m'][$key];
-                    $wind_speed = $slopeWeatherData['hourly']['wind_speed_10m'][$key];
-                    $wind_gust = $slopeWeatherData['hourly']['wind_gusts_10m'][$key];
-                    $cloud_cover = $slopeWeatherData['hourly']['cloud_cover'][$key];
-                    $rain = $slopeWeatherData['hourly']['rain'][$key];
-                    $temperature = $slopeWeatherData['hourly']['temperature_2m'][$key];
+                foreach ($slopeRawWeatherData['hourly']['time'] as $key => $timeStr) {
+                    $wind_heading = $slopeRawWeatherData['hourly']['wind_direction_10m'][$key];
+                    $wind_speed = $slopeRawWeatherData['hourly']['wind_speed_10m'][$key];
+                    $wind_gust = $slopeRawWeatherData['hourly']['wind_gusts_10m'][$key];
+                    $cloud_cover = $slopeRawWeatherData['hourly']['cloud_cover'][$key];
+                    $rain = $slopeRawWeatherData['hourly']['rain'][$key];
+                    $temperature = $slopeRawWeatherData['hourly']['temperature_2m'][$key];
                     if ($timeStr) {
                         $forecast_timestamp = strtotime($timeStr);
                         $hour = intval(date ("H",$forecast_timestamp));
-                        if ($hour > 9 and $hour < 21) {
+                        if ($hour > 8 and $hour < 22 and $hour&1) {
                             $weatherDataSet[] = [
+                                'forecast_time' => date('Y-m-d H:i:s', strtotime($timeStr)),
                                 'wind_heading' => $wind_heading,
                                 'wind_speed' => $wind_speed,
                                 'wind_gust' => $wind_gust,
                                 'cloud_cover' => $cloud_cover,
                                 'rain' => $rain,
-                                'temperature' => $temperature,
-                                'forecast_time' => date('Y-m-d H:i:s', strtotime($timeStr))
+                                'temperature' => $temperature
                             ];
                         }
                     }
                 }
-
-                $slopeData['weatherDataSet'] = $weatherDataSet;
-                $slopesData[] = $slopeData;
+                $slopeWeatherData['weatherDataSet'] = $weatherDataSet;
+                $slopesWeatherData[] = $slopeWeatherData;
             }
         }
 
-        return $slopesData;
+        return $slopesWeatherData;
     }
 }

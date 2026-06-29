@@ -66,22 +66,6 @@ if ($method === 'GET' && $uri === '/slopes') {
 } elseif ($method === 'GET' && preg_match('#^/stations/(\d+)$#', $uri, $m)) {
     $windStationController->show((int) $m[1]);
 
-// ── POST /slopes ─────────────────────────────────────────────
-} elseif ($method === 'POST' && $uri === '/slopes') {
-    $slopeController->store();
-
-// ── POST /stations ─────────────────────────────────────────────
-} elseif ($method === 'POST' && $uri === '/stations') {
-    $windStationController->store();
-
-// ── PUT /slopes/{id} ─────────────────────────────────────────
-} elseif ($method === 'PUT' && preg_match('#^/slopes/(\d+)$#', $uri, $m)) {
-    $slopeController->update((int) $m[1]);
-
-// ── PUT /stations/{id} ─────────────────────────────────────────
-} elseif ($method === 'PUT' && preg_match('#^/stations/(\d+)$#', $uri, $m)) {
-    $windStationController->update((int) $m[1]);
-
 // ── Route inconnue ───────────────────────────────────────────
 } else {
     jsonResponse(['success' => false, 'error' => 'Route introuvable.'], 404);

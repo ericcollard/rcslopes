@@ -18,18 +18,18 @@ class Slope
     /**
      * Retourne tous les sites de vol.
      */
-    public static function getAll($limit = -1, $offset = -1, $slope = 0): array
+    public static function getAll($limit = -1, $offset = -1, $slopeType = false): array
     {
         if ($limit == -1)
         {
             $sql = "SELECT * FROM slopes ORDER BY slopeId ASC";
-            if ($slope == 1) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC";
+            if ($slopeType) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC";
             $stmt = getDB()->query($sql);
         }
         else
         {
             $sql = "SELECT * FROM slopes ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
-            if ($slope == 1) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
+            if ($slopeType) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
             $stmt = getDB()->query($sql);
 
         }
@@ -41,14 +41,13 @@ class Slope
             $row['lat'] = (float)$row['lat'];
             $row['lng'] = (float)$row['lng'];
         }
-
         return $rows;
     }
 
-    public static function getCount($slope = 0): int
+    public static function getCount($slopeType = false): int
     {
         $sql = "SELECT COUNT(*) as Nb FROM slopes";
-        if ($slope == 1) $sql = "SELECT COUNT(*) as Nb FROM slopes where type = 'pente'";
+        if ($slopeType) $sql = "SELECT COUNT(*) as Nb FROM slopes where type = 'pente'";
         $stmt = getDB()->query($sql);
 
         $rows = $stmt->fetchAll();
@@ -119,78 +118,5 @@ class Slope
         return $row;
     }
 
-    // ── Création ─────────────────────────────────────────────
 
-    /**
-     * Crée un nouveau site. Retourne l'entité créée.
-     */
-    public static function create(array $data): array
-    {
-        $db = getDB();
-        $stmt = $db->prepare(
-            'INSERT INTO slopes
-                (name, type, lat, lng, orient, description, weather_url)
-             VALUES
-                (:name, :type, :lat, :lng, :orient, :description, :weather_url)'
-        );
-        $stmt->execute([
-            ':name' => $data['name'],
-            ':type' => $data['type'],
-            ':lat' => $data['lat'],
-            ':lng' => $data['lng'],
-            ':orient' => implode(',', $data['orient']),
-            ':description' => $data['description'] ?? null,
-            ':weather_url' => $data['weather_url'] ?? null,
-        ]);
-
-        return self::getById((int)$db->lastInsertId());
-    }
-
-    // ── Mise à jour ───────────────────────────────────────────
-
-    /**
-     * Met à jour un site existant. Retourne l'entité mise à jour.
-     */
-    public static function update(int $slopeId, array $data): ?array
-    {
-        $fields = [];
-        $params = [];
-
-        if (isset($data['name'])) {
-            $fields[] = 'name = :name';
-            $params[':name'] = $data['name'];
-        }
-        if (isset($data['type'])) {
-            $fields[] = 'type = :type';
-            $params[':type'] = $data['type'];
-        }
-        if (isset($data['lat'])) {
-            $fields[] = 'lat = :lat';
-            $params[':lat'] = $data['lat'];
-        }
-        if (isset($data['lng'])) {
-            $fields[] = 'lng = :lng';
-            $params[':lng'] = $data['lng'];
-        }
-        if (isset($data['orient'])) {
-            $fields[] = 'orient = :orient';
-            $params[':orient'] = implode(',', $data['orient']);
-        }
-        if (array_key_exists('description', $data)) {
-            $fields[] = 'description = :description';
-            $params[':description'] = $data['description'];
-        }
-        if (array_key_exists('weather_url', $data)) {
-            $fields[] = 'weather_url = :weather_url';
-            $params[':weather_url'] = $data['weather_url'];
-        }
-
-        if (empty($fields)) return self::getById($slopeId); // rien à modifier
-
-        $params[':slopeId'] = $slopeId;
-        $sql = 'UPDATE slopes SET ' . implode(', ', $fields) . ' WHERE slopeId = :slopeId';
-        getDB()->prepare($sql)->execute($params);
-
-        return self::getById($slopeId);
-    }
 }

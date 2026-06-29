@@ -4,6 +4,7 @@
 // ============================================================
 
 namespace controllers;
+use IntlDateFormatter;
 use models\Slope;
 use models\WeatherForecast;
 use function jsonResponse;
@@ -21,25 +22,6 @@ class SlopeController
     {
         $slopes = Slope::getAll();
         jsonResponse(['success' => true, 'data' => $slopes]);
-    }
-
-    // ── pour WeatherForecastController───────────────────────────────────────
-
-    public function get($limit = -1, $offset = -1,$slope = 0): array
-    {
-        $slopes = Slope::getAll($limit, $offset,$slope);
-        $data = [];
-        foreach ($slopes as $key => $slope) {
-            if ($key < $limit) {
-                $data[] = [
-                    'slope_id' => $slope['slopeId'],
-                    'latitude' => $slope['lat'],
-                    'longitude' => $slope['lng'],
-                ];
-            }
-
-        }
-        return $data;
     }
 
     public function getCount($slope = 0):int {
@@ -61,11 +43,117 @@ class SlopeController
     public function generateWindDirectionSVG(float $heading)
     {
 
+        $svg = '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">' .
+        '<polygon fill="white" stroke="black" stroke-width="0.25" points="18.87,46.68 31.13,46.68 36.14,3.32 13.86,3.32"' . ' transform="rotate(' . ($heading) . ',25,25)"'. '/>' .
+        '<polygon fill="red" stroke="black" stroke-width="0.25"  points="36.14,3.32 35.14,11.99 14.86,11.99 13.86,3.32"' . ' transform="rotate(' . ($heading) . ',25,25)"'. '/>' .
+        '<polygon fill="red" stroke="black" stroke-width="0.25"   points="15.86,20.66 34.14,20.66 33.14,29.34 16.86,29.34"' . ' transform="rotate(' . ($heading) . ',25,25)"'. '/>' .
+        '<polygon fill="red" stroke="black" stroke-width="0.25"   points="32.14,38.01 17.86,38.01 18.87,46.68 31.13,46.68"' . ' transform="rotate(' . ($heading) . ',25,25)"'. '/>' .
+        '</svg>';
+
+        return $svg;
+        /*
         $svg = '<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">' .
             '<circle r="2" cx="10" cy="10" fill="black" />' .
             '<polygon points="13,10 7,10 10,0" style="fill:black" transform="rotate(' . ($heading + 180) . ',10,10)"/>' .
             '</svg>';
-        return $svg;
+        return $svg;*/
+    }
+
+    public function getCouldCoverImg(float $cloudCover, float $rainQty)
+    {
+        $imgFileName = "cloud-0";
+        if ($cloudCover > 15.0) $imgFileName = "cloud-1";
+        if ($cloudCover > 30.0) $imgFileName = "cloud-2";
+        if ($cloudCover > 60.0) $imgFileName = "cloud-3";
+        if ($cloudCover > 80.0) $imgFileName = "cloud-4";
+        if ($rainQty > 0.0) $imgFileName = "cloud-5";
+        return "<img src='/assets/".$imgFileName.".png'>";
+    }
+
+
+    public function getDayName($date) {
+        $jours= array("", "Lundi", "Mardi",
+            "Mercredi", "Jeudi", "Vendredi",
+            "Samedi","Dimanche");
+        $today = new \DateTime();
+        $todaySinceStart = intdiv($today->getTimestamp(), 60*60*24);
+        $daySinceStart = intdiv($date->getTimestamp(), 60*60*24);
+        if ($daySinceStart == $todaySinceStart) return "Aujourd'hui";
+        if ($daySinceStart == ($todaySinceStart + 1)) return "Demain";
+        if ($daySinceStart == ($todaySinceStart - 1)) return "Hier";
+        return $jours[date_format($date,'N')];
+    }
+
+    public function getDayCellHtml($date) {
+        $html = '<td rowspan="7" class="day-cell align-top">';
+        $html .= '<div class="contend"><span class="dayOfWeek">'.$this->getDayName($date).'</span></br>';
+        $html .= '<span class="date">'.date_format($date,'j/m/Y').'</span></div>';
+        $html .= '</td>';
+        return $html;
+    }
+
+    public function getWeatherforecastHtml($slopeWeatherData) {
+
+        $separation = "<tr class='separation'><td colspan='8'></td></tr>";
+
+        $html = "<div class='weather-forecast-wrapper'>";
+        $html .= "<table class='weather-forecast-table'>";
+        $html .= "<tr>";
+        $html .= "<td></td><td></td><td></td><td>Vitesse</td><td>Rafales</td><td>Nuages</td><td>Pluie</td><td>Température</td>";
+        $html .= "</tr>";
+
+        $daySinceStart = 0;
+        foreach ($slopeWeatherData as $key => $slopeWeatherDataItem) {
+
+            $date = new \DateTime($slopeWeatherDataItem['forecast_time']);
+            $currentDaySinceStart = intdiv($date->getTimestamp(), 60*60*24);
+            $dayHtml = "";
+            if ($currentDaySinceStart != $daySinceStart)
+            {
+                // nouvelle prévision pour un nouveau jour
+                $dayHtml = $this->getDayCellHtml($date);
+                $html .=$separation;
+                $daySinceStart = $currentDaySinceStart;
+            }
+            $html .= "<tr>";
+            $html .= $dayHtml;
+            // nouvelle prévision pour le même jour
+            $orient = $this->generateWindDirectionSVG($slopeWeatherDataItem['wind_heading']);
+            $speed = number_format($slopeWeatherDataItem['wind_speed'], 0, '.', ''). "<span class='unit'> km/h</span>";
+            $gust = number_format($slopeWeatherDataItem['wind_gust'], 0, '.', ''). "<span class='unit'> km/h</span>";
+            $cloud = $this->getCouldCoverImg($slopeWeatherDataItem['cloud_cover'],$slopeWeatherDataItem['rain']);
+            $temperature = number_format($slopeWeatherDataItem['temperature'], 0, '.', ''). "<span class='unit'> °C</span>";
+            $rain = number_format($slopeWeatherDataItem['rain'], 0, '.', ''). "<span class='unit'> mm</span>";
+            $timeStr = date_format($date,'H:i');
+            $html .= "<td>{$timeStr}</td><td>{$orient}</td><td>{$speed}</td><td>{$gust}</td><td>{$cloud}</td><td>{$rain}</td><td>{$temperature}</td>";
+
+            $html .= "</tr>";
+        }
+
+        $html .= "</table>";
+        $html .= "</div>";
+        return $html;
+
+        /*
+         *
+         *      $weatherStr = "<table class='table table-success table-striped-columns slope-forecast'><tr><td>Date</td><td>Orientation</td><td>Vitesse</td><td>Rafales</td><td>Nuages</td><td>Pluie</td><td>Température</td></tr>";
+
+                foreach ($slopeWeatherData as $key => $slopeWeatherDataItem) {
+                    $date = new \DateTime($slopeWeatherDataItem['forecast_time']);
+                    $dateStr = date_format($date,'d m Y H:i');
+                    $orient = $this->generateWindDirectionSVG($slopeWeatherDataItem['wind_heading']) . " (".$slopeWeatherDataItem['wind_heading'].")";
+                    $speed = number_format($slopeWeatherDataItem['wind_speed'], 0, '.', ''). " km/h";
+                    $gust = number_format($slopeWeatherDataItem['wind_gust'], 0, '.', ''). " km/h";
+                    $cloud = $this->getCouldCoverImg($slopeWeatherDataItem['cloud_cover'],$slopeWeatherDataItem['rain']);
+                    $temperature = number_format($slopeWeatherDataItem['temperature'], 0, '.', ''). " °C";
+                    $rain = number_format($slopeWeatherDataItem['rain'], 0, '.', ''). " mm";
+                    $weatherStr .= "<tr><td>{$dateStr}</td><td>{$orient}</td><td>{$speed}</td><td>{$gust}</td><td>{$cloud}</td><td>{$rain}</td><td>{$temperature}</td></tr>";
+                }
+
+                $weatherStr .= "</table>";
+         *
+         */
+
     }
 
     public function showHtml(int $slopeId): void
@@ -96,20 +184,9 @@ class SlopeController
             $data['html'] .= "</div>"; // du row
             $data['html'] .= "<div class='col-lg'>";
             $slopeWeatherData = WeatherForecast::getBySlopeId($slopeId);
+
             if ($slopeWeatherData) {
-                $weatherStr = "<table class='table table-success table-striped-columns slope-forecast'><tr><td>Date</td><td>Orientation</td><td>Vitesse</td><td>Rafales</td><td>Nuages</td><td>Pluie</td><td>Température</td></tr>";
-                foreach ($slopeWeatherData as $key => $slopeWeatherDataItem) {
-                    $date = new \DateTime($slopeWeatherDataItem['forecast_time']);
-                    $dateStr = date_format($date,'d m Y H:i');
-                    $orient = $this->generateWindDirectionSVG($slopeWeatherDataItem['wind_heading']) . " (".$slopeWeatherDataItem['wind_heading'].")";
-                    $speed = number_format($slopeWeatherDataItem['wind_speed'], 0, '.', ''). " km/h";
-                    $gust = number_format($slopeWeatherDataItem['wind_gust'], 0, '.', ''). " km/h";
-                    $cloud = number_format($slopeWeatherDataItem['cloud_cover'], 0, '.', ''). " %";
-                    $temperature = number_format($slopeWeatherDataItem['temperature'], 0, '.', ''). " °C";
-                    $rain = number_format($slopeWeatherDataItem['rain'], 0, '.', ''). " mm";
-                    $weatherStr .= "<tr><td>{$dateStr}</td><td>{$orient}</td><td>{$speed}</td><td>{$gust}</td><td>{$cloud}</td><td>{$rain}</td><td>{$temperature}</td></tr>";
-                }
-                $weatherStr .= "</table>";
+                $weatherStr = $this->getWeatherforecastHtml($slopeWeatherData);
                 $data['html'] .= "<h2>Prévisions météo à 3 jours</h2>";
                 $data['html'] .= $weatherStr;
             }

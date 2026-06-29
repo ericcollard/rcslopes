@@ -18,15 +18,15 @@ class WeatherForecast
     /**
      * Retourne les données pour une station par son station_id, ou null.
      */
-    public static function getBySlopeId(int $slope_id): ?array
+    public static function getBySlopeId(int $slopeId): ?array
     {
         $stmt = getDB()->prepare(
             'SELECT *
              FROM weather_forecast
-             WHERE slope_id = ? ORDER BY forecast_time'
+             WHERE slopeId = ? ORDER BY forecast_time'
         );
 
-        $stmt->execute([$slope_id]);
+        $stmt->execute([$slopeId]);
         $rows = $stmt->fetchAll();
 
         if (!$rows) {
@@ -48,7 +48,7 @@ class WeatherForecast
 
 
     // Upsert (Insert or Update)
-    public static function insert(array $weather_forecast_dataset, int $slope_id)
+    public static function insert(array $weather_forecast_dataset, int $slopeId)
     {
 
         $db = getDB();
@@ -56,13 +56,13 @@ class WeatherForecast
 
 
         $query = "INSERT INTO weather_forecast
-                (slope_id, wind_heading, wind_speed, forecast_time, wind_gust, cloud_cover,rain, temperature)
+                (slopeId, wind_heading, wind_speed, forecast_time, wind_gust, cloud_cover,rain, temperature)
                 VALUES
-                (:slope_id, :wind_heading, :wind_speed, :forecast_time , :wind_gust, :cloud_cover,:rain, :temperature)" ;
+                (:slopeId, :wind_heading, :wind_speed, :forecast_time , :wind_gust, :cloud_cover,:rain, :temperature)" ;
         $stmt = $db->prepare($query);
 
         foreach ($weather_forecast_dataset as $weather_forecast_dataItem) {
-            $stmt->bindParam(":slope_id", $slope_id);
+            $stmt->bindParam(":slopeId", $slopeId);
             $stmt->bindParam(":wind_heading", $weather_forecast_dataItem['wind_heading']);
             $stmt->bindParam(":wind_speed", $weather_forecast_dataItem['wind_speed']);
             $stmt->bindParam(":forecast_time", $weather_forecast_dataItem['forecast_time']);
@@ -80,7 +80,7 @@ class WeatherForecast
 
 
     // Upsert (Insert or Update)
-    public static function upsert(array $weather_forecast_dataset, int $slope_id)
+    public static function upsert(array $weather_forecast_dataset, int $slopeId)
     {
 
         $db = getDB();
@@ -88,12 +88,12 @@ class WeatherForecast
         // Suppression des anciennes données
         $stmt = getDB()->prepare(
             'DELETE FROM weather_forecast
-             WHERE slope_id = ?'
+             WHERE slopeId = ?'
         );
-        $stmt->execute([$slope_id]);
+        $stmt->execute([$slopeId]);
 
 
-        self::insert($weather_forecast_dataset,$slope_id);
+        self::insert($weather_forecast_dataset,$slopeId);
 
         return true;
     }
