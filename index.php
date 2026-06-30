@@ -3,7 +3,7 @@
 // ============================================================
 // index.php  –  Point d'entrée : page d'accueil + API REST
 // ============================================================
-
+error_reporting(E_ALL);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
