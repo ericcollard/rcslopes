@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 require_once __DIR__ . '/helpers/OpenMeteoHelper.php';
 require_once __DIR__ . '/controllers/WeatherForecastController.php';
 require_once __DIR__ . '/models/Slope.php';
@@ -6,6 +7,7 @@ require_once __DIR__ . '/models/Slope.php';
 use controllers\WeatherForecastController;
 use helpers\OpenMeteoHelper;
 use models\Slope;
+use models\WeatherForecast;
 
 /*
 $meteoHelper = new OpenMeteoHelper('https://api.open-meteo.com/v1/forecast?hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m,cloud_cover,rain,showers,temperature_2m&forecast_days=3&');$slope = Slope::getById(3);
@@ -25,11 +27,13 @@ echo '</pre>';
 //$data = $meteoHelper->fetchForSlopes($slopesData);
 //var_dump($data);
 
+$slopeWeatherData = WeatherForecast::getBySlopeId(5);
+var_dump($slopeWeatherData);
 
 //var_dump($slopeController->get());
 
-$controller = new WeatherForecastController();
-var_dump($controller->getBySlopeId(3,0));
+//$controller = new WeatherForecastController();
+//var_dump($controller->getBySlopeId(3,0));
 
 /*
 $slopesData = [
