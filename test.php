@@ -2,39 +2,34 @@
 error_reporting(E_ALL);
 require_once __DIR__ . '/helpers/OpenMeteoHelper.php';
 require_once __DIR__ . '/controllers/WeatherForecastController.php';
+require_once __DIR__ . '/controllers/SlopeController.php';
 require_once __DIR__ . '/models/Slope.php';
 
+use controllers\SlopeController;
 use controllers\WeatherForecastController;
 use helpers\OpenMeteoHelper;
 use models\Slope;
 use models\WeatherForecast;
 
-/*
-$meteoHelper = new OpenMeteoHelper('https://api.open-meteo.com/v1/forecast?hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m,cloud_cover,rain,showers,temperature_2m&forecast_days=3&');$slope = Slope::getById(3);
-$slopes = [];
-$slopes[] = $slope;
-$slope = Slope::getById(4);
-$slopes[] = $slope;
-$weatherData = $meteoHelper->fetchForSlopes($slopes);
-echo '<pre>';
-var_dump($weatherData);
-echo '</pre>';
-*/
 
-//$slopeController = new SlopeController();
+
+$slopeController = new SlopeController();
+//var_dump($slopeController->showHtml(5));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);
 //var_dump($data);
 
-$slopeWeatherData = WeatherForecast::getBySlopeId(5);
-var_dump($slopeWeatherData);
+//$slopeWeatherData = WeatherForecast::getBySlopeId(3);
+//var_dump($slopeWeatherData);
 
 //var_dump($slopeController->get());
 
-//$controller = new WeatherForecastController();
-//var_dump($controller->getBySlopeId(3,0));
-
+$controller = new WeatherForecastController();
+$slopeWeatherData =  $controller->getBySlopeId(3,1);
+//var_dump($slopeWeatherData);
+$weatherStr = $slopeController->getWeatherforecastHtml($slopeWeatherData);
+var_dump($weatherStr);
 /*
 $slopesData = [
     ['slope_id' => 1, 'latitude' => 52.52, 'longitude' =>13.41 ],

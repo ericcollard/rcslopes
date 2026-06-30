@@ -5,14 +5,17 @@
 
 namespace controllers;
 use IntlDateFormatter;
+use controllers\WeatherForecastController;
 use models\Slope;
 use models\WeatherForecast;
 use function jsonResponse;
 use function sanitizeWindDirections;
 
+
 require_once __DIR__ . '/../models/Slope.php';
 require_once __DIR__ . '/../models/WeatherForecast.php';
 require_once __DIR__ . '/../helpers/response.php';
+require_once __DIR__ . '/../controllers/WeatherForecastController.php';
 
 class SlopeController
 {
@@ -91,7 +94,16 @@ class SlopeController
         return $html;
     }
 
-    public function getWeatherforecastHtml($slopeWeatherData) {
+    public function getWeatherforecastHtml($slopesWeatherData) {
+
+
+        /*
+         *  $slopeWeatherData
+         *
+         *
+         */
+
+        $slopeWeatherData = $slopesWeatherData[0]['weatherDataSet'];
 
         $separation = "<tr class='separation'><td colspan='8'></td></tr>";
 
@@ -157,6 +169,7 @@ class SlopeController
 
     public function showHtml(int $slopeId): void
     {
+
         $slope = Slope::getById($slopeId);
         if (!$slope) {
             jsonResponse(['success' => false, 'error' => 'Site introuvable.'], 404);
@@ -183,13 +196,14 @@ class SlopeController
             $data['html'] .= "<p class='slope-description'>{$slope['description']}</p>";
             $data['html'] .= "</div>"; // du row
             $data['html'] .= "<div class='col-lg'>";
-            $slopeWeatherData = WeatherForecast::getBySlopeId($slopeId);
-
+            $weatherForecastController = new WeatherForecastController();
+            $slopeWeatherData = $weatherForecastController->getBySlopeId($slopeId,0);
             if ($slopeWeatherData) {
                 $weatherStr = $this->getWeatherforecastHtml($slopeWeatherData);
                 $data['html'] .= "<h2>Prévisions météo à 3 jours</h2>";
                 $data['html'] .= $weatherStr;
             }
+
             $data['html'] .= "</div>";  // du col
             $data['html'] .= "</div>";  // du row
             $data['html'] .= "</div>";  // du container
