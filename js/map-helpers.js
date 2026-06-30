@@ -5,9 +5,33 @@ function feedModalBySlope(slopeId) {
             if (!json?.data?.title) return;
             document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
             document.getElementById("markerModalBody").innerHTML= json.data.html;
+
+
+            var container = document.getElementById("markerModalShare");
+            container.classList.add('share-buttons');
+
+            // Bouton Facebook
+            const fbBtn = document.createElement('button');
+            fbBtn.textContent = 'Partager sur Facebook';
+            fbBtn.classList.add('share-btn', 'share-btn-facebook');
+            fbBtn.addEventListener('click', () => {
+                shareOnFacebook(window.location.href, document.title);
+            });
+
+            // Bouton WhatsApp
+            const waBtn = document.createElement('button');
+            waBtn.textContent = 'Partager sur WhatsApp';
+            waBtn.classList.add('share-btn', 'share-btn-whatsapp');
+            waBtn.addEventListener('click', () => {
+                shareOnWhatsApp(window.location.href, document.title);
+            });
+
+            container.appendChild(fbBtn);
+            container.appendChild(waBtn);
+
+
         })
         .catch(() => {});
-
 }
 
 function generateWindRoseSVG(sectors) {

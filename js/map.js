@@ -1,4 +1,5 @@
 
+
 // Instance Bootstrap réutilisable
 const markerModalEl = document.getElementById('markerModal');
 const markerModal = new bootstrap.Modal(markerModalEl);
@@ -252,3 +253,59 @@ gps
 gps.addTo(map);
 
 generateWinSpeedColorLegend();
+
+
+// va à la pente demandée si une demande est faite dans l'URL
+let currentLocation = window.location;
+var requestedSlopeId = 0;
+if (currentLocation.pathname.length > 1)
+{
+    // le pathname contient plus que /
+    requestedSlopeId = parseInt(currentLocation.pathname.substring(1));
+}
+if (requestedSlopeId > 0)
+{
+    //console.log('Déplacement vers la pente demandée');
+    fetch('/api/slopes/'+requestedSlopeId)
+        .then(r => r.ok ? r.json() : null)
+        .then(json => {
+            //console.log(json.data);
+            if (!json?.data?.lat) return;
+            map.flyTo([json.data.lat, json.data.lng],14);
+            feedModalBySlope(requestedSlopeId);
+            markerModal.show();
+            //document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
+            //document.getElementById("markerModalBody").innerHTML= json.data.html;
+        })
+        .catch(() => {});
+}
+
+function shareOnFacebook(url, quote = '') {
+    const shareUrl = new URL('https://www.facebook.com/sharer/sharer.php');
+    shareUrl.searchParams.set('u', url);
+    if (quote) shareUrl.searchParams.set('quote', quote);
+
+    openSharePopup(shareUrl.toString());
+}
+
+function shareOnWhatsApp(url, text = '') {
+    // Sur mobile, l'app s'ouvre directement ; sur desktop, WhatsApp Web s'ouvre
+    const message = text ? `${text} ${url}` : url;
+    const shareUrl = new URL('https://wa.me/');
+    shareUrl.searchParams.set('text', message);
+
+    openSharePopup(shareUrl.toString());
+}
+
+function openSharePopup(shareUrl) {
+    const width = 600;
+    const height = 500;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+
+    window.open(
+        shareUrl,
+        'share-dialog',
+        `width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0`
+    );
+}

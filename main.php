@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta property="og:url" content="<?= $fullUrl ?>" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="<?= $og_title ?>" />
+    <meta property="og:description"   content="<?= $og_description ?>" />
+    <meta property="og:image"         content="<?= $og_image ?>" />
     <title>RC Slopes – Sites de vol de pente</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -105,7 +110,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title" id="markerModalLabel">Titre du marker</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-title-right" id="markerModalShare"></div>
             </div>
             <div class="modal-body" id="markerModalBody">
                 <p>Lorem ipsum dolor sit amet. Aut quae repellat aut sequi quaeratQui delectus id nihil consequatur aut iste impedit hic modi voluptate. Ut repellat praesentium sed alias aspernaturest asperiores id eligendi facere et eius autem. Eos nihil laboreQuo neque ea nisi ducimus sed libero omnis et perspiciatis inventore. Ad dicta doloribus <a href="https://www.loremipzum.com" target="_blank">Qui obcaecati</a> ut quae maiores! Est tempore galisum sed impedit fugitAut inventore nam facere ratione id laborum illo quo nesciunt placeat aut necessitatibus aliquid. Ut voluptatibus nemo ab deleniti nostrumet veritatis. Cum consequuntur delectus est labore nobisSed voluptatem vel aperiam quibusdam cum voluptatem velit qui labore quas ut laborum autem. Sit dignissimos rerum eos totam laboriosamut perspiciatis ut asperiores blanditiis. Id blanditiis autemEa quia qui dignissimos quod et voluptatem aspernatur in laborum voluptas sed sint distinctio. </p><ul><li>In architecto voluptas non ullam dolores. </li><li>Ea recusandae labore et odit ratione! </li></ul>

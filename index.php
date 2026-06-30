@@ -7,17 +7,55 @@
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
+$fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+    === 'on' ? "https" : "http") .
+    "://" . $_SERVER['HTTP_HOST'] .
+    $_SERVER['REQUEST_URI'];
+$serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+    === 'on' ? "https" : "http") .
+    "://" . $_SERVER['HTTP_HOST'];
 // Supprime le préfixe si l'API est dans un sous-dossier
 $uri = preg_replace('#^/api#', '', $uri);
 $uri = rtrim($uri, '/');
 
 
 // ── Page d'accueil (GET /) ────────────────────────────────────
-if ($method === 'GET' && ($uri === '' || $uri === '/')) {
-    include('main.html');
+$request = null;
+$requestedSlopeId = 0;
+if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request))) {
+
+    if ($request) {
+        $requestedSlopeId = (int)$request[1];
+        //var_dump($requestedSlopeId);
+    }
+    /*
+    la redirection vers une pente donnée est gérée dans le js
+    */
+
+    $slope = null;
+    $og_title = "RcSlopeS";
+    $og_description = "La base de donnée des sites de vol de pente planeur Rc";
+    $og_image = $serverName."/assets/preview.png";
+    if ($requestedSlopeId > 0)
+    {
+        require_once __DIR__ . '/models/SLope.php';
+        $slope = \models\Slope::getById($requestedSlopeId);
+        $og_title = "RcSlopeS"." - pente ".$slope['name'];
+        //var_dump($slope);
+    }
+    include_once('main.php');
 exit;
 }
+/*
+ *
+ * preg_match('#^/slope/(\d+)$#', $uri, $m)
+ *
+// ── GET /slopes ──────────────────────────────────────────────
+if ($method === 'GET' && preg_match('#^/slope/(\d+)$#', $uri, $m)) {
+    include_once('main.html');
+    exit;
+}
+*/
 
 // ── Routes API ────────────────────────────────────────────────
 // En-têtes JSON + CORS (uniquement pour les routes /api/*)

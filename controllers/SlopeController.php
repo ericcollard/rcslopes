@@ -70,7 +70,6 @@ class SlopeController
         return "<img src='/assets/".$imgFileName.".png'>";
     }
 
-
     public function getDayName($date) {
         $jours= array("", "Lundi", "Mardi",
             "Mercredi", "Jeudi", "Vendredi",
@@ -171,6 +170,7 @@ class SlopeController
             $data['html'] = "<div class='container-fluid'>";
             $data['html'] .= "<div class='row'>";
             $data['html'] .= "<div class='col-lg'>";
+
             $data['html'] .= "<p class='slope-coordinates'>Latitude : {$slope['lat']} / Longitude : {$slope['lng']}</p>";
             $data['html'] .= "<p class='slope-orient'>Orientations exploitables : {$orientations}</p>";
             if ($slope['aip'])
