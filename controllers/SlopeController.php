@@ -187,7 +187,6 @@ class SlopeController
 
             if ($slopeWeatherData) {
                 $weatherStr = $this->getWeatherforecastHtml($slopeWeatherData);
-                $weatherStr ="";
                 $data['html'] .= "<h2>Prévisions météo à 3 jours</h2>";
                 $data['html'] .= $weatherStr;
             }
