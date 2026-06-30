@@ -4,3 +4,4 @@
 /config/database_prod.php
 /data
 /legacy_rcslopes
+/cache
