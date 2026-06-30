@@ -183,7 +183,8 @@ class SlopeController
             $data['html'] .= "<p class='slope-description'>{$slope['description']}</p>";
             $data['html'] .= "</div>"; // du row
             $data['html'] .= "<div class='col-lg'>";
-            $slopeWeatherData = WeatherForecast::getBySlopeId($slopeId);
+            $slopeWeatherData = null;
+            //$slopeWeatherData = WeatherForecast::getBySlopeId($slopeId);
 
             if ($slopeWeatherData) {
                 $weatherStr = $this->getWeatherforecastHtml($slopeWeatherData);
