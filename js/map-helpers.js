@@ -6,10 +6,12 @@ function feedModalBySlope(slopeId) {
             document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
             document.getElementById("markerModalBody").innerHTML= json.data.html;
 
+            document.getElementById('markerModalShare').innerHTML = "";
 
             var container = document.getElementById("markerModalShare");
             container.classList.add('share-buttons');
 
+            //ajouter els 2 boutons de partages
             // Bouton Facebook
             const fbBtn = document.createElement('button');
             fbBtn.textContent = 'Partager sur Facebook';
@@ -29,6 +31,7 @@ function feedModalBySlope(slopeId) {
             container.appendChild(fbBtn);
             container.appendChild(waBtn);
 
+            console.log(container);
 
         })
         .catch(() => {});
