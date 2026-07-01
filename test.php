@@ -14,7 +14,7 @@ use models\WeatherForecast;
 
 
 $slopeController = new SlopeController();
-//var_dump($slopeController->showHtml(5));
+var_dump($slopeController->showHtml(3));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);
@@ -25,11 +25,11 @@ $slopeController = new SlopeController();
 
 //var_dump($slopeController->get());
 
-$controller = new WeatherForecastController();
-$slopeWeatherData =  $controller->getBySlopeId(3,1);
+//$controller = new WeatherForecastController();
+//$slopeWeatherData =  $controller->getBySlopeId(3,1);
 //var_dump($slopeWeatherData);
-$weatherStr = $slopeController->getWeatherforecastHtml($slopeWeatherData);
-var_dump($weatherStr);
+//$weatherStr = $slopeController->getWeatherforecastHtml($slopeWeatherData);
+//var_dump($weatherStr);
 /*
 $slopesData = [
     ['slope_id' => 1, 'latitude' => 52.52, 'longitude' =>13.41 ],

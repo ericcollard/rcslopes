@@ -23,13 +23,13 @@ final class TableRegistry
             // Table : slopes
             // -----------------------------------------------------------
             'slopes' => [
-                'label'       => 'Sites de vol (Slopes)',
+                'label'       => 'Pentes',
                 'icon'        => 'bi-geo-alt-fill',
                 'primary_key' => 'slopeId',
                 'pk_auto'     => false, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
                 'order_by'    => 'slopeId DESC',
-                'list_columns' => ['slopeId', 'name', 'country', 'dpt', 'type', 'updated_at'],
-                'search_columns' => ['name', 'description', 'country', 'dpt', 'addBy'],
+                'list_columns' => ['slopeId', 'name', 'country', 'dpt', 'type', 'status'],
+                'search_columns' => ['name', 'desc_fr', 'country', 'dpt', 'addBy'],
                 'columns' => [
                     'slopeId' => [
                         'label' => 'ID', 'type' => 'hidden', 'editable' => false,
@@ -38,10 +38,10 @@ final class TableRegistry
                         'label' => 'Nom du site', 'type' => 'text', 'required' => true, 'maxlength' => 255,
                     ],
                     'lat' => [
-                        'label' => 'Latitude', 'type' => 'decimal', 'step' => '0.000001', 'required' => false,
+                        'label' => 'Latitude', 'type' => 'decimal', 'step' => '0.000001', 'required' => true,
                     ],
                     'lng' => [
-                        'label' => 'Longitude', 'type' => 'decimal', 'step' => '0.000001', 'required' => false,
+                        'label' => 'Longitude', 'type' => 'decimal', 'step' => '0.000001', 'required' => true,
                     ],
                     'orient' => [
                         'label' => 'Orientations (vent)', 'type' => 'select_multiple',
@@ -49,11 +49,21 @@ final class TableRegistry
                     ],
                     'type' => [
                         'label' => 'Type de site', 'type' => 'select',
-                        'options' => ['pente' => 'Pente', 'interdit' => 'Interdit', 'treuil' => 'Treuil', 'autre' => 'Autre'],
-                        'allow_custom' => true,
+                        'options' => ['pente' => 'Pente', 'interdit' => 'Interdit', 'meteo' => 'Balise météo', 'parking' => 'Parking'],
+                        'required' => true,
+                        'allow_custom' => false,
                     ],
-                    'description' => [
+                    'status' => [
+                        'label' => 'Statut', 'type' => 'select',
+                        'options' => ['active' => 'Actif', 'disabled' => 'Archivé', 'new' => 'A modérer'],
+                        'required' => true,
+                        'allow_custom' => false,
+                    ],
+                    'desc_fr' => [
                         'label' => 'Description (FR)', 'type' => 'wysiwyg',
+                    ],
+                    'desc_en' => [
+                        'label' => 'Description (EN)', 'type' => 'wysiwyg',
                     ],
                     'weather_url' => [
                         'label' => 'URL météo', 'type' => 'text', 'maxlength' => 2048,
@@ -76,11 +86,8 @@ final class TableRegistry
                     'aip' => [
                         'label' => 'Référence AIP', 'type' => 'text', 'maxlength' => 255,
                     ],
-                    'desc_en' => [
-                        'label' => 'Description (EN)', 'type' => 'wysiwyg',
-                    ],
                     'country' => [
-                        'label' => 'Pays', 'type' => 'text', 'maxlength' => 100,
+                        'label' => 'Pays', 'type' => 'text', 'maxlength' => 100, 'required' => true,
                     ],
                     'dpt' => [
                         'label' => 'Département', 'type' => 'text', 'maxlength' => 100,
@@ -91,6 +98,40 @@ final class TableRegistry
                     'updated_at' => [
                         'label' => 'Mis à jour le', 'type' => 'datetime', 'editable' => false, 'auto_always' => true,
                     ],
+                ],
+            ],
+
+            // -----------------------------------------------------------
+            // Table : comments
+            // -----------------------------------------------------------
+            'comments' => [
+                'label'       => 'Commentaires',
+                'icon'        => 'bi-geo-alt-fill',
+                'primary_key' => 'id',
+                'pk_auto'     => true, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
+                'order_by'    => 'id DESC',
+                'list_columns' => ['id', 'slopeId', 'email', 'status'],
+                'search_columns' => ['slopeId', 'email', 'status'],
+                'columns' => [
+                    'id' => [
+                        'label' => 'ID', 'type' => 'hidden', 'editable' => false,
+                    ],
+                    'slopeId' => [
+                        'label' => 'Site (slopeId)', 'type' => 'lookup', 'required' => true,
+                        'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'name',
+                    ],
+                    'comment' => [
+                        'label' => 'Description (FR)', 'type' => 'wysiwyg',
+                    ],
+                    'status' => [
+                        'label' => 'Statut', 'type' => 'select',
+                        'options' => ['active' => 'Actif', 'disabled' => 'Archivé', 'new' => 'A modérer'],
+                        'required' => true,
+                        'allow_custom' => false,
+                    ],
+                    'email' => [
+                        'label' => 'Ajouté par', 'type' => 'text', 'maxlength' => 255,
+                    ]
                 ],
             ],
 

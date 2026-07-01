@@ -8,10 +8,11 @@ function feedModalBySlope(slopeId) {
 
             document.getElementById('markerModalShare').innerHTML = "";
 
+
             var container = document.getElementById("markerModalShare");
             container.classList.add('share-buttons');
 
-            //ajouter els 2 boutons de partages
+            //ajouter les 2 boutons de partages
             // Bouton Facebook
             const fbBtn = document.createElement('button');
             fbBtn.textContent = 'Partager sur Facebook';
@@ -32,6 +33,7 @@ function feedModalBySlope(slopeId) {
             container.appendChild(waBtn);
 
             console.log(container);
+
 
         })
         .catch(() => {});

@@ -18,18 +18,18 @@ class Slope
     /**
      * Retourne tous les sites de vol.
      */
-    public static function getAll($limit = -1, $offset = -1, $slopeType = false): array
+    public static function getAll($limit = -1, $offset = -1, $slopeType = false, $status = 'active'): array
     {
         if ($limit == -1)
         {
-            $sql = "SELECT * FROM slopes ORDER BY slopeId ASC";
-            if ($slopeType) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC";
+            $sql = "SELECT * FROM slopes where status='".$status."' ORDER BY slopeId ASC";
+            if ($slopeType) $sql = "SELECT * FROM slopes where status='".$status."' and type = 'pente' ORDER BY slopeId ASC";
             $stmt = getDB()->query($sql);
         }
         else
         {
-            $sql = "SELECT * FROM slopes ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
-            if ($slopeType) $sql = "SELECT * FROM slopes where type = 'pente' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
+            $sql = "SELECT * FROM slopes where status='".$status."' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
+            if ($slopeType) $sql = "SELECT * FROM slopes where status='".$status."' and type = 'pente' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
             $stmt = getDB()->query($sql);
 
         }
@@ -44,10 +44,10 @@ class Slope
         return $rows;
     }
 
-    public static function getCount($slopeType = false): int
+    public static function getCount($slopeType = false, $status = 'active'): int
     {
-        $sql = "SELECT COUNT(*) as Nb FROM slopes";
-        if ($slopeType) $sql = "SELECT COUNT(*) as Nb FROM slopes where type = 'pente'";
+        $sql = "SELECT COUNT(*) as Nb FROM slopes where status='".$status."'";
+        if ($slopeType) $sql = "SELECT COUNT(*) as Nb FROM slopes where status='".$status."' and type = 'pente'";
         $stmt = getDB()->query($sql);
 
         $rows = $stmt->fetchAll();
@@ -84,7 +84,7 @@ class Slope
     /**
      * Retourne les sites qui correspondent anu nom.
      */
-    public static function getByPartialName(string $searchStr, int $limit=10): ?array
+    public static function getByPartialName(string $searchStr, int $limit=10, $status = 'active'): ?array
     {
         // recherche sur le nom de la pente
 
@@ -94,7 +94,7 @@ class Slope
         $stmt = getDB()->prepare(
             'SELECT slopeId,name, lat, lng
              FROM slopes
-             WHERE type = "pente" and name like ? Limit '.$limit
+             WHERE status="'.$status.'" and type = "pente" and name like ? Limit '.$limit
         );
 
         if (is_numeric($searchStr))

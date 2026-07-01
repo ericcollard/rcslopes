@@ -193,7 +193,7 @@ class SlopeController
             if ($slope['url'])
                 $data['html'] .= "<p class='slope-gestion'>URL du club gestionnaire : {$slope['url']}</p>";
             $data['html'] .= "<h2>Description et accès</h2>";
-            $data['html'] .= "<p class='slope-description'>{$slope['description']}</p>";
+            $data['html'] .= "<p class='slope-description'>{$slope['desc_fr']}</p>";
             $data['html'] .= "</div>"; // du row
             $data['html'] .= "<div class='col-lg'>";
             $weatherForecastController = new WeatherForecastController();
@@ -212,7 +212,7 @@ class SlopeController
 
         if ($slope['type'] == 'meteo')
         {
-            $data['html'] = $slope['description'];
+            $data['html'] = $slope['desc_fr'];
         }
 
         jsonResponse(['success' => true, 'data' => $data]);
@@ -336,10 +336,10 @@ class SlopeController
         if (isset($body['orient'])) {
             $data['orient'] = sanitizeWindDirections($body['orient']);
         }
-        if (array_key_exists('description', $body)) {
+        if (array_key_exists('desc_fr', $body)) {
             // On autorise le HTML – filtrer selon tes besoins de sécurité
-            $data['description'] = $body['description'] !== null
-                ? trim($body['description'])
+            $data['desc_fr'] = $body['desc_fr'] !== null
+                ? trim($body['desc_fr'])
                 : null;
         }
         if (array_key_exists('weather_url', $body)) {
