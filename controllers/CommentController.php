@@ -34,6 +34,69 @@ class CommentController
             exit;
         }
 
+
+// ============================================================
+// 1) VÉRIFICATION DU TOKEN CSRF
+// ============================================================
+        $submittedToken = $input['csrf_token'] ?? '';
+
+        if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
+            http_response_code(419); // "Page Expired" (convention courante pour CSRF invalide)
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Session expirée, veuillez recharger la page et réessayer.']
+            ]);
+            exit;
+        }
+
+// ============================================================
+// 2) HONEYPOT — un bot remplit généralement tous les champs
+// ============================================================
+        if (!empty($input['website'])) {
+            // On répond "succès" pour ne pas indiquer au bot qu'il a été détecté,
+            // mais on n'insère rien en base.
+            http_response_code(201);
+            echo json_encode(['success' => true]);
+            exit;
+        }
+
+// ============================================================
+// 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
+// ============================================================
+        $renderedAt = (int) ($input['form_rendered_at'] ?? 0);
+        $elapsed    = time() - $renderedAt;
+
+        if ($renderedAt <= 0 || $elapsed < 2) {
+            http_response_code(422);
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Soumission trop rapide, veuillez réessayer.']
+            ]);
+            exit;
+        }
+
+// ============================================================
+// 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
+// ============================================================
+        $now            = time();
+        $window         = 600; // 10 minutes
+        $maxSubmissions = 5;
+
+        $_SESSION['comment_submissions'] = array_filter(
+            $_SESSION['comment_submissions'] ?? [],
+            fn(int $timestamp) => ($now - $timestamp) < $window
+        );
+
+        if (count($_SESSION['comment_submissions']) >= $maxSubmissions) {
+            http_response_code(429); // Too Many Requests
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Trop de commentaires envoyés récemment, veuillez patienter avant de réessayer.']
+            ]);
+            exit;
+        }
+
+
         $errors = $this->validateRequired($input);
         if (empty($errors)) $input = $this->sanitize($input);
 

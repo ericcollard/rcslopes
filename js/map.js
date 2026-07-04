@@ -386,7 +386,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const payload = {
             email: formData.get('email'),
             comment: formData.get('comment'),
-            slopeId: formData.get('slopeId')
+            slopeId: formData.get('slopeId'),
+            csrf_token: formData.get('csrf_token'),
+            form_rendered_at: formData.get('form_rendered_at'),
+            website: formData.get('website') // honeypot : doit rester vide côté humain
         };
 
         try {

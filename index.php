@@ -18,6 +18,16 @@ $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
 $uri = preg_replace('#^/api#', '', $uri);
 $uri = rtrim($uri, '/');
 
+// ── Pour protection des formulaires ────────────────────────────────────
+session_start();
+// Génère (ou réutilise) le token CSRF de la session
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrfToken = $_SESSION['csrf_token'];
+// Horodatage d'affichage du formulaire, utilisé pour détecter les soumissions trop rapides (bots)
+$formRenderedAt = time();
+
 
 // ── Page d'accueil (GET /) ────────────────────────────────────
 $request = null;

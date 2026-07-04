@@ -293,3 +293,13 @@ vertical-align: top;
 td.slope-comment-date {
     vertical-align: top;
 }
+
+/* Honeypot : invisible pour un humain, mais accessible aux bots qui remplissent tout */
+.hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}

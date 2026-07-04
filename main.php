@@ -141,6 +141,21 @@
                 <div id="formErrors" class="alert alert-danger d-none"></div>
                 <input type="hidden" id="slopeId" name="slopeId">
 
+
+                <!-- Token CSRF -->
+                <input type="hidden" id="csrf_token" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES) ?>">
+
+                <!-- Horodatage d'affichage du formulaire (détection de soumission trop rapide) -->
+                <input type="hidden" id="form_rendered_at" name="form_rendered_at" value="<?= $formRenderedAt ?>">
+
+                <!-- Honeypot : champ piège, doit rester vide. Les bots le remplissent souvent. -->
+                <div class="hp-field" aria-hidden="true">
+                    <label for="website">Ne pas remplir ce champ</label>
+                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
+
+
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" required>
