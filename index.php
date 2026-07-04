@@ -26,7 +26,7 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
 
     if ($request) {
         $requestedSlopeId = (int)$request[1];
-        //var_dump($requestedSlopeId);
+        var_dump($requestedSlopeId);
     }
     /*
     la redirection vers une pente donnée est gérée dans le js
@@ -41,9 +41,9 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
         require_once __DIR__ . '/models/SLope.php';
         $slope = \models\Slope::getById($requestedSlopeId);
         $og_title = "RcSlopeS"." - pente ".$slope['name'];
-        //var_dump($slope);
+        var_dump($slope);
     }
-    include_once('main.php');
+    //include_once('main.php');
 exit;
 }
 /*
