@@ -39,7 +39,7 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
     if ($requestedSlopeId > 0)
     {
         var_dump('avant require_once');
-        require_once __DIR__ . '/models/SLope.php';
+        require_once __DIR__ . '/models/Slope.php';
         var_dump('après require_once');
         $slope = \models\Slope::getById($requestedSlopeId);
         var_dump('après getById');
