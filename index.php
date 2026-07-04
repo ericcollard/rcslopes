@@ -38,8 +38,11 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
     $og_image = $serverName."/assets/preview.png";
     if ($requestedSlopeId > 0)
     {
+        var_dump('avant require_once');
         require_once __DIR__ . '/models/SLope.php';
+        var_dump('après require_once');
         $slope = \models\Slope::getById($requestedSlopeId);
+        var_dump('après getById');
         $og_title = "RcSlopeS"." - pente ".$slope['name'];
         var_dump($slope);
     }
