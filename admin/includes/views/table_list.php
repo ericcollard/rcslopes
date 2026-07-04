@@ -143,15 +143,47 @@
 
   <!-- Pagination -->
   <?php if ($result['total_pages'] > 1): ?>
+    <?php
+
+        $paginationTable = [];
+        if ($result['page'] == 1)  $paginationTable[] = 1;
+
+        for ($j = -2; $j <= 2; $j++) {
+            if (($j + $result['page']) > 1 and ($j + $result['page']) < $result['total_pages']) {
+                $paginationTable[] = $j + $result['page'];
+            }
+        }
+        if ($result['page'] == $result['total_pages'])  $paginationTable[] = $result['total_pages'];
+        $paginationCnt = sizeof($paginationTable);
+    ?>
+
     <nav class="mt-4 d-flex justify-content-center">
       <ul class="pagination mb-0">
-        <?php for ($p = 1; $p <= $result['total_pages']; $p++): ?>
-          <li class="page-item <?= $p === $result['page'] ? 'active' : '' ?>">
-            <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page=' . $p . '&q=' . urlencode($search)) ?>">
-              <?= $p ?>
+          <li class="page-item">
+              <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page=1&q=' . urlencode($search)) ?>"><<</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page='.($result['page']-1>0?$result['page']-1:1).'&q=' . urlencode($search)) ?>"><</a>
+          </li>
+
+
+        <?php for ($p = 0; $p < $paginationCnt; $p++): ?>
+          <li class="page-item <?= $paginationTable[$p] === $result['page'] ? 'active' : '' ?>">
+            <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page=' . $paginationTable[$p] . '&q=' . urlencode($search)) ?>">
+              <?= $paginationTable[$p] ?>
             </a>
           </li>
         <?php endfor; ?>
+
+          <li class="page-item">
+              <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page='.($result['page']+1<=$result['total_pages']?$result['page']+1:$result['total_pages']).'&q=' . urlencode($search)) ?>"> > </a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" href="<?= admin_url('table.php?t=' . urlencode($tableKey) . '&page='.$result['total_pages'].'&q=' . urlencode($search)) ?>"> >> </a>
+          </li>
+
+
+
       </ul>
     </nav>
   <?php endif; ?>

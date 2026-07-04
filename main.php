@@ -117,8 +117,50 @@
                 <p>Lorem ipsum dolor sit amet. Aut quae repellat aut sequi quaeratQui delectus id nihil consequatur aut iste impedit hic modi voluptate. Ut repellat praesentium sed alias aspernaturest asperiores id eligendi facere et eius autem. Eos nihil laboreQuo neque ea nisi ducimus sed libero omnis et perspiciatis inventore. Ad dicta doloribus <a href="https://www.loremipzum.com" target="_blank">Qui obcaecati</a> ut quae maiores! Est tempore galisum sed impedit fugitAut inventore nam facere ratione id laborum illo quo nesciunt placeat aut necessitatibus aliquid. Ut voluptatibus nemo ab deleniti nostrumet veritatis. Cum consequuntur delectus est labore nobisSed voluptatem vel aperiam quibusdam cum voluptatem velit qui labore quas ut laborum autem. Sit dignissimos rerum eos totam laboriosamut perspiciatis ut asperiores blanditiis. Id blanditiis autemEa quia qui dignissimos quod et voluptatem aspernatur in laborum voluptas sed sint distinctio. </p><ul><li>In architecto voluptas non ullam dolores. </li><li>Ea recusandae labore et odit ratione! </li></ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <a class="btn btn-warning" id="modal-edit-button" href="#" target="_blank" role="button">Editer (Admin)</a>
+                <button class="btn btn-primary" data-bs-target="#commentModal" data-bs-toggle="modal">Ajout commentaire</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Conteneur des messages flash -->
+<div id="flashContainer"></div>
+
+<div class="modal fade" id="commentModal" aria-hidden="true" aria-labelledby="commentModalLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+            <form id="commentForm" novalidate>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="commentModalLabel">Ajouter un commentaire</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Zone d'erreurs générales (renvoyées par le POST) -->
+                <div id="formErrors" class="alert alert-danger d-none"></div>
+                <input type="hidden" id="slopeId" name="slopeId">
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="invalid-feedback" id="email-error"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Commentaire</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
+                    <div class="invalid-feedback" id="comment-error"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="spinner-border spinner-border-sm d-none" id="submitSpinner"></span>
+                    Envoyer
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

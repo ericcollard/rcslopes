@@ -70,14 +70,18 @@ if ($method === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
+
+use controllers\CommentController;
 use controllers\SlopeController;
 use controllers\WindStationController;
 require_once __DIR__ . '/controllers/SlopeController.php';
+require_once __DIR__ . '/controllers/CommentController.php';
 require_once __DIR__ . '/controllers/WindStationController.php';
 require_once __DIR__ . '/helpers/response.php';
 
 $slopeController = new SlopeController();
 $windStationController = new WindStationController();
+$commentController = new CommentController();
 
 // ── GET /slopes ──────────────────────────────────────────────
 if ($method === 'GET' && $uri === '/slopes') {
@@ -99,11 +103,12 @@ if ($method === 'GET' && $uri === '/slopes') {
 } elseif ($method === 'GET' && preg_match('#^/slopes/(\d+)$#', $uri, $m)) {
     $slopeController->show((int) $m[1]);
 
-
 // ── GET /stations/{id} ─────────────────────────────────────────
 } elseif ($method === 'GET' && preg_match('#^/stations/(\d+)$#', $uri, $m)) {
     $windStationController->show((int) $m[1]);
 
+} elseif ($method === 'POST' && $uri === '/comment') {
+    $commentController->store();
 // ── Route inconnue ───────────────────────────────────────────
 } else {
     jsonResponse(['success' => false, 'error' => 'Route introuvable.'], 404);

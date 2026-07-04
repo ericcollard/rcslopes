@@ -13,8 +13,23 @@ use models\WeatherForecast;
 
 
 
-$slopeController = new SlopeController();
-var_dump($slopeController->showHtml(3));
+$params=['email'=>'eric.collardfree.fr', 'comment'=>'Cest moi', 'slopeId'=>36];
+$defaults = array(
+    CURLOPT_URL => 'https://rcslopes.test/comment',
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => json_encode($params),
+);
+$ch = curl_init();
+curl_setopt_array($ch, $defaults);
+
+curl_exec($ch);
+if(curl_error($ch)) {
+    echo curl_error($ch);
+}
+
+
+//$slopeController = new SlopeController();
+//var_dump($slopeController->showHtml(3));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);

@@ -1,3 +1,16 @@
+function getEditUrl(datatable,id) {
+
+    let currentLocation = window.location;
+    if (currentLocation.origin.length > 1)
+    {
+        return currentLocation.origin + "/admin/table.php?t=" + datatable + "&mode=edit&pk=" + id;
+    }
+    else
+    {
+        return "#";
+    }
+}
+
 function feedModalBySlope(slopeId) {
     fetch('/api/slopes/desc/'+slopeId)
         .then(r => r.ok ? r.json() : null)
@@ -32,8 +45,12 @@ function feedModalBySlope(slopeId) {
             container.appendChild(fbBtn);
             container.appendChild(waBtn);
 
-            console.log(container);
+            // Ajout du lien d'édition
+            var linkElement = document.getElementById("modal-edit-button");
+            linkElement.href = getEditUrl('slopes',slopeId);
 
+            var SlopeIdFormElem = document.getElementById("slopeId");
+            SlopeIdFormElem.value = slopeId;
 
         })
         .catch(() => {});

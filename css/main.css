@@ -3,6 +3,13 @@ html {
     height: 100%;
     margin: 0;
 }
+#flashContainer {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2000;
+    min-width: 300px;
+}
 
 /* Empêche tout scroll sur la page */
 .rc-body {
@@ -261,4 +268,28 @@ p.leaflet-popup-date {
 }
 .share-btn-whatsapp:hover {
     background-color: #1da851;
+}
+
+
+.slope-comments {
+    font-size: 0.8em;
+    color: #6c757d;
+    font-style: italic;
+}
+
+td.slope-comment-email {
+    vertical-align: top;
+    padding-top: 10px;
+}
+td.slope-comment-text {
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+.slope-comment-status {
+vertical-align: top;
+}
+
+td.slope-comment-date {
+    vertical-align: top;
 }

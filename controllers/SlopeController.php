@@ -6,12 +6,13 @@
 namespace controllers;
 use IntlDateFormatter;
 use controllers\WeatherForecastController;
+use models\Comment;
 use models\Slope;
 use models\WeatherForecast;
 use function jsonResponse;
 use function sanitizeWindDirections;
 
-
+require_once __DIR__ . '/../models/Comment.php';
 require_once __DIR__ . '/../models/Slope.php';
 require_once __DIR__ . '/../models/WeatherForecast.php';
 require_once __DIR__ . '/../helpers/response.php';
@@ -54,12 +55,6 @@ class SlopeController
         '</svg>';
 
         return $svg;
-        /*
-        $svg = '<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">' .
-            '<circle r="2" cx="10" cy="10" fill="black" />' .
-            '<polygon points="13,10 7,10 10,0" style="fill:black" transform="rotate(' . ($heading + 180) . ',10,10)"/>' .
-            '</svg>';
-        return $svg;*/
     }
 
     public function getCouldCoverImg(float $cloudCover, float $rainQty)
@@ -95,13 +90,6 @@ class SlopeController
     }
 
     public function getWeatherforecastHtml($slopesWeatherData) {
-
-
-        /*
-         *  $slopeWeatherData
-         *
-         *
-         */
 
         $slopeWeatherData = $slopesWeatherData[0]['weatherDataSet'];
 
@@ -145,26 +133,45 @@ class SlopeController
         $html .= "</div>";
         return $html;
 
-        /*
-         *
-         *      $weatherStr = "<table class='table table-success table-striped-columns slope-forecast'><tr><td>Date</td><td>Orientation</td><td>Vitesse</td><td>Rafales</td><td>Nuages</td><td>Pluie</td><td>Température</td></tr>";
+    }
 
-                foreach ($slopeWeatherData as $key => $slopeWeatherDataItem) {
-                    $date = new \DateTime($slopeWeatherDataItem['forecast_time']);
-                    $dateStr = date_format($date,'d m Y H:i');
-                    $orient = $this->generateWindDirectionSVG($slopeWeatherDataItem['wind_heading']) . " (".$slopeWeatherDataItem['wind_heading'].")";
-                    $speed = number_format($slopeWeatherDataItem['wind_speed'], 0, '.', ''). " km/h";
-                    $gust = number_format($slopeWeatherDataItem['wind_gust'], 0, '.', ''). " km/h";
-                    $cloud = $this->getCouldCoverImg($slopeWeatherDataItem['cloud_cover'],$slopeWeatherDataItem['rain']);
-                    $temperature = number_format($slopeWeatherDataItem['temperature'], 0, '.', ''). " °C";
-                    $rain = number_format($slopeWeatherDataItem['rain'], 0, '.', ''). " mm";
-                    $weatherStr .= "<tr><td>{$dateStr}</td><td>{$orient}</td><td>{$speed}</td><td>{$gust}</td><td>{$cloud}</td><td>{$rain}</td><td>{$temperature}</td></tr>";
-                }
+    public function getCommentsHtml(int $slopeId): string
+    {
+        $comments = Comment::getBySlopeId($slopeId);
+        if (!$comments) {
+            return "";
+        }
+        $html = "<table class='slope-comments'>";
+        foreach ($comments as $key => $comment) {
+            $html .= "<tr>";
+            $html .= "<td class='slope-comment-email'>".substr(strip_tags($comment['email']),0,10)."...</td>";
+            $html .= "<td rowspan='3' class='slope-comment-text'>".strip_tags($comment['comment'])."</td>";
+            $html .= "</tr>";
+            $created = new \DateTime($comment['created_at']);
+            $html .= "<tr>";
+            $html .= "<td class='slope-comment-date'>".date_format($created,'d/m/Y')."</td>";
+            $html .= "</tr>";
+            $html .= "<tr>";
+            $html .= "<td class='slope-comment-status'>";
+            if ($comment['status'] == 'new') {
+                $html .= "Nouveau !";
+            }
+            $html .= "<span  class='slope-comment-status-edit'><a target='_blank' href='".$this->getEditUrl('comments',$comment['id'])."'><i class='bi bi-pencil-square'></i></a></span>";
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+        $html .= "</table>";
 
-                $weatherStr .= "</table>";
-         *
-         */
+        return $html;
+    }
 
+    public function getEditUrl($datatable,$id) {
+        //https://rcslopes.test/admin/table.php?t=comments&mode=edit&pk=368
+        $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+            === 'on' ? "https" : "http") .
+            "://" . $_SERVER['HTTP_HOST'];
+
+        return $serverName."/admin/table.php?t=".$datatable."&mode=edit&pk=".$id;
     }
 
     public function showHtml(int $slopeId): void
@@ -191,11 +198,17 @@ class SlopeController
             else
                 $data['html'] .= "<div class='alert alert-danger' role='alert'>Cette pente ne possède pas d'AIP</div>";
             if ($slope['url'])
-                $data['html'] .= "<p class='slope-gestion'>URL du club gestionnaire : {$slope['url']}</p>";
+                $data['html'] .= '<p class="slope-gestion">Lien club gestionnaire : <a target="_blank" href = '.$slope["url"].'>'.$slope["url"].'</a></p>';
             $data['html'] .= "<h2>Description et accès</h2>";
             $data['html'] .= "<p class='slope-description'>{$slope['desc_fr']}</p>";
             $data['html'] .= "</div>"; // du row
             $data['html'] .= "<div class='col-lg'>";
+            $commentsHtml = $this->getCommentsHtml($slopeId);
+            if (strlen($commentsHtml)>0)
+            {
+                $data['html'] .= "<h2>Commentaires</h2>";
+                $data['html'] .= $commentsHtml;
+            }
             $weatherForecastController = new WeatherForecastController();
             $slopeWeatherData = $weatherForecastController->getBySlopeId($slopeId,0);
             if ($slopeWeatherData) {
