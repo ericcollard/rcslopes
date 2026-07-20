@@ -140,27 +140,35 @@ svg {
 .modal-backdrop { z-index: 1290; }
 
 
-#markerModal h1, #markerModal h2, #markerModal h3, #markerModal h4, #markerModal h5, #markerModal h6 {
+.modal h1, .modal h2, .modal h3, .modal h4, .modal h5, .modal h6 {
     color: #7ecfff;
 }
 
-#markerModal h1 {
+.modal h1 {
     font-size: 1.8rem !important;
 }
 
-#markerModal h2 {
+.modal h2 {
     font-size: 1.6rem !important;
+    font-variant: small-caps;
 }
 
-#markerModal h3 {
-    font-size: 1.4rem !important;
-}
-#markerModal h5 {
+.modal h3 {
     font-size: 1.2rem !important;
+    color: #aaaaaa;
+}
+.modal h4 {
+    font-size: 1.1rem !important;
+    color: #aaaaaa;
+}
+.modal h5 {
+    font-size: 1.0rem !important;
+    color: #aaaaaa;
 }
 
-#markerModal h6 {
+.modal h6 {
     font-size: 1.0rem !important;
+    color: #aaaaaa;
 }
 
 #markerModalLabel .label {
@@ -303,3 +311,56 @@ td.slope-comment-date {
     width: 0;
     overflow: hidden;
 }
+
+
+
+/***  Choix direction du vent ***/
+
+.addOrient{
+    width:100%;
+    border:none;
+    font-size:10px;
+    color:#aaa;
+    text-align:center;
+    background:none;
+}
+
+.sector {
+    position: relative;
+}
+
+.sec_child {
+    position: absolute;
+    top: 0;
+}
+
+.sec_dir {
+    left: 0;
+    width:300px;
+    z-index:10;
+}
+
+.sec_cntr {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    z-index:11;
+}
+
+
+.divider {
+    margin: 1rem 0;
+    position: relative;
+}
+
+
+.divider-gradient {
+    height: 3px;
+    background: linear-gradient(to right, transparent, #0d6efd, transparent);
+}
+.divider-fade {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #6c757d, transparent);
+}
+

@@ -48,3 +48,13 @@ function windSetToArray(string $set): array
     if ($set === '') return [];
     return explode(',', $set);
 }
+
+/**
+ * Convertit le tableau en chaine SET.
+ * Exemple : ["N", "NNE", "NW"] -> "N,NNE,NW"
+ */
+function windSetFromArray(array $windArray): string
+{
+    if (empty($windArray)) return '';
+    return implode(',',$windArray);
+}

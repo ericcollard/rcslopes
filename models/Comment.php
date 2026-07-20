@@ -53,6 +53,21 @@ class Comment
         return $row;
     }
 
+    public static function getUnderReview(): ?array
+    {
+        $stmt = getDB()->prepare(
+            'SELECT *
+             FROM comments
+             WHERE status = "new"'
+        );
+
+        $stmt->execute();
+        $row = $stmt->fetchAll();
+        if (!$row) return null;
+
+        return $row;
+    }
+
     public static function insert(string $comment, string $email, int $slopeId): int
     {
 

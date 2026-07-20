@@ -57,7 +57,7 @@
 
                 <li class="nav-item">
                     <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#OpenWindMapModal">
-                        Wind data
+                        Aide
                     </button>
                 </li>
 
@@ -104,112 +104,20 @@
     <div id="map"></div>
 </main>
 
-<!-- Dialogue modal pour les markers -->
-<div class="modal fade" id="markerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen-lg-down modal-dialog-centered modal-dialog-scrollable modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="markerModalLabel">Titre du marker</h1>
-                <div class="modal-title-right" id="markerModalShare"></div>
-            </div>
-            <div class="modal-body" id="markerModalBody">
-                <p>Lorem ipsum dolor sit amet. Aut quae repellat aut sequi quaeratQui delectus id nihil consequatur aut iste impedit hic modi voluptate. Ut repellat praesentium sed alias aspernaturest asperiores id eligendi facere et eius autem. Eos nihil laboreQuo neque ea nisi ducimus sed libero omnis et perspiciatis inventore. Ad dicta doloribus <a href="https://www.loremipzum.com" target="_blank">Qui obcaecati</a> ut quae maiores! Est tempore galisum sed impedit fugitAut inventore nam facere ratione id laborum illo quo nesciunt placeat aut necessitatibus aliquid. Ut voluptatibus nemo ab deleniti nostrumet veritatis. Cum consequuntur delectus est labore nobisSed voluptatem vel aperiam quibusdam cum voluptatem velit qui labore quas ut laborum autem. Sit dignissimos rerum eos totam laboriosamut perspiciatis ut asperiores blanditiis. Id blanditiis autemEa quia qui dignissimos quod et voluptatem aspernatur in laborum voluptas sed sint distinctio. </p><ul><li>In architecto voluptas non ullam dolores. </li><li>Ea recusandae labore et odit ratione! </li></ul>
-                <p>Lorem ipsum dolor sit amet. Aut quae repellat aut sequi quaeratQui delectus id nihil consequatur aut iste impedit hic modi voluptate. Ut repellat praesentium sed alias aspernaturest asperiores id eligendi facere et eius autem. Eos nihil laboreQuo neque ea nisi ducimus sed libero omnis et perspiciatis inventore. Ad dicta doloribus <a href="https://www.loremipzum.com" target="_blank">Qui obcaecati</a> ut quae maiores! Est tempore galisum sed impedit fugitAut inventore nam facere ratione id laborum illo quo nesciunt placeat aut necessitatibus aliquid. Ut voluptatibus nemo ab deleniti nostrumet veritatis. Cum consequuntur delectus est labore nobisSed voluptatem vel aperiam quibusdam cum voluptatem velit qui labore quas ut laborum autem. Sit dignissimos rerum eos totam laboriosamut perspiciatis ut asperiores blanditiis. Id blanditiis autemEa quia qui dignissimos quod et voluptatem aspernatur in laborum voluptas sed sint distinctio. </p><ul><li>In architecto voluptas non ullam dolores. </li><li>Ea recusandae labore et odit ratione! </li></ul>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-warning" id="modal-edit-button" href="#" target="_blank" role="button">Editer (Admin)</a>
-                <button class="btn btn-primary" data-bs-target="#commentModal" data-bs-toggle="modal">Ajout commentaire</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Conteneur des messages flash -->
 <div id="flashContainer"></div>
 
-<div class="modal fade" id="commentModal" aria-hidden="true" aria-labelledby="commentModalLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+<!-- Dialogue modal pour les markers -->
+<?php include 'modal-dialog-slope.php';?>
 
-        <div class="modal-content">
-            <form id="commentForm" novalidate>
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="commentModalLabel">Ajouter un commentaire</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Zone d'erreurs générales (renvoyées par le POST) -->
-                <div id="formErrors" class="alert alert-danger d-none"></div>
-                <input type="hidden" id="slopeId" name="slopeId">
-
-
-                <!-- Token CSRF -->
-                <input type="hidden" id="csrf_token" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES) ?>">
-
-                <!-- Horodatage d'affichage du formulaire (détection de soumission trop rapide) -->
-                <input type="hidden" id="form_rendered_at" name="form_rendered_at" value="<?= $formRenderedAt ?>">
-
-                <!-- Honeypot : champ piège, doit rester vide. Les bots le remplissent souvent. -->
-                <div class="hp-field" aria-hidden="true">
-                    <label for="website">Ne pas remplir ce champ</label>
-                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
-                </div>
-
-
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                    <div class="invalid-feedback" id="email-error"></div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Commentaire</label>
-                    <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
-                    <div class="invalid-feedback" id="comment-error"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <span class="spinner-border spinner-border-sm d-none" id="submitSpinner"></span>
-                    Envoyer
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
+<!-- Dialogue modal pour les commentaires -->
+<?php include 'modal-dialog-comment.php';?>
 
 <!-- Dialogue modal pour les légendes OpenWindMap -->
-<div class="modal fade" id="OpenWindMapModal" tabindex="-1" aria-labelledby="OpenWindMapModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen-lg-down modal-dialog-centered modal-dialog-scrollable modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="OpenWindMapModalLabel">Légende OpenWindMap data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Pour visualiser les données vent en temps réel, activer la couche "Vent" sur la carte.</p>
-                <p>Les données sont fournies par le Réseau Opendata Windbird</p>
-                <p>Dernières données : <span id="lastupdate"></span></p>
-                <p>Légende des vitesse de vent : </p>
-                <div class="wind-legend" id="windLegend">
-                    <div class="gauge-container" id="gaugeContainer"></div>
-                    <div class="labels">
-                        <span>0</span>
-                        <span>15</span>
-                        <span>30</span>
-                        <span>45</span>
-                        <span>60 km/h</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<?php include 'modal-dialog-help.php';?>
+
+<!-- Dialogue modal pour un ajout de nouvelle pente -->
+<?php include 'modal-dialog-newslope.php';?>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -220,6 +128,9 @@
 <!-- main JS -->
 <script src="js/map-helpers.js"></script>
 <script src="js/map.js"></script>
+<script src="js/modal-dialog-comment.js"></script>
+<script src="js/modal-dialog-newslope.js"></script>
+
 <script src="js/slope-search.js"></script>
 
 </body>

@@ -11,11 +11,18 @@ use helpers\OpenMeteoHelper;
 use models\Slope;
 use models\WeatherForecast;
 
+/*
 
+$params=[
+    'newslope_lat'=> 45.2,
+    'newslope_lng'=> 12.2,
+    'newslope_type'=> 'pente',
+    'newslope_name' => 'test',
+    'newslope_orient' => ' N  NNE '
+];
 
-$params=['email'=>'eric.collardfree.fr', 'comment'=>'Cest moi', 'slopeId'=>36];
 $defaults = array(
-    CURLOPT_URL => 'https://rcslopes.test/comment',
+    CURLOPT_URL => 'https://rcslopes.test/newslope',
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode($params),
 );
@@ -26,8 +33,10 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
+*/
 
-
+$slopes = Slope::getUnderReview();
+var_dump($slopes);
 //$slopeController = new SlopeController();
 //var_dump($slopeController->showHtml(3));
 //$slopesData = $slopeController->get(10,700, 1);

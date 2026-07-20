@@ -122,6 +122,9 @@ if ($method === 'GET' && $uri === '/slopes') {
 
 } elseif ($method === 'POST' && $uri === '/comment') {
     $commentController->store();
+
+} elseif ($method === 'POST' && $uri === '/newslope') {
+    $slopeController->store();
 // ── Route inconnue ───────────────────────────────────────────
 } else {
     jsonResponse(['success' => false, 'error' => 'Route introuvable.'], 404);

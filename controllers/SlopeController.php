@@ -10,7 +10,6 @@ use models\Comment;
 use models\Slope;
 use models\WeatherForecast;
 use function jsonResponse;
-use function sanitizeWindDirections;
 
 require_once __DIR__ . '/../models/Comment.php';
 require_once __DIR__ . '/../models/Slope.php';
@@ -177,6 +176,11 @@ class SlopeController
     public function showHtml(int $slopeId): void
     {
 
+        $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+            === 'on' ? "https" : "http") .
+            "://" . $_SERVER['HTTP_HOST'];
+        $slopeUrl = $serverName . "/" . $slopeId;
+
         $slope = Slope::getById($slopeId);
         if (!$slope) {
             jsonResponse(['success' => false, 'error' => 'Site introuvable.'], 404);
@@ -220,7 +224,16 @@ class SlopeController
             $data['html'] .= "</div>";  // du col
             $data['html'] .= "</div>";  // du row
             $data['html'] .= "</div>";  // du container
-            $data['html'] .= "<hr><h2>Données techniques</h2><p>Identifiant du site : " . $slopeId . "</p>";
+            $data['html'] .= "<hr>";
+            $data['html'] .= "<div class='row'>";
+            $data['html'] .= "<h2>Données techniques</h2>";
+            $data['html'] .= "<div class='col-6'>";
+            $data['html'] .= "<p>Identifiant du site : " . $slopeId . "</p>";
+            $data['html'] .= "</div>"; // du col
+            $data['html'] .= "<div class='col-6'>";
+            $data['html'] .= "<p>Lien direct : <a href='" .$slopeUrl . "'>" . $slopeUrl . "</a></p>";
+            $data['html'] .= "</div>"; // du col
+            $data['html'] .= "</div>"; // du row
         }
 
         if ($slope['type'] == 'meteo')
@@ -242,37 +255,110 @@ class SlopeController
 
     public function store(): void
     {
-        $body = $this->parseBody();
-        $errors = $this->validateRequired($body);
+        header('Content-Type: application/json; charset=utf-8');
+
+        // N'accepter que la méthode POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            jsonResponse(['success' => false,'errors'  => ['Méthode non autorisée.']], 405);
+            exit;
+        }
+
+        // Lecture du corps JSON envoyé par fetch()
+        $rawInput = file_get_contents('php://input');
+        $input    = json_decode($rawInput, true);
+
+        if (!is_array($input)) {
+            jsonResponse(['success' => false,'errors'  => ['Requête invalide.']], 400);
+            exit;
+        }
+
+// ============================================================
+// 1) VÉRIFICATION DU TOKEN CSRF
+// ============================================================
+        /*
+        $submittedToken = $input['newslope_csrf_token'] ?? '';
+
+        if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
+            http_response_code(419); // "Page Expired" (convention courante pour CSRF invalide)
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Session expirée, veuillez recharger la page et réessayer.']
+            ]);
+            exit;
+        }
+
+// ============================================================
+// 2) HONEYPOT — un bot remplit généralement tous les champs
+// ============================================================
+        if (!empty($input['newslope_website'])) {
+            // On répond "succès" pour ne pas indiquer au bot qu'il a été détecté,
+            // mais on n'insère rien en base.
+            http_response_code(201);
+            echo json_encode(['success' => true]);
+            exit;
+        }
+
+// ============================================================
+// 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
+// ============================================================
+        $renderedAt = (int) ($input['form_rendered_at'] ?? 0);
+        $elapsed    = time() - $renderedAt;
+
+        if ($renderedAt <= 0 || $elapsed < 2) {
+            http_response_code(422);
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Soumission trop rapide, veuillez réessayer.']
+            ]);
+            exit;
+        }
+
+// ============================================================
+// 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
+// ============================================================
+        $now            = time();
+        $window         = 600; // 10 minutes
+        $maxSubmissions = 5;
+
+        $_SESSION['slope_submissions'] = array_filter(
+            $_SESSION['slope_submissions'] ?? [],
+            fn(int $timestamp) => ($now - $timestamp) < $window
+        );
+
+        if (count($_SESSION['slope_submissions']) >= $maxSubmissions) {
+            http_response_code(429); // Too Many Requests
+            echo json_encode([
+                'success' => false,
+                'errors'  => ['Trop de pentes envoyées récemment, veuillez patienter avant de réessayer.']
+            ]);
+            exit;
+        }
+
+*/
+        $errors = $this->validateRequired($input);
+        if (empty($errors)) $input = $this->sanitize($input);
 
         if (!empty($errors)) {
-            jsonResponse(['success' => false, 'errors' => $errors], 422);
+            jsonResponse(['success' => false,'errors'  => $errors], 422);
+            exit;
         }
 
-        $data = $this->sanitize($body);
-        $slope = Slope::create($data);
-        jsonResponse(['success' => true, 'data' => $slope], 201);
+
+        //$orient = ['N','NW'];
+        //windSetFromArray($input['newslope_orient']));
+
+        try {
+            $slopeId = slope::insert($input);
+            jsonResponse(['success' => true,'id'  => $slopeId], 201);
+
+
+        } catch (PDOException $e) {
+            // Ne jamais renvoyer le message d'erreur SQL brut au client en production
+            error_log('Erreur insertion pente : ' . $e->getMessage());
+            jsonResponse(['success' => false,'errors'  => ['Une erreur serveur est survenue, veuillez réessayer plus tard.']], 500);
+        }
     }
 
-    // ── PUT /api/slopes/{slopeId} ──────────────────────────────────
-
-    public function update(int $slopeId): void
-    {
-        if (!Slope::getById($slopeId)) {
-            jsonResponse(['success' => false, 'error' => 'Site introuvable.'], 404);
-        }
-
-        $body = $this->parseBody();
-        $errors = $this->validatePartial($body);
-
-        if (!empty($errors)) {
-            jsonResponse(['success' => false, 'errors' => $errors], 422);
-        }
-
-        $data = $this->sanitize($body, partial: true);
-        $slope = Slope::update($slopeId, $data);
-        jsonResponse(['success' => true, 'data' => $slope]);
-    }
 
     // ── Validation ────────────────────────────────────────────
 
@@ -280,49 +366,43 @@ class SlopeController
     {
         $errors = [];
 
-        if (empty($body['name'])) {
-            $errors[] = 'Le champ "name" est obligatoire.';
+        if (empty($body['newslope_name'])) {
+            $errors[] = 'Le champ "nom" est obligatoire.';
         }
-        if (empty($body['type'])) {
+        if (empty($body['newslope_type'])) {
             $errors[] = 'Le champ "type" est obligatoire.';
         }
-        if (!isset($body['latitude']) || !is_numeric($body['lat'])) {
-            $errors[] = 'Le champ "lat" doit être un nombre.';
+        if (!isset($body['newslope_lat']) || !is_numeric($body['newslope_lat'])) {
+            $errors[] = 'Le champ "lattitude" doit être un nombre.';
         }
-        if (!isset($body['lng']) || !is_numeric($body['lng'])) {
-            $errors[] = 'Le champ "lng" doit être un nombre.';
+        if (!isset($body['newslope_lng']) || !is_numeric($body['newslope_lng'])) {
+            $errors[] = 'Le champ "longitude" doit être un nombre.';
         }
-        if (empty($body['orient']) || !is_array($body['orient'])) {
-            $errors[] = 'Le champ "orient" doit être un tableau non vide.';
-        } else {
-            if (sanitizeWindDirections($body['orient']) === null) {
-                $errors[] = 'Orientations invalides. Valeurs acceptées : ' . implode(', ', validWindDirections());
+        $types = array('pente','interdit','parking');
+        if (!isset($body['newslope_type']) || !in_array($body['newslope_type'], $types)) {
+            $errors[] = 'Le type n\'est pas correct.';
+        }
+        if (empty($body['newslope_email'])) {
+            $errors[] = 'Le champ "email" est obligatoire.';
+        }
+        else
+        {
+            if (!filter_var($body['newslope_email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = "L'adresse email n'est pas valide.";
+            }
+        }
+        if (isset($body['newslope_orient']) &&  strlen($body['newslope_orient'])>0 ) {
+            $orientStr = trim(preg_replace ("/\s+/", " ", $body['newslope_orient'])); // suppression des doubles espaces
+            $orients = explode(" ", $orientStr);
+            $orients = $this->sanitizeWindDirections($orients);
+            if (!$orients) {
+                $errors[] = 'Valeur invalide dans l\'orientation';
             }
         }
 
         return $errors;
     }
 
-    private function validatePartial(array $body): array
-    {
-        $errors = [];
-
-        if (isset($body['lat']) && !is_numeric($body['lat'])) {
-            $errors[] = 'Le champ "lat" doit être un nombre.';
-        }
-        if (isset($body['lng']) && !is_numeric($body['lng'])) {
-            $errors[] = 'Le champ "lng" doit être un nombre.';
-        }
-        if (isset($body['orient'])) {
-            if (!is_array($body['orient'])) {
-                $errors[] = '"orient" doit être un tableau.';
-            } elseif (sanitizeWindDirections($body['orient']) === null) {
-                $errors[] = 'Orientations invalides. Valeurs acceptées : ' . implode(', ', validWindDirections());
-            }
-        }
-
-        return $errors;
-    }
 
     // ── Helpers ───────────────────────────────────────────────
 
@@ -333,22 +413,105 @@ class SlopeController
         return is_array($data) ? $data : [];
     }
 
-    private function sanitize(array $body, bool $partial = false): array
+    private function sanitize(array $body): array
     {
         $data = [];
 
-        if (isset($body['name'])) {
-            $data['name'] = trim(strip_tags($body['name']));
+        if (isset($body['newslope_name'])) {
+            $data['name'] = trim(strip_tags($body['newslope_name']));
         }
-        if (isset($body['lat'])) {
-            $data['lat'] = (float)$body['lat'];
+        if (isset($body['newslope_lat'])) {
+            $data['lat'] = (float)$body['newslope_lat'];
         }
-        if (isset($body['lng'])) {
-            $data['lng'] = (float)$body['lng'];
+        if (isset($body['newslope_lng'])) {
+            $data['lng'] = (float)$body['newslope_lng'];
         }
-        if (isset($body['orient'])) {
-            $data['orient'] = sanitizeWindDirections($body['orient']);
+        if (isset($body['newslope_type'])) {
+            $data['type'] = trim(strip_tags($body['newslope_type']));
         }
+        if (isset($body['newslope_email'])) {
+            $data['addBy'] = trim(strip_tags($body['newslope_email']));
+        }
+        if (isset($body['newslope_orient']) &&  strlen($body['newslope_orient'])>0) {
+            /**
+             * Exemple : "N  NNE NW"
+             */
+
+            $orientStr = trim(preg_replace ("/\s+/", " ", $body['newslope_orient'])); // suppression des doubles espaces
+            $orients = explode(" ", $orientStr);
+            $data['orient'] =  $this->windSetFromArray($this->sanitizeWindDirections($orients));
+        }
+
+        if (isset($body['newslope_country'])) {
+            $data['country'] = trim(strip_tags($body['newslope_country']));
+        }
+        if (isset($body['newslope_dept'])) {
+            $data['dpt'] = trim(strip_tags($body['newslope_dept']));
+        }
+        if (isset($body['newslope_slopeAIP'])) {
+            $data['aip'] = trim(strip_tags($body['newslope_slopeAIP']));
+        }
+        if (isset($body['newslope_slopeClub']) && $body['newslope_slopeClub'] == 'on') {
+            $data['club'] = 1;
+        }
+        else
+        {
+            $data['club'] = 0;
+        }
+        if (isset($body['newslope_slopeCotisation']) && $body['newslope_slopeCotisation'] == 'on') {
+            $data['cotisation'] = 1;
+        }
+        else
+        {
+            $data['cotisation'] = 0;
+        }
+        if (isset($body['newslope_slopeLicence']) && $body['newslope_slopeLicence'] == 'on') {
+            $data['licence'] = 1;
+        }
+        else
+        {
+            $data['licence'] = 0;
+        }
+        if (isset($body['newslope_slopeURL'])) {
+            $data['url'] = trim(strip_tags($body['newslope_slopeURL']));
+        }
+
+        $infoStr = "<h3>Conditions de vol</h3>";
+        if (isset($body['newslope_slopeSize'])) {
+            $infoStr .= "<p>Hauteur de la pente : " . trim($body['newslope_slopeSize']) . "</p>";
+        }
+        if (isset($body['newslope_slopeCompatibility'])) {
+            $infoStr .= "<p>Pente compatible avec les planeurs de type : " . trim($body['newslope_slopeCompatibility']) . "</p>";
+        }
+        if (isset($body['newslope_slopeSurface'])) {
+            $infoStr .= "<p>Etat de surface de la zone de posé : " . trim($body['newslope_slopeSurface']) . "</p>";
+        }
+        if (isset($body['newslope_slopeGap'])) {
+            $infoStr .= "<p>Accès au trou : " . trim($body['newslope_slopeGap']) . "</p>";
+        }
+        $infoStr .= "<h3>Conditions d'accès à la pente</h3>";
+        if (isset($body['newslope_slopePark'])) {
+            $infoStr .= "<p>Accès à la pente depuis de stationnement : " . trim($body['newslope_slopePark']) . "</p>";
+        }
+        if (isset($body['newslope_slopeAccess'])) {
+            $infoStr .= "<p>Accès à la zone de stationnement : " . trim($body['newslope_slopeAccess']) . "</p>";
+        }
+        $infoStr .= "<h3>Gestion de le pente</h3>";
+        if (isset($body['newslope_clubName'])) {
+            $infoStr .= "<p>Nom du club gérant la pente : " . trim($body['newslope_clubName']) . "</p>";
+        }
+        $infoStr .= "<h3>Description détaillée</h3>";
+        if (isset($body['newslope_slopeInfo'])) {
+            $infoStr .= trim($body['newslope_slopeInfo']);
+        }
+        $data['desc_fr'] = $infoStr;
+
+        if (isset($body['newslope_slopeInfoEn'])) {
+            $data['desc_en'] = trim($body['newslope_slopeInfoEn']);
+        }
+
+
+        /*
         if (array_key_exists('desc_fr', $body)) {
             // On autorise le HTML – filtrer selon tes besoins de sécurité
             $data['desc_fr'] = $body['desc_fr'] !== null
@@ -359,7 +522,55 @@ class SlopeController
             $url = filter_var($body['weather_url'], FILTER_VALIDATE_URL);
             $data['weather_url'] = $url !== false ? $url : null;
         }
-
+*/
         return $data;
     }
+
+    /**
+     * Orientations de vent valides.
+     */
+    private function validWindDirections(): array
+    {
+        return ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    }
+
+    /**
+     * Valide et nettoie un tableau d'orientations.
+     * Retourne un tableau filtré ou null si une valeur est invalide.
+     */
+    private function sanitizeWindDirections(array $directions): ?array
+    {
+        $valid = $this->validWindDirections();
+        $clean = [];
+        foreach ($directions as $d) {
+            $d = strtoupper(trim((string)$d));
+            if (!in_array($d, $valid, true)) {
+                return null;
+            }
+            $clean[] = $d;
+        }
+
+        return array_values(array_unique($clean));
+    }
+
+    /**
+     * Convertit la chaîne SET MySQL en tableau PHP.
+     * Exemple : "N,NNE,NW" → ["N", "NNE", "NW"]
+     */
+    private function windSetToArray(string $set): array
+    {
+        if ($set === '') return [];
+        return explode(',', $set);
+    }
+
+    /**
+     * Convertit le tableau en chaine SET.
+     * Exemple : ["N", "NNE", "NW"] -> "N,NNE,NW"
+     */
+    private function windSetFromArray(array $windArray): string
+    {
+        if (empty($windArray)) return '';
+        return implode(',',$windArray);
+    }
+
 }
