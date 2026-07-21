@@ -343,12 +343,39 @@ class SlopeController
             exit;
         }
 
-
-        //$orient = ['N','NW'];
-        //windSetFromArray($input['newslope_orient']));
-
         try {
             $slopeId = slope::insert($input);
+
+            // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
+            if (!empty($input['addBy'])) {
+                // Construction contenu email
+                $adminEmail = "admin@finesseplus.org";
+                $email_vars = array(
+                    'NAME' => $input['name'],
+                    'SLOPEID' => $slopeId,
+                    'EMAIL' => $input['addBy'],
+                    'MAILADMIN' => $adminEmail,
+                );
+                $body = file_get_contents('./mail-templates/newslope.html');
+                if(isset($email_vars)){
+                    foreach($email_vars as $k=>$v){
+                        $body = str_replace('{'.strtoupper($k).'}', $v, $body);
+                    }
+                }
+                $altBody = strip_tags($body);
+
+                // Expédition email
+                require_once 'helpers/mailer.php';
+                $mail = getMailer();
+                $mail->setFrom($adminEmail, 'FinessPlus');
+                $mail->addAddress($input['addBy'], $input['addBy']);
+                $mail->Subject = 'FinessPlus - Enregistrement site #'.$slopeId;
+                $mail->isHTML(TRUE);
+                $mail->Body = $body;
+                $mail->AltBody = $altBody;
+                $mail->send();
+            }
+
             jsonResponse(['success' => true,'id'  => $slopeId], 201);
 
 

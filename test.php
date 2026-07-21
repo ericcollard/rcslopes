@@ -11,14 +11,40 @@ use helpers\OpenMeteoHelper;
 use models\Slope;
 use models\WeatherForecast;
 
+
 /*
+require_once 'helpers/mailer.php';
+$mail = getMailer();
+
+
+$mail->setFrom('admin@finesseplus.org', 'FinessPlus');
+$mail->addAddress('destinataire@gmail.com', 'Moi');
+$mail->Subject = 'Test envoi mail 7';
+// Définir le HTML
+$mail->isHTML(TRUE);
+$mail->Body = '<html>Bonjour, nous sommes heureux de <br>confirmer votre réservation.</br> Veuillez vérifier le document en pièce jointe.</html>';
+$mail->AltBody = 'Bonjour, nous sommes heureux de confirmer votre réservation. Veuillez vérifier le document en pièce jointe.';
+
+// envoyer le message
+if (!$mail->send()) {
+    echo 'Le message n\'a pas pu être envoyé . ';
+    echo 'Erreur du Mailer : ' . $mail->ErrorInfo;
+} else {
+    echo 'Le message a été envoyé';
+}
+*/
+
+
+
+
 
 $params=[
     'newslope_lat'=> 45.2,
     'newslope_lng'=> 12.2,
     'newslope_type'=> 'pente',
-    'newslope_name' => 'test',
-    'newslope_orient' => ' N  NNE '
+    'newslope_name' => 'test avec mail',
+    'newslope_orient' => ' N  NNE ',
+    'newslope_email' => 'eric.collard@free.fr'
 ];
 
 $defaults = array(
@@ -33,10 +59,10 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
-*/
 
-$slopes = Slope::getUnderReview();
-var_dump($slopes);
+
+//$slopes = Slope::getUnderReview();
+//var_dump($slopes);
 //$slopeController = new SlopeController();
 //var_dump($slopeController->showHtml(3));
 //$slopesData = $slopeController->get(10,700, 1);
