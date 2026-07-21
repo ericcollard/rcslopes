@@ -129,7 +129,7 @@
                     <div class="col-6">
                         <h4>Nouvelles pentes</h4>
                         <div class="table-responsive">
-                        <table class="table">
+                            <table class="table">
                             <tr>
                                 <th>Id</th>
                                 <th>Nom</th>
@@ -184,8 +184,8 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
