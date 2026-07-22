@@ -275,7 +275,7 @@ class SlopeController
 // ============================================================
 // 1) VÉRIFICATION DU TOKEN CSRF
 // ============================================================
-        /*
+
         $submittedToken = $input['newslope_csrf_token'] ?? '';
 
         if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
@@ -301,7 +301,7 @@ class SlopeController
 // ============================================================
 // 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
 // ============================================================
-        $renderedAt = (int) ($input['form_rendered_at'] ?? 0);
+        $renderedAt = (int) ($input['newslope_form_rendered_at'] ?? 0);
         $elapsed    = time() - $renderedAt;
 
         if ($renderedAt <= 0 || $elapsed < 2) {
@@ -334,7 +334,7 @@ class SlopeController
             exit;
         }
 
-*/
+
         $errors = $this->validateRequired($input);
         if (empty($errors)) $input = $this->sanitize($input);
 
@@ -347,14 +347,15 @@ class SlopeController
             $slopeId = slope::insert($input);
 
             // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
+            require_once 'helpers/mailer.php';
+
             if (!empty($input['addBy'])) {
                 // Construction contenu email
-                $adminEmail = "admin@finesseplus.org";
                 $email_vars = array(
                     'NAME' => $input['name'],
                     'SLOPEID' => $slopeId,
                     'EMAIL' => $input['addBy'],
-                    'MAILADMIN' => $adminEmail,
+                    'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
                 );
                 $body = file_get_contents('./mail-templates/newslope.html');
                 if(isset($email_vars)){
@@ -365,10 +366,10 @@ class SlopeController
                 $altBody = strip_tags($body);
 
                 // Expédition email
-                require_once 'helpers/mailer.php';
                 $mail = getMailer();
-                $mail->setFrom($adminEmail, 'FinessPlus');
+                $mail->setFrom(MAIL_ADMIN, 'FinessPlus');
                 $mail->addAddress($input['addBy'], $input['addBy']);
+                $mail->addCC(MAIL_ADMIN);
                 $mail->Subject = 'FinessPlus - Enregistrement site #'.$slopeId;
                 $mail->isHTML(TRUE);
                 $mail->Body = $body;

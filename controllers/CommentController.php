@@ -107,6 +107,39 @@ class CommentController
 
         try {
             $commentId = comment::insert($input['comment'], $input['email'], $input['slopeId']);
+
+            // commentaire enregistré avec succès > envoi d'un mail récapitulatif à l'émetteur
+            require_once 'helpers/mailer.php';
+
+            if (!empty($input['email'])) {
+                // Construction contenu email
+                $email_vars = array(
+                    'COMMENT' => $input['comment'],
+                    'SLOPEID' => $input['slopeId'],
+                    'EMAIL' => $input['email'],
+                    'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
+                );
+                $body = file_get_contents('./mail-templates/newcomment.html');
+                if(isset($email_vars)){
+                    foreach($email_vars as $k=>$v){
+                        $body = str_replace('{'.strtoupper($k).'}', $v, $body);
+                    }
+                }
+                $altBody = strip_tags($body);
+
+                // Expédition email
+                $mail = getMailer();
+                $mail->setFrom(MAIL_ADMIN, 'FinessPlus');
+                $mail->addAddress($input['email'], $input['email']);
+                $mail->addCC(MAIL_ADMIN);
+                $mail->Subject = 'FinessPlus - Nouveau commentaire pente #'.$input['slopeId'];
+                $mail->isHTML(TRUE);
+                $mail->Body = $body;
+                $mail->AltBody = $altBody;
+                $mail->send();
+            }
+
+
             jsonResponse(['success' => true,'id'  => $commentId], 201);
 
 

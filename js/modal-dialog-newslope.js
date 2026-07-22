@@ -90,25 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
             newslope_website: formData.get('newslope_website') // honeypot : doit rester vide côté humain
         };
 
-
-
-
-
-
-/*
-        const payload = {
-            newslope_lat:45.2,
-            newslope_lng:12.2,
-            newslope_type:'pente',
-            newslope_name:'test',
-            newslope_orient : '',
-            newslope_csrf_token : 'lkxlkwjlwkxjc',
-            newslope_form_rendered_at : '',
-            newslope_website : ''
-        };
-
-
-*/
         try {
             console.log(payload);
 
@@ -125,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Succès : on ferme le modal, on vide le formulaire, on affiche le flash
                 bootstrap.Modal.getInstance(document.getElementById('newslopeModal')).hide();
                 newslopeForm.reset();
-                showFlash('Votre pente a bien été ajouté.', 'success');
+                showFlash('Votre pente a bien été ajouté, un email vous a été envoyé.', 'success');
             } else {
                 // Erreur(s) : le modal reste ouvert, on affiche les erreurs
                 displayServerErrorsNewslope(data.errors || ['Une erreur est survenue, veuillez réessayer.']);

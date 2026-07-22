@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Succès : on ferme le modal, on vide le formulaire, on affiche le flash
                 bootstrap.Modal.getInstance(document.getElementById('commentModal')).hide();
                 form.reset();
-                showFlash('Votre commentaire a bien été ajouté.', 'success');
+                showFlash('Votre commentaire a bien été ajouté. Un email récapitulatif vous a été envoyé', 'success');
             } else {
                 // Erreur(s) : le modal reste ouvert, on affiche les erreurs
                 displayServerErrors(data.errors || ['Une erreur est survenue, veuillez réessayer.']);
