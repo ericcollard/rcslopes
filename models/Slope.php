@@ -4,6 +4,7 @@
 // ============================================================
 
 namespace models;
+use DOMDocument;
 use function getDB;
 use function windSetToArray;
 
@@ -141,15 +142,10 @@ class Slope
 
 
         $query = "INSERT INTO slopes
-                (lat, lng, name, type, orient, addBy, status, club, cotisation, licence, url, aip, desc_fr, desc_en, country, dpt)
+                (lat, lng, name, type, orient, addBy, status, club,club_name, cotisation, licence, url, aip, desc_summary_fr, desc_fr, desc_en, country, dpt)
                 VALUES
-                (:lat, :lng, :name , :type, :orient, :addBy, :status, :club, :cotisation, :licence, :url, :aip, :desc_fr, :desc_en, :country, :dpt)" ;
+                (:lat, :lng, :name , :type, :orient, :addBy, :status, :club,:club_name, :cotisation, :licence, :url, :aip, :desc_summary_fr, :desc_fr, :desc_en, :country, :dpt)" ;
         $stmt = $db->prepare($query);
-
-
-
-
-
 
         if (!isset($input['lat'])) $input['lat'] = null;
         if (!isset($input['lng'])) $input['lng'] = null;
@@ -159,10 +155,12 @@ class Slope
         if (!isset($input['addBy'])) $input['addBy'] = null;
         $defaultStatus = "new";
         if (!isset($input['club'])) $input['club'] = null;
+        if (!isset($input['club_name'])) $input['club_name'] = null;
         if (!isset($input['cotisation'])) $input['cotisation'] = null;
         if (!isset($input['licence'])) $input['licence'] = null;
         if (!isset($input['url'])) $input['url'] = null;
         if (!isset($input['aip'])) $input['aip'] = null;
+        if (!isset($input['desc_summary_fr'])) $input['desc_summary_fr'] = null;
         if (!isset($input['desc_fr'])) $input['desc_fr'] = null;
         if (!isset($input['desc_en'])) $input['desc_en'] = null;
         if (!isset($input['country'])) $input['country'] = null;
@@ -177,10 +175,12 @@ class Slope
         $stmt->bindParam(":addBy", $input['addBy']);
         $stmt->bindParam(":status", $defaultStatus);
         $stmt->bindParam(":club", $input['club']);
+        $stmt->bindParam(":club_name", $input['club_name']);
         $stmt->bindParam(":cotisation", $input['cotisation']);
         $stmt->bindParam(":licence", $input['licence']);
         $stmt->bindParam(":url", $input['url']);
         $stmt->bindParam(":aip", $input['aip']);
+        $stmt->bindParam(":desc_summary_fr", $input['desc_summary_fr']);
         $stmt->bindParam(":desc_fr", $input['desc_fr']);
         $stmt->bindParam(":desc_en", $input['desc_en']);
         $stmt->bindParam(":country", $input['country']);
@@ -191,5 +191,87 @@ class Slope
         $lastId = $db->lastInsertId();
 
         return $lastId;
+    }
+
+    public static function trouverTagsNonConcordants($html) {
+        // Activer la gestion des erreurs de libxml
+        libxml_use_internal_errors(true);
+
+        $dom = new DOMDocument();
+
+        // Charger le HTML (ajouter le header UTF-8 pour éviter les problèmes d'encodage)
+        $htmlProtege = '<?xml encoding="UTF-8">' . $html;
+        @$dom->loadHTML($htmlProtege, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $erreurs = libxml_get_errors();
+        $resultats = [];
+
+        foreach ($erreurs as $erreur) {
+            $resultats[] = [
+                'type' => 'Erreur',
+                'ligne' => $erreur->line,
+                'colonne' => $erreur->column,
+                'message' => trim($erreur->message)
+            ];
+        }
+
+        // Libérer la mémoire et réinitialiser les erreurs
+        libxml_clear_errors();
+
+        return $resultats;
+    }
+
+    public static function normalize() {
+        $stmt = getDB()->prepare(
+            'SELECT *
+             FROM slopes2'
+        );
+
+        $stmt->execute();
+        $rows = $stmt->fetchAll();
+        if (!$rows) return null;
+
+        foreach ($rows as $row) {
+            $id = $row['slopeId'];
+            $desc = $row['desc_fr'];
+
+            /*
+            $desc =  htmlspecialchars_decode($desc);
+
+
+            $recherches = ["&agrave;", "&eacute;", "&egrave;",
+                "&nbsp;","&ccedil;","&ecirc;","&ugrave;","&ocirc;",
+                "&rsquo;"
+            ];
+            $remplacements = ["à", "é", "è", " ","ç","ê","ù","ô","'"];
+
+            $recherches = ["\r", "\n", CHR(10), CHR(13)
+            ];
+            $remplacements = ["","","",""];
+
+
+            $recherches = ["</br>","<br/>","<br />"];
+            $remplacements = ["</p><p>","</p><p>","</p><p>"];
+
+
+            $desc = str_replace($recherches, $remplacements, $desc);
+
+            $sql = "UPDATE slopes2 SET desc_fr=? WHERE slopeId=?";
+            getDB()->prepare($sql)->execute([$desc,$id]);
+
+
+                        $erreurs = self::trouverTagsNonConcordants($desc);
+
+            foreach ($erreurs as $err) {
+                echo strval($id)." > Ligne {$err['ligne']} : {$err['message']}<br>";
+            }
+
+*/
+            echo htmlentities($desc);
+            $sql = "UPDATE slopes2 SET desc2=? WHERE slopeId=?";
+            getDB()->prepare($sql)->execute([htmlentities($desc),$id]);
+
+        }
+
     }
 }

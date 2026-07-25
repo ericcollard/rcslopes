@@ -3,6 +3,7 @@ table.weather-forecast-table {
     margin-top: 10px;
     margin-bottom: 10px;
     color: white;
+    font-size: 0.9rem;
 }
 .weather-forecast-wrapper {
     padding: 0;
@@ -17,6 +18,11 @@ table.weather-forecast-table tr {
     background-color: rgba(0,80,200,0.45);
 }
 
+table.weather-forecast-table th {
+    font-size: 0.6rem;
+    font-weight: normal;
+}
+
 .weather-forecast-table .separation {
     background-color:transparent;
     height: 5px;
@@ -27,16 +33,16 @@ table.weather-forecast-table .day-cell {
 }
 
 table.weather-forecast-table .day-cell .contend {
-    padding: 5px;
+    padding: 2px;
 }
 
 table.weather-forecast-table .day-cell .dayOfWeek {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: bold;
 }
 
 table.weather-forecast-table .day-cell .date {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 table.weather-forecast-table  .hour {
@@ -49,6 +55,7 @@ table.weather-forecast-table  img {
 
 table.weather-forecast-table  svg {
     height: 20px!important;
+    width: 30px!important;
 }
 
 table.weather-forecast-table .unit {

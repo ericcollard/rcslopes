@@ -34,11 +34,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'save') {
         $isCreate = ($_POST['form_mode'] ?? '') === 'create';
-        $result = FormProcessor::process($schema, $_POST, $isCreate);
+
+        // En édition, on récupère la ligne actuelle : nécessaire pour que FormProcessor
+        // puisse conserver la valeur d'un champ "image_upload" si aucun nouveau fichier
+        // n'a été envoyé dans ce formulaire.
+        $existingRow = [];
+        if (!$isCreate) {
+            $editPk = $_POST['pk'] ?? null;
+            $existingRow = $engine->find($editPk) ?? [];
+        }
+
+        $result = FormProcessor::process($schema, $_POST, $isCreate, $_FILES, $existingRow);
 
         if (!empty($result['errors'])) {
             $formErrors = $result['errors'];
             $formData = $_POST;
+            // $_POST ne contient pas de valeur pour les champs de type fichier : on reprend
+            // la valeur déjà calculée par FormProcessor (nouvelle image uploadée, ou ancienne
+            // conservée) pour que le formulaire réaffiché montre le bon aperçu.
+            foreach ($schema['columns'] as $colName => $colDef) {
+                if (($colDef['type'] ?? '') === 'image_upload') {
+                    $formData[$colName] = $result['data'][$colName] ?? ($existingRow[$colName] ?? null);
+                }
+            }
             $mode = $isCreate ? 'create' : 'edit';
             $pkValue = $_POST[$pk] ?? $pkValue;
         } else {
@@ -98,13 +116,13 @@ require __DIR__ . '/includes/views/sidebar.php';
 
 <main class="rcs-content">
 
-  <?php require __DIR__ . '/includes/views/flash_messages.php'; ?>
+    <?php require __DIR__ . '/includes/views/flash_messages.php'; ?>
 
-  <?php if ($mode === 'list'): ?>
-    <?php require __DIR__ . '/includes/views/table_list.php'; ?>
-  <?php else: ?>
-    <?php require __DIR__ . '/includes/views/table_form.php'; ?>
-  <?php endif; ?>
+    <?php if ($mode === 'list'): ?>
+        <?php require __DIR__ . '/includes/views/table_list.php'; ?>
+    <?php else: ?>
+        <?php require __DIR__ . '/includes/views/table_form.php'; ?>
+    <?php endif; ?>
 
 </main>
 

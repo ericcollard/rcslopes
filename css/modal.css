@@ -1,0 +1,129 @@
+
+
+
+.modal { z-index: 1300; }
+.modal-backdrop { z-index: 1290; }
+
+
+.modal h1, .modal h2, .modal h3, .modal h4, .modal h5, .modal h6 {
+    color: #7ecfff;
+}
+
+.modal h1 {
+    font-size: 1.5rem !important;
+    color: white;
+    line-height : 1.3rem;
+}
+
+
+.modal h2 {
+    font-size: 1.1rem !important;
+    font-variant: small-caps;
+    padding: 2px 10px 10px 10px;
+    background: linear-gradient(rgba(15,81,131,0.3), rgba(15,81,131,0));
+    border-radius: 0.25rem;
+    color: white;
+}
+
+.modal h3 {
+    font-size: 0.9rem !important;
+    font-variant: small-caps;
+    font-weight: bold;
+    text-decoration: underline;
+    color: #939393;
+    margin: 8px 0 5px 0 ;
+}
+.modal h4 {
+    font-size: 1.1rem !important;
+    color: #aaaaaa;
+}
+.modal h5 {
+    font-size: 1.0rem !important;
+    color: #aaaaaa;
+}
+
+.modal h6 {
+    font-size: 1.0rem !important;
+    color: #aaaaaa;
+}
+
+#markerModalLabel .label {
+    font-size: 1rem;
+}
+
+.modal-title-right {
+    margin-left: auto;
+}
+
+.modal-header {
+    background: linear-gradient(to right, #0f5183, #1a6ca9);
+}
+
+.divider {
+    background-color: #0f5183;
+    color: white;
+    padding: 7px;
+    border-radius: 0.25rem;
+}
+
+
+.slope-summary p {
+    padding: 0;
+    margin: 0;
+}
+
+.slope-gestion p {
+    padding: 0;
+    margin: 0;
+}
+
+.slope-comments {
+    font-size: 0.8em;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.modal-footer {
+    background: linear-gradient(to right, #0f5183, #1a6ca9);
+    color: white;
+}
+
+.modal-footer p a {
+    color: red;
+}
+
+.modal-footer p {
+    padding: 0;
+    margin: 0;
+    line-height: 1.1rem;
+}
+
+.modal-footer .buttons-wrapper {
+    text-align: right;
+}
+
+td.slope-comment-email {
+    vertical-align: top;
+    padding-top: 10px;
+}
+td.slope-comment-text {
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+.slope-comment-status {
+    vertical-align: top;
+}
+
+td.slope-comment-date {
+    vertical-align: top;
+}
+
+
+.slope-coordinates p {
+    text-align: right;
+    padding: 0;
+    margin: 0;
+    line-height: 1.0rem;
+    font-size: 0.8rem;
+}

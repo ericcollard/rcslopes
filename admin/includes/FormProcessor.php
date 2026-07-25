@@ -5,17 +5,28 @@
  */
 
 require_once __DIR__ . '/HtmlSanitizer.php';
+require_once __DIR__ . '/ImageManager.php';
 
 final class FormProcessor
 {
     /**
      * Construit le tableau de données prêt pour CrudEngine::insert()/update()
-     * à partir de $_POST, en respectant les types déclarés dans le schéma.
+     * à partir de $_POST (et $_FILES pour les champs de type "image_upload"),
+     * en respectant les types déclarés dans le schéma.
+     *
+     * @param array $files       Généralement $_FILES. Utilisé par le type "image_upload".
+     * @param array $existingRow Ligne actuelle en base (mode édition). Permet de conserver
+     *                           l'image déjà enregistrée si aucun nouveau fichier n'est envoyé.
      *
      * @return array{data: array, errors: array<string,string>}
      */
-    public static function process(array $schema, array $post, bool $isCreate): array
-    {
+    public static function process(
+        array $schema,
+        array $post,
+        bool $isCreate,
+        array $files = [],
+        array $existingRow = []
+    ): array {
         $data   = [];
         $errors = [];
 
@@ -103,6 +114,30 @@ final class FormProcessor
                     $data[$colName] = HtmlSanitizer::clean((string) ($raw ?? ''));
                     break;
 
+                case 'image_upload':
+                    // Le champ HTML correspondant doit être <input type="file" name="{$colName}">
+                    // et le <form> doit avoir enctype="multipart/form-data".
+                    $fileInput = $files[$colName] ?? null;
+                    $uploadError = is_array($fileInput) ? ($fileInput['error'] ?? UPLOAD_ERR_NO_FILE) : UPLOAD_ERR_NO_FILE;
+                    $hasNewFile = $uploadError !== UPLOAD_ERR_NO_FILE;
+
+                    if ($hasNewFile) {
+                        $uploadResult = ImageManager::upload($fileInput);
+                        if ($uploadResult['success']) {
+                            // On stocke l'URL publique (assets/images/...) directement utilisable en <img src="...">
+                            $data[$colName] = $uploadResult['url'];
+                        } else {
+                            $errors[$colName] = $uploadResult['message'];
+                            // On garde l'ancienne valeur en cas d'échec d'upload, pour ne pas
+                            // écraser une image valide existante avec un champ vide.
+                            $data[$colName] = $existingRow[$colName] ?? null;
+                        }
+                    } else {
+                        // Aucun nouveau fichier envoyé : on conserve l'image déjà en base (mode édition).
+                        $data[$colName] = $existingRow[$colName] ?? null;
+                    }
+                    break;
+
                 case 'textarea':
                 case 'text':
                 default:
@@ -119,7 +154,7 @@ final class FormProcessor
             }
 
             // Vérification "required" générique (sauf checkbox, déjà 0/1 par nature)
-            if (!empty($colDef['required']) && $type !== 'checkbox') {
+            if (!empty($colDef['required']) && $type !== 'checkbox' && !isset($errors[$colName])) {
                 if ($data[$colName] === null || $data[$colName] === '') {
                     $errors[$colName] = $colDef['label'] . ' est obligatoire.';
                 }

@@ -8,11 +8,13 @@ use IntlDateFormatter;
 use controllers\WeatherForecastController;
 use models\Comment;
 use models\Slope;
+use models\SlopePicture;
 use models\WeatherForecast;
 use function jsonResponse;
 
 require_once __DIR__ . '/../models/Comment.php';
 require_once __DIR__ . '/../models/Slope.php';
+require_once __DIR__ . '/../models/SlopePicture.php';
 require_once __DIR__ . '/../models/WeatherForecast.php';
 require_once __DIR__ . '/../helpers/response.php';
 require_once __DIR__ . '/../controllers/WeatherForecastController.php';
@@ -97,7 +99,7 @@ class SlopeController
         $html = "<div class='weather-forecast-wrapper'>";
         $html .= "<table class='weather-forecast-table'>";
         $html .= "<tr>";
-        $html .= "<td></td><td></td><td></td><td>Vitesse</td><td>Rafales</td><td>Nuages</td><td>Pluie</td><td>Température</td>";
+        $html .= "<th></th><th></th><th></th><th>Vitesse</th><th>Rafales</th><th>Nuages</th><th>Pluie</th><th>Température</th>";
         $html .= "</tr>";
 
         $daySinceStart = 0;
@@ -140,7 +142,10 @@ class SlopeController
         if (!$comments) {
             return "";
         }
-        $html = "<table class='slope-comments'>";
+        $html = "";
+        $html .= "<div class='slope-comment mb-4'>";
+        $html .= "<h2>Commentaires</h2>";
+        $html .= "<table class='slope-comments'>";
         foreach ($comments as $key => $comment) {
             $html .= "<tr>";
             $html .= "<td class='slope-comment-email'>".substr(strip_tags($comment['email']),0,10)."...</td>";
@@ -160,8 +165,68 @@ class SlopeController
             $html .= "</tr>";
         }
         $html .= "</table>";
+        $html .= "</div>";
+
 
         return $html;
+    }
+
+    public function getPictureCarousselHtml(int $slopeId): string {
+        $pictures = SlopePicture::getBySlopeId($slopeId);
+        if ($pictures) {
+            $pictHtml = "";
+            if (!empty($pictures)) {
+
+                $pictHtml .= '<div id="slopePictureCarouselCaptions" class="carousel slide  mb-4" data-bs-ride="carousel">';
+                $pictHtml .= '    <div class="carousel-indicators">';
+                //..Boutons
+                foreach ($pictures as $key => $picture) {
+                    $pictHtml .= '<button type="button" data-bs-target="#slopePictureCarouselCaptions" data-bs-slide-to="'.$key.'" aria-current="true" aria-label="Photo '.($key+1).'"';
+                    if ($key == 0) {
+                        $pictHtml .= ' class="active" ';
+                    }
+                    $pictHtml .= '></button>';
+                }
+                $pictHtml .= '    </div>';
+                $pictHtml .= '    <div class="carousel-inner">';
+                //.. photos avec légende et date
+                foreach ($pictures as $key => $picture) {
+                    $pictHtml .= '        <div class="carousel-item ';
+                    if ($key == 0) {
+                        $pictHtml .= 'active';
+                    }
+                    $pictHtml .= '">';
+                    $pictHtml .= '            <img src="'.$picture['path'].'" class="d-block w-100" alt="'.$picture['alt'].'">';
+                    $pictHtml .= '            <div class="carousel-caption d-none d-md-block">';
+
+                    $created = new \DateTime($picture['created_at']);
+                    $createdHtml = date_format($created,'d/m/Y');
+
+                    $pictHtml .= '                <h5>'.$picture['alt'].' - date: '.$createdHtml.'</h5>';
+                    $pictHtml .= '            </div>';
+                    $pictHtml .= '        </div>';
+                }
+                $pictHtml .= '    </div>';
+
+                $pictHtml .= '    <button class="carousel-control-prev" type="button" data-bs-target="#slopePictureCarouselCaptions" data-bs-slide="prev">';
+                $pictHtml .= '    <span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                $pictHtml .= '    <span class="visually-hidden">Previous</span>';
+                $pictHtml .= '    </button>';
+                $pictHtml .= '    <button class="carousel-control-next" type="button" data-bs-target="#slopePictureCarouselCaptions" data-bs-slide="next">';
+                $pictHtml .= '    <span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                $pictHtml .= '    <span class="visually-hidden">Next</span>';
+                $pictHtml .= '    </button>';
+                $pictHtml .= '</div>';
+            }
+
+
+            return $pictHtml;
+        }
+        else
+        {
+            return "";
+        }
+
     }
 
     public function getEditUrl($datatable,$id) {
@@ -186,54 +251,107 @@ class SlopeController
             jsonResponse(['success' => false, 'error' => 'Site introuvable.'], 404);
         }
         $data['title'] = $slope['name'];
+        if ($slope['dpt']) $data['title'] .= '-'.$slope['dpt'];
 
         if ($slope['type'] == 'pente')
         {
             $orientations = join(", ",$slope['orient']);
 
             $data['html'] = "<div class='container-fluid'>";
-            $data['html'] .= "<div class='row'>";
-            $data['html'] .= "<div class='col-lg'>";
 
-            $data['html'] .= "<p class='slope-coordinates'>Latitude : {$slope['lat']} / Longitude : {$slope['lng']}</p>";
-            $data['html'] .= "<p class='slope-orient'>Orientations exploitables : {$orientations}</p>";
+            // --- Première ligne
+            // ------------------
+            $data['html'] .= "<div class='row'>";
+            // --- Première colonne
+            $data['html'] .= '<div class="col-6">';
+            $data['html'] .= '    <div  class="logo">';
+            $data['html'] .= '        <img src="./assets/logo.png" alt="Logo RcSlopes" width="150px"/>';
+            $data['html'] .= '        </div>';
+            $data['html'] .= '</div>';
+            // --- Deuxième colonne
+            $data['html'] .= "<div class='col-6  slope-coordinates'>";
+            $data['html'] .= "<p>Latitude : {$slope['lat']}</p>";
+            $data['html'] .= "<p>Longitude : {$slope['lng']}</p>";
+            $created = new \DateTime($slope['created_at']);
+            $data['html'] .= "<p>Créé le ".date_format($created,'d/m/Y')."</p>";
+            $data['html'] .= "</div>";
+            $data['html'] .= "</div>";  // fin row
+
+
+            // --- Orientations
+            // ------------------
+
+            $data['html'] .= '<div class="row mb-2">';
+            $data['html'] .= '    <div class="col-12">';
+            $data['html'] .= "        <div class='divider'>Orientations de vent exploitables : {$orientations}</div>";
+            $data['html'] .= '    </div>';
+            $data['html'] .= '</div> ' ;
+
+            // --- Description générale
+            // ------------------
+            $data['html'] .= "<div class='row'>";
+
+            // --- Première colonne
+            $data['html'] .= "<div class='col-md-6'>";
+
             if ($slope['aip'])
-                $data['html'] .= "<div class='alert alert-success' role='alert'>Numéro AIP : {$slope['aip']}</div>";
+                $data['html'] .= "<div class='alert alert-success mb-4' role='alert'>Numéro AIP : {$slope['aip']}</div>";
             else
-                $data['html'] .= "<div class='alert alert-danger' role='alert'>Cette pente ne possède pas d'AIP</div>";
+                $data['html'] .= "<div class='alert alert-danger mb-4' role='alert'>Cette pente ne possède pas d'AIP</div>";
+
+            $data['html'] .= "<div class='slope-summary mb-4'>";
+            $data['html'] .= "<h2>En bref</h2>";
+            $data['html'] .= ($slope['desc_summary_fr'] ? $slope['desc_summary_fr'] : 'Nc.');
+            $data['html'] .= "</div>";
+
+            $data['html'] .= "<div class='slope-gestion mb-4'>";
+            $data['html'] .= "<h2>Gestion</h2>";
+            $data['html'] .= "<p>Pente gérée par un club ? ".($slope['club'] == 1 ? 'Oui' : 'Non')."</p>";
+            $data['html'] .= "<p>Nom du club gestionnaire : ".($slope['club_name'] ? $slope['club_name'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Costisation club nécessaire ? ".($slope['cotisation'] == 1 ? 'Oui' : 'Non')."</p>";
+            $data['html'] .= "<p>License FFAM obligatoire ? ".($slope['licence'] == 1 ? 'Oui' : 'Non')."</p>";
             if ($slope['url'])
                 $data['html'] .= '<p class="slope-gestion">Lien club gestionnaire : <a target="_blank" href = '.$slope["url"].'>'.$slope["url"].'</a></p>';
-            $data['html'] .= "<h2>Description et accès</h2>";
-            $data['html'] .= "<p class='slope-description'>{$slope['desc_fr']}</p>";
-            $data['html'] .= "</div>"; // du row
-            $data['html'] .= "<div class='col-lg'>";
+            $data['html'] .= "</div>";
+
+            $data['html'] .= "<div class='slope-summary mb-4'>";
+            $data['html'] .= "<h2>En Détail</h2>";
+            $data['html'] .= ($slope['desc_fr'] ? $slope['desc_fr'] : 'Nc.');
+            $data['html'] .= "</div>";
+            $data['html'] .= "<div class='slope-summary mb-4'>";
+            $data['html'] .= "<h2>En anglais</h2>";
+            $data['html'] .= ($slope['desc_en'] ? $slope['desc_en'] : 'Nc.');
+            $data['html'] .= "</div>";
+            $data['html'] .= "</div>"; // du col
+
+            // Deuxième colonne
+            $data['html'] .= "<div class='col-md-6'>";
+            //> images
+            $pictureHtml = $this->getPictureCarousselHtml($slopeId);
+            if (strlen($pictureHtml)>0)
+            {
+                $data['html'] .= $pictureHtml;
+            }
+            //> commentaires
             $commentsHtml = $this->getCommentsHtml($slopeId);
             if (strlen($commentsHtml)>0)
             {
-                $data['html'] .= "<h2>Commentaires</h2>";
                 $data['html'] .= $commentsHtml;
             }
+            //> Prévisions météo
             $weatherForecastController = new WeatherForecastController();
             $slopeWeatherData = $weatherForecastController->getBySlopeId($slopeId,0);
             if ($slopeWeatherData) {
                 $weatherStr = $this->getWeatherforecastHtml($slopeWeatherData);
+                $data['html'] .= "<div class='slope-weather mb-4'>";
                 $data['html'] .= "<h2>Prévisions météo à 3 jours</h2>";
                 $data['html'] .= $weatherStr;
+                $data['html'] .= "</div>";
             }
 
             $data['html'] .= "</div>";  // du col
             $data['html'] .= "</div>";  // du row
             $data['html'] .= "</div>";  // du container
-            $data['html'] .= "<hr>";
-            $data['html'] .= "<div class='row'>";
-            $data['html'] .= "<h2>Données techniques</h2>";
-            $data['html'] .= "<div class='col-6'>";
-            $data['html'] .= "<p>Identifiant du site : " . $slopeId . "</p>";
-            $data['html'] .= "</div>"; // du col
-            $data['html'] .= "<div class='col-6'>";
-            $data['html'] .= "<p>Lien direct : <a href='" .$slopeUrl . "'>" . $slopeUrl . "</a></p>";
-            $data['html'] .= "</div>"; // du col
-            $data['html'] .= "</div>"; // du row
         }
 
         if ($slope['type'] == 'meteo')
@@ -253,7 +371,7 @@ class SlopeController
 
     // ── POST /api/slopes ──────────────────────────────────────
 
-    public function store(): void
+    public function store(bool $controls = true): void
     {
         header('Content-Type: application/json; charset=utf-8');
 
@@ -272,66 +390,70 @@ class SlopeController
             exit;
         }
 
-// ============================================================
+        if ($controls)
+        {
+            // ============================================================
 // 1) VÉRIFICATION DU TOKEN CSRF
 // ============================================================
 
-        $submittedToken = $input['newslope_csrf_token'] ?? '';
+            $submittedToken = $input['newslope_csrf_token'] ?? '';
 
-        if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
-            http_response_code(419); // "Page Expired" (convention courante pour CSRF invalide)
-            echo json_encode([
-                'success' => false,
-                'errors'  => ['Session expirée, veuillez recharger la page et réessayer.']
-            ]);
-            exit;
-        }
+            if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
+                http_response_code(419); // "Page Expired" (convention courante pour CSRF invalide)
+                echo json_encode([
+                    'success' => false,
+                    'errors'  => ['Session expirée, veuillez recharger la page et réessayer.']
+                ]);
+                exit;
+            }
 
 // ============================================================
 // 2) HONEYPOT — un bot remplit généralement tous les champs
 // ============================================================
-        if (!empty($input['newslope_website'])) {
-            // On répond "succès" pour ne pas indiquer au bot qu'il a été détecté,
-            // mais on n'insère rien en base.
-            http_response_code(201);
-            echo json_encode(['success' => true]);
-            exit;
-        }
+            if (!empty($input['newslope_website'])) {
+                // On répond "succès" pour ne pas indiquer au bot qu'il a été détecté,
+                // mais on n'insère rien en base.
+                http_response_code(201);
+                echo json_encode(['success' => true]);
+                exit;
+            }
 
 // ============================================================
 // 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
 // ============================================================
-        $renderedAt = (int) ($input['newslope_form_rendered_at'] ?? 0);
-        $elapsed    = time() - $renderedAt;
+            $renderedAt = (int) ($input['newslope_form_rendered_at'] ?? 0);
+            $elapsed    = time() - $renderedAt;
 
-        if ($renderedAt <= 0 || $elapsed < 2) {
-            http_response_code(422);
-            echo json_encode([
-                'success' => false,
-                'errors'  => ['Soumission trop rapide, veuillez réessayer.']
-            ]);
-            exit;
-        }
+            if ($renderedAt <= 0 || $elapsed < 2) {
+                http_response_code(422);
+                echo json_encode([
+                    'success' => false,
+                    'errors'  => ['Soumission trop rapide, veuillez réessayer.']
+                ]);
+                exit;
+            }
 
 // ============================================================
 // 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
 // ============================================================
-        $now            = time();
-        $window         = 600; // 10 minutes
-        $maxSubmissions = 5;
+            $now            = time();
+            $window         = 600; // 10 minutes
+            $maxSubmissions = 5;
 
-        $_SESSION['slope_submissions'] = array_filter(
-            $_SESSION['slope_submissions'] ?? [],
-            fn(int $timestamp) => ($now - $timestamp) < $window
-        );
+            $_SESSION['slope_submissions'] = array_filter(
+                $_SESSION['slope_submissions'] ?? [],
+                fn(int $timestamp) => ($now - $timestamp) < $window
+            );
 
-        if (count($_SESSION['slope_submissions']) >= $maxSubmissions) {
-            http_response_code(429); // Too Many Requests
-            echo json_encode([
-                'success' => false,
-                'errors'  => ['Trop de pentes envoyées récemment, veuillez patienter avant de réessayer.']
-            ]);
-            exit;
+            if (count($_SESSION['slope_submissions']) >= $maxSubmissions) {
+                http_response_code(429); // Too Many Requests
+                echo json_encode([
+                    'success' => false,
+                    'errors'  => ['Trop de pentes envoyées récemment, veuillez patienter avant de réessayer.']
+                ]);
+                exit;
+            }
+
         }
 
 
@@ -503,32 +625,34 @@ class SlopeController
         if (isset($body['newslope_slopeURL'])) {
             $data['url'] = trim(strip_tags($body['newslope_slopeURL']));
         }
+        if (isset($body['newslope_clubName'])) {
+            $data['club_name'] = trim(strip_tags($body['newslope_clubName']));
+        }
 
         $infoStr = "<h3>Conditions de vol</h3>";
         if (isset($body['newslope_slopeSize'])) {
             $infoStr .= "<p>Hauteur de la pente : " . trim($body['newslope_slopeSize']) . "</p>";
         }
         if (isset($body['newslope_slopeCompatibility'])) {
-            $infoStr .= "<p>Pente compatible avec les planeurs de type : " . trim($body['newslope_slopeCompatibility']) . "</p>";
+            $infoStr .= "<p>Compatible type de planeurs : " . trim($body['newslope_slopeCompatibility']) . "</p>";
         }
         if (isset($body['newslope_slopeSurface'])) {
-            $infoStr .= "<p>Etat de surface de la zone de posé : " . trim($body['newslope_slopeSurface']) . "</p>";
+            $infoStr .= "<p>Etat de surface zone de posé : " . trim($body['newslope_slopeSurface']) . "</p>";
         }
         if (isset($body['newslope_slopeGap'])) {
             $infoStr .= "<p>Accès au trou : " . trim($body['newslope_slopeGap']) . "</p>";
         }
         $infoStr .= "<h3>Conditions d'accès à la pente</h3>";
         if (isset($body['newslope_slopePark'])) {
-            $infoStr .= "<p>Accès à la pente depuis de stationnement : " . trim($body['newslope_slopePark']) . "</p>";
+            $infoStr .= "<p>Accès pente depuis le stationnement : " . trim($body['newslope_slopePark']) . "</p>";
         }
         if (isset($body['newslope_slopeAccess'])) {
-            $infoStr .= "<p>Accès à la zone de stationnement : " . trim($body['newslope_slopeAccess']) . "</p>";
+            $infoStr .= "<p>Accès zone de stationnement : " . trim($body['newslope_slopeAccess']) . "</p>";
         }
-        $infoStr .= "<h3>Gestion de le pente</h3>";
-        if (isset($body['newslope_clubName'])) {
-            $infoStr .= "<p>Nom du club gérant la pente : " . trim($body['newslope_clubName']) . "</p>";
-        }
-        $infoStr .= "<h3>Description détaillée</h3>";
+
+        $data['desc_summary_fr'] = $infoStr;
+
+        $infoStr = "";
         if (isset($body['newslope_slopeInfo'])) {
             $infoStr .= trim($body['newslope_slopeInfo']);
         }

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/leaflet-gps.css" />
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/weather.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="css/share.css" />
 </head>
 <body  class="rc-body">
 
@@ -31,7 +33,6 @@
                 <span >RC-SlopeS</span></br>
                 <span class="site-by">by Finesse+</span>
             </p>
-
         </a>
 
         <!-- Groupe droit mobile : loupe + burger, toujours ensemble -->

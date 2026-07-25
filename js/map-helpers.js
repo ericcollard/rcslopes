@@ -16,9 +16,15 @@ function feedModalBySlope(slopeId) {
         .then(r => r.ok ? r.json() : null)
         .then(json => {
             if (!json?.data?.title) return;
-            document.getElementById("markerModalLabel").innerHTML= "<span class='label'>Dénomination du site : </span>" + json.data.title;
-            document.getElementById("markerModalBody").innerHTML= json.data.html;
 
+            let currentLocation = window.location;
+            footerLinkHtml = '';
+            footerLinkHtml+= '<p>Identifiant du site : '+slopeId+'</p>';
+            footerLinkHtml+= '<p>Lien direct : <a href="'+currentLocation.origin+'/'+slopeId+'">'+currentLocation.origin+'/'+slopeId+'</a></p>';
+
+            document.getElementById("markerModalLabel").innerHTML= json.data.title;
+            document.getElementById("markerModalBody").innerHTML= json.data.html;
+            document.getElementById("footer-links").innerHTML= footerLinkHtml;
             document.getElementById('markerModalShare').innerHTML = "";
 
 

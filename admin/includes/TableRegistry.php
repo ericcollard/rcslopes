@@ -29,7 +29,7 @@ final class TableRegistry
                 'pk_auto'     => false, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
                 'order_by'    => 'slopeId DESC',
                 'list_columns' => ['slopeId', 'name', 'country', 'dpt', 'type', 'status'],
-                'search_columns' => ['name', 'desc_fr', 'country', 'dpt', 'addBy'],
+                'search_columns' => ['slopeId','name', 'desc_fr', 'country', 'dpt', 'addBy'],
                 'columns' => [
                     'slopeId' => [
                         'label' => 'ID', 'type' => 'hidden', 'editable' => false,
@@ -59,6 +59,9 @@ final class TableRegistry
                         'required' => true,
                         'allow_custom' => false,
                     ],
+                    'desc_summary_fr' => [
+                        'label' => 'Description (FR)', 'type' => 'wysiwyg',
+                    ],
                     'desc_fr' => [
                         'label' => 'Description (FR)', 'type' => 'wysiwyg',
                     ],
@@ -73,6 +76,9 @@ final class TableRegistry
                     ],
                     'club' => [
                         'label' => 'Site de club', 'type' => 'checkbox',
+                    ],
+                    'club_name' => [
+                        'label' => 'Nom du club gestionnaire', 'type' => 'text', 'required', 'maxlength' => 255,
                     ],
                     'cotisation' => [
                         'label' => 'Cotisation requise', 'type' => 'checkbox',
@@ -92,6 +98,12 @@ final class TableRegistry
                     'dpt' => [
                         'label' => 'Département', 'type' => 'text', 'maxlength' => 100,
                     ],
+                    'rating' => [
+                        'label' => 'Rating', 'type' => 'decimal', 'step' => '0.000001', 'required' => true,
+                    ],
+                    'rating_count' => [
+                        'label' => 'Nombre de votes', 'type' => 'number', 'required' => true,
+                    ],
                     'created_at' => [
                         'label' => 'Créé le', 'type' => 'datetime', 'editable' => false, 'auto_on_create' => true,
                     ],
@@ -106,7 +118,7 @@ final class TableRegistry
             // -----------------------------------------------------------
             'comments' => [
                 'label'       => 'Commentaires',
-                'icon'        => 'bi-geo-alt-fill',
+                'icon'        => 'bi-chat-dots-fill',
                 'primary_key' => 'id',
                 'pk_auto'     => true, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
                 'order_by'    => 'id DESC',
@@ -132,6 +144,43 @@ final class TableRegistry
                     'email' => [
                         'label' => 'Ajouté par', 'type' => 'text', 'maxlength' => 255,
                     ]
+                ],
+            ],
+
+            // -----------------------------------------------------------
+            // Table : slope_pictures
+            // -----------------------------------------------------------
+            'slope_pictures' => [
+                'label'       => 'Images',
+                'icon'        => 'bi-image-fill',
+                'primary_key' => 'id',
+                'pk_auto'     => true, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
+                'order_by'    => 'id DESC',
+                'list_columns' => ['id', 'slopeId', 'alt', 'status'],
+                'search_columns' => ['slopeId', 'status'],
+                'columns' => [
+                    'id' => [
+                        'label' => 'ID', 'type' => 'hidden', 'editable' => false,
+                    ],
+                    'slopeId' => [
+                        'label' => 'Site (slopeId)', 'type' => 'lookup', 'required' => true,
+                        'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'name',
+                    ],
+                    'path' => [
+                        // Le fichier est envoyé via <input type="file" name="path">, uploadé par
+                        // ImageManager::upload() dans assets/images (voir ImageManager.php),
+                        // puis l'URL retournée est stockée dans cette colonne.
+                        'label' => 'Image', 'type' => 'image_upload', 'required' => true,
+                    ],
+                    'alt' => [
+                        'label' => 'Légende', 'type' => 'text', 'maxlength' => 255,
+                    ],
+                    'status' => [
+                        'label' => 'Statut', 'type' => 'select',
+                        'options' => ['active' => 'Actif', 'disabled' => 'Archivé', 'new' => 'A modérer'],
+                        'required' => true,
+                        'allow_custom' => false,
+                    ],
                 ],
             ],
 

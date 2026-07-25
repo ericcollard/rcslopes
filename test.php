@@ -4,12 +4,15 @@ require_once __DIR__ . '/helpers/OpenMeteoHelper.php';
 require_once __DIR__ . '/controllers/WeatherForecastController.php';
 require_once __DIR__ . '/controllers/SlopeController.php';
 require_once __DIR__ . '/models/Slope.php';
+require_once __DIR__ . '/models/SlopePicture.php';
 
 use controllers\SlopeController;
 use controllers\WeatherForecastController;
 use helpers\OpenMeteoHelper;
 use models\Slope;
+use models\SlopePicture;
 use models\WeatherForecast;
+
 
 
 /*
@@ -44,7 +47,23 @@ $params=[
     'newslope_type'=> 'pente',
     'newslope_name' => 'test avec mail',
     'newslope_orient' => ' N  NNE ',
-    'newslope_email' => 'eric.collard@free.fr'
+    'newslope_email' => 'eric.collard@free.fr',
+    'newslope_country'=>'france',
+    'newslope_dept'=> '05',
+    'newslope_slopeAIP'=> '1547',
+    'newslope_slopeClub'=> 'on',
+    'newslope_slopeCotisation'=> 0,
+    'newslope_slopeLicence'=> 'on',
+    'newslope_slopeURL'=> 'http://www.lapente.com',
+    'newslope_clubName'=> 'Club de la pente',
+    'newslope_slopeSize'=> 'Grand pente',
+    'newslope_slopeCompatibility'=> 'Moyens planeurs',
+    'newslope_slopeSurface'=> 'Herbe',
+    'newslope_slopeGap'=> 'Accès au trou impossible',
+    'newslope_slopePark'=> 'A plus de 60mn',
+    'newslope_slopeAccess'=> 'chemin 4x4',
+    'newslope_slopeInfo'=> 'Superbe dynamique',
+    'newslope_slopeInfoEn'=> 'High pleazsure',
 ];
 
 $defaults = array(
@@ -61,10 +80,10 @@ if(curl_error($ch)) {
 }
 
 
-//$slopes = Slope::getUnderReview();
+//$slopes = Slope::normalize();
 //var_dump($slopes);
 //$slopeController = new SlopeController();
-//var_dump($slopeController->showHtml(3));
+//var_dump($slopeController->showHtml(59));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);
