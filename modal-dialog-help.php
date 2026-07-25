@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <div class="divider">
+                <div class="divider-help">
                     <div class="divider-fade"></div>
                 </div>
 
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="divider">
+                <div class="divider-help">
                     <div class="divider-fade"></div>
                 </div>
 
@@ -116,11 +116,11 @@
                     <div class="col-9 mb-3">
                         Vous pouvez partager une pente sur Facebook ou Whatsapp via les boutons situés dans l'entête de chaque fiche de pente.
                         <br/>Pour tout autre partage, ou pour arriver directement sur une fiche de pente précise, vous pouvez copier le lien
-                        direct en bas à droite de chaque fiche ("Lien direct") juste avant le pied de pachge de chaque fiche.
+                        direct en bas à droite de chaque fiche ("Lien direct") juste avant le pied de page de chaque fiche.
                     </div>
                 </div>
 
-                <div class="divider">
+                <div class="divider-help">
                     <div class="divider-fade"></div>
                 </div>
 
@@ -141,15 +141,18 @@
                             require_once __DIR__ . '/models/Slope.php';
                             $slopes = Slope::getUnderReview();
 
-                            foreach ((array) $slopes as $slope ) {
-                                echo "<tr>";
-                                echo "<td>".$slope['slopeId']."</td>";
-                                echo "<td>".$slope['name']."</td>";
-                                echo "<td>".$slope['addBy']."</td>";
-                                $created = new \DateTime($slope['created_at']);
-                                echo "<td>".date_format($created,'d/m/Y')."</td>";
-                                echo "</tr>";
+                            if ($slopes and count($slopes) > 0) {
+                                foreach ((array) $slopes as $slope ) {
+                                    echo "<tr>";
+                                    echo "<td>".$slope['slopeId']."</td>";
+                                    echo "<td>".$slope['name']."</td>";
+                                    echo "<td>".substr($slope['addBy'],0,10)."xxxx</td>";
+                                    $created = new \DateTime($slope['created_at']);
+                                    echo "<td>".date_format($created,'d/m/Y')."</td>";
+                                    echo "</tr>";
+                                }
                             }
+
 
                             ?>
                         </table>
@@ -161,7 +164,7 @@
                             <table class="table">
                                 <tr>
                                     <th>Id Pente</th>
-                                    <th>Nom</th>
+                                    <th>Commentaire</th>
                                     <th>Email</th>
                                     <th>Date</th>
                                 </tr>
@@ -173,8 +176,8 @@
                                 foreach ((array) $comments as $comment ) {
                                     echo "<tr>";
                                     echo "<td>".$comment['slopeId']."</td>";
-                                    echo "<td>".substr(strip_tags($comment['comment']),10)."...</td>";
-                                    echo "<td>".$comment['addBy']."</td>";
+                                    echo "<td>".substr(strip_tags($comment['comment']),0,15)."...</td>";
+                                    echo "<td>".substr($comment['email'],0,10)."xxx</td>";
                                     $created = new \DateTime($comment['created_at']);
                                     echo "<td>".date_format($created,'d/m/Y')."</td>";
                                     echo "</tr>";
@@ -185,6 +188,62 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="divider-help">
+                    <div class="divider-fade"></div>
+                </div>
+
+                <div class="row">
+                    <h2>Nouveautés (v2.0)</h2>
+                    <div class="col-12">
+                        <ul>
+                            <li>Ouverture par défaut sur fond de carte Carto (et non GPS … pour alléger le chargement en zone de faible couverture 4G)</li>
+                            <li>Parkings ont été mis dans une couche à part (non sélectionnée par défaut) pour ne pas surcharger l'affichage</li>
+                            <li>Nouvelles icônes de pente indiquant les orientations de vent fonctionnelles quelque soit le niveau de zoom</li>
+                            <li>Nouveau bouton (en dessous du zoom) qui permet de voir où se situe l'utilisateur et de centrer la carte autour de lui</li>
+                            <li>Ajout d'une couche « Vent » présentant le vent en temps réel sur tous les anémomètres du réseau Windbird (cache 5mn)</li>
+                            <li>Il est possible (administrateur) d'ajouter manuellement des sites d'observation vent temps réel hors windbird (holfuy etc.)</li>
+                            <li>Résolution des bugs d'affichages en zoom max</li>
+                            <li>Accès direct à une pente donnée, via un lien URL. Exemple : <a href="https://rcslopes.windfoilfan.com/59">https://rcslopes.windfoilfan.com/59</a> pour la pente de corps</li>
+                            <li>Refonte de la fiche pente avec
+                                <ul>
+                                    <li>Le lien d'accès direct</li>
+                                    <li>Le département affiché à côté du nom</li>
+                                    <li>Possibilité d'illustrer avec un carrousel de photos</li>
+                                    <li>Nouvelle affichage horaire de la météo à 3 jours</li>
+                                    <li>Enrichissement des données (Nom du club gestionnaire, typologie de planeurs, Accès au trou, type de route d'accès etc.)</li>
+                                    <li>Boutons de partage Facebook et WhatsApp (balises OG renseignées automatiquement)</li>
+                                    <li>Accès direct à l'interface d'administration depuis la fiche de pente</li>
+                                </ul>
+                            </li>
+                            <li>Refonte de la recherche de pente qui se fait par une partie du nom, ou par le département</li>
+                            <li>Refonte du système de commentaire
+                                <ul>
+                                    <li>Tout commentaire apparaît immédiatement statut « new », avec envoi d'une confirmation à l'utilisateur, et d'une copie à l'administrateur (modérateur), qui pourra l'approuver, le rejeter, ou l'intégrer à la description générale du site</li>
+                                    <li>Pour éviter les attaques, un utilisateur ne peut pas publier plus de 3 commentaires non approuvés</li>
+                                    <li>Les commentaires approuvés apparaissent sous forme de liste horodatée sur la page de la pente</li>
+                                </ul>
+                            </li>
+                            <li>Refonte de l'ajout de nouvelle pente
+                                <ul>
+                                    <li>Formulaire plus complet, avec les nouveaux champs (Nom du club gestionnaire, typologie de planeurs, Accès au trou, type de route d'accès etc.)</li>
+                                    <li>Envoi d'une confirmation à l'utilisateur, et d'une copie à l'administrateur (modérateur), qui pourra l'approuver (la pente n'apparaît pas tant qu'elle n'est pas approuvée, mais le « soumetteur » peut la visualiser avec sa référence directe)</li>
+                                    <li>Pour éviter les attaques, un utilisateur ne peut pas soumettre plus de 3 pentes avant acceptation par un administrateur</li>
+                                </ul>
+                            </li>
+                            <li>Nouvelle interface d'administration permettant
+                                <ul>
+                                    <li>De modérer les ajouts de pente / commentaires</li>
+                                    <li>De modifier les descriptions avec un contenu enrichi (html)</li>
+                                    <li>De gérer la bibliothèque de photos</li>
+                                    <li>De gérer les droits des administrateurs / modérateurs</li>
+                                </ul>
+                            </li>
+                            <li>Visualisation publique des commentaires et pentes en attente de modération à la fin de la page d'aide</li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

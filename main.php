@@ -30,7 +30,7 @@
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="/assets/logo.svg" alt="Logo RcSlopes"/>
             <p class="site-name">
-                <span >RC-SlopeS</span></br>
+                RC-SlopeS <span class="site-version">v2.0</span></br>
                 <span class="site-by">by Finesse+</span>
             </p>
         </a>

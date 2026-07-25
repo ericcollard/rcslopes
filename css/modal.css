@@ -66,6 +66,22 @@
     border-radius: 0.25rem;
 }
 
+.divider-help {
+    margin: 1rem 0;
+    position: relative;
+}
+
+
+.divider-gradient {
+    height: 3px;
+    background: linear-gradient(to right, transparent, #0d6efd, transparent);
+}
+.divider-fade {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #6c757d, transparent);
+}
+
+
 
 .slope-summary p {
     padding: 0;
