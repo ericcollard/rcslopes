@@ -75,19 +75,19 @@ final class TableRegistry
                         'label' => 'Ajouté par', 'type' => 'text', 'maxlength' => 255,
                     ],
                     'club' => [
-                        'label' => 'Site de club', 'type' => 'checkbox',
+                        'label' => 'Géré par un club', 'type' => 'checkbox',
                     ],
                     'club_name' => [
                         'label' => 'Nom du club gestionnaire', 'type' => 'text', 'required', 'maxlength' => 255,
+                    ],
+                    'url' => [
+                        'label' => 'URL site club', 'type' => 'text', 'maxlength' => 255,
                     ],
                     'cotisation' => [
                         'label' => 'Cotisation requise', 'type' => 'checkbox',
                     ],
                     'licence' => [
                         'label' => 'Licence requise', 'type' => 'checkbox',
-                    ],
-                    'url' => [
-                        'label' => 'Lien externe (texte libre)', 'type' => 'textarea',
                     ],
                     'aip' => [
                         'label' => 'Référence AIP', 'type' => 'text', 'maxlength' => 255,

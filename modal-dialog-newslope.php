@@ -188,8 +188,8 @@
                                 <option value="Route">Route</option>
                                 <option value="Chemin court - tout véhicule">Chemin court tout véhicule</option>
                                 <option value="Piste caillouteuse, moins de 1km">Piste caillouteuse - de 1km</option>
-                                <option value="piste longue">Piste caillouteuse + de 1km</option>
-                                <option value="4x4">Véhicule tout terrain recommandé</option>
+                                <option value="Piste caillouteuse, plus de 1km">Piste caillouteuse + de 1km</option>
+                                <option value="Véhicule tout terrain recommandé">Véhicule tout terrain recommandé</option>
                             </select>
 
                         </div>
