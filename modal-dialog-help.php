@@ -206,10 +206,11 @@
                                 </ul>
                             </li>
                             <li>Visualisation publique des commentaires et pentes en attente de modération à la fin de la page d'aide</li>
-                            <li>Ajout d'une échelle sur la carte</li>
-                            <li>Blocage du zoom max pour éviter un affichage dégradé</li>
-                            <li>Ajout de l'option "Planeur motorisé" dans la description d'une pente</li>
-                            <li>Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
+                            <li>V2.1 > Ajout d'une échelle sur la carte</li>
+                            <li>V2.1 > Blocage du zoom max pour éviter un affichage dégradé</li>
+                            <li>V2.1 > Ajout de l'option "Planeur motorisé" dans la description d'une pente</li>
+                            <li>V2.1 > Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
+                            <li>V2.1 > Nouveau menu spécifique pour l'aide aux ajouts / commentaires</li>
                         </ul>
                     </div>
                 </div>
