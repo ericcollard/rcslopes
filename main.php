@@ -58,13 +58,13 @@
 
                 <li class="nav-item">
                     <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#OpenWindMapModal">
-                        Aide
+                        <i class="bi bi-question-circle-fill"></i> Aide
                     </button>
                 </li>
 
                 <li class="nav-item">
                     <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
-                        Ajout
+                        <i class="bi bi-plus-circle-fill"></i> Ajout
                     </button>
                 </li>
 
