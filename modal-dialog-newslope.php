@@ -24,7 +24,6 @@
                         <input type="text" id="newslope_website" name="newslope_website" tabindex="-1" autocomplete="off">
                     </div>
 
-
                     <div class="row">
                         <!-- Longitude et lattitude. -->
                         <div class="col-3 mb-3">
@@ -54,8 +53,6 @@
                         <div class="divider-fade"></div>
                     </div>
 
-
-                    <!-- Type (pente, iterdit, parking) -->
                     <div class="row">
                         <div class="col-6">
                             <!-- Nom du site -->
@@ -144,26 +141,35 @@
                             </div>
                         </div>
                         <div class="col-4">
-                                <label for="newslope_slopeSize">Hauteur de la pente</label>
-                                <select class="form-control mb-3" id="newslope_slopeSize" name="newslope_slopeSize">
-                                    <option value="Petite pente">Petite pente</option>
-                                    <option value="Moyenne pente">Moyenne pente</option>
-                                    <option value="Grande pente">Grande pente</option>
-                                </select>
+                            <label for="newslope_slopeSize">Hauteur de la pente</label>
+                            <select class="form-control mb-3" id="newslope_slopeSize" name="newslope_slopeSize">
+                                <option value="Petite pente">Petite pente</option>
+                                <option value="Moyenne pente">Moyenne pente</option>
+                                <option value="Grande pente">Grande pente</option>
+                            </select>
 
-                                <label for="newslope_slopeType">Surface posé</label>
-                                <select class="form-control mb-3" id="newslope_slopeSurface" name="newslope_slopeSurface">
-                                    <option value="Herbe">Herbe</option>
-                                    <option value="Cailloux">Cailloux</option>
-                                    <option value="Herbe et cailloux">Herbe et cailloux</option>
-                                </select>
+                            <label for="newslope_slopeSurface">Surface posé</label>
+                            <select class="form-control mb-3" id="newslope_slopeSurface" name="newslope_slopeSurface">
+                                <option value="Herbe">Herbe</option>
+                                <option value="Cailloux">Cailloux</option>
+                                <option value="Herbe et cailloux">Herbe et cailloux</option>
+                            </select>
 
-                                <label for="newslope_slopeType">Comptabilité modèles</label>
-                                <select class="form-control mb-3" id="newslope_slopeCompatibility" name="newslope_slopeCompatibility">
-                                    <option value="Mousse (posé peu accueillant)">Mousse (posé peu accueillant)</option>
-                                    <option value="Petit & moyen modèle (1 et 2m)">Petit & moyen modèle (1 et 2m)</option>
-                                    <option value="Grande plume (>3m)">Grande plume (>3m)</option>
-                                </select>
+                            <label for="newslope_slopeCompatibility">Comptabilité modèles</label>
+                            <select class="form-control mb-3" id="newslope_slopeCompatibility" name="newslope_slopeCompatibility">
+                                <option value="Mousse (posé peu accueillant)">Mousse (posé peu accueillant)</option>
+                                <option value="Petit modèle (< 1.5m)">Petit & moyen modèle (< 1.5m)</option>
+                                <option value="Planeur moyen (<3m)">Planeur moyen (<3m)</option>
+                                <option value="Grand planeur (<5m)">Grand planeur (<5m)"</option>
+                                <option value="GPR (> 5m)">GPR (> 5m)</option>
+                            </select>
+
+                            <label for="newslope_moulinette">Planeur motorisé</label>
+                            <select class="form-control mb-3" id="newslope_moulinette" name="newslope_moulinette">
+                                <option value="Superflu">Superflu</option>
+                                <option value="Confortable">Confortable</option>
+                                <option value="Indispensable">Indispensable</option>
+                            </select>
 
 
                         </div>
@@ -195,11 +201,9 @@
                         </div>
                     </div>
 
-
                     <div class="divider">
                         <div class="divider-fade"></div>
                     </div>
-
 
                     <div class="row">
                         <div class="col-4">
@@ -231,7 +235,6 @@
                         </div>
                     </div>
 
-
                     <div class="divider">
                         <div class="divider-fade"></div>
                     </div>
@@ -252,7 +255,6 @@
 
                         </div>
                     </div>
-
 
                 </div>
                 <div class="modal-footer">

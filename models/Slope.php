@@ -75,7 +75,7 @@ class Slope
 
         if (!$row) return null;
 
-        $row['orient'] = windSetToArray($row['orient']);
+        $row['orient'] = windSetToArray($row['orient'] ? $row['orient'] : '');
         $row['lat'] = (float)$row['lat'];
         $row['lng'] = (float)$row['lng'];
 

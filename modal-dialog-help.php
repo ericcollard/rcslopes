@@ -58,7 +58,6 @@
                     <h2>Aide</h2>
                     <div class="col-3">
                         <h3>Chercher une pente</h3>
-
                     </div>
                     <div class="col-9 mb-3">
                         En haut à droite de la carte, vous trouverez une loupe. En cliquant sur celle-ci vous ferez apparaitre un champ
@@ -70,44 +69,11 @@
 
                     <div class="col-3">
                         <h3>Centrer sur l'utilisateur</h3>
-
                     </div>
                     <div class="col-9 mb-3">
                         En cliquant sur la cible située sous les boutons Zoom + et Zoom -, la carte va zoomer et se centrer autour de votre
                         position. Votre position s'affichera avec une icône rouge.
                         <br/>Attention : cette fonctionnalité ne fonctionne que si la localisation est activée dans votre navigateur.
-                    </div>
-
-                    <div class="col-3">
-                        <h3>Modifier une pente</h3>
-                    </div>
-                    <div class="col-9 mb-3">
-                        En cliquant sur le bouton "Commenter" qui est affiché sur chaque fiche descriptive de pente, vous pouvez nous faire part
-                        d'une modification que vous souhaitez apporter ou d'une précision que vous souhaitez nous apporter.
-                        <br>Remplissez le champ commentaire, indiquez votre adresse email et cliquez sur 'envoyer'... nous nous occupons du reste.
-                        N'hésitez donc pas !
-                    </div>
-
-                    <div class="col-3">
-                        <h3>Photos</h3>
-                    </div>
-                    <div class="col-9 mb-3">
-                        Il est désormais possible d'ajouter des photos de description pour chaque pente. Pour des questions de sécurité,
-                        l'ajout est réservé aux administrateurs.
-                        L'objectif est de proposer un maximum de 5 photos par pente, permettant d'illustrer la zone de vol,
-                        la zone d'atterrissage, et l'accès.
-                        <br>Pour soumettre des photos, envoyer un email à l'administrateur avec vos photos. Le titre du mail doit être :
-                        "Photos pente ref #XXX" ou #XXX est le numéro identifiant la pente. Vos photos doivent être impérativement au format
-                        jpeg, avec des dimensions exactes de 1000x600px. Les photos de 5Go ou de dimensions fantaisistes seront ignorées.
-                    </div>
-
-                    <div class="col-3">
-                        <h3>Ajouter une pente</h3>
-                    </div>
-                    <div class="col-9 mb-3">
-                        Si vous désirez soumettre une nouvelle pente, zoomez sur la carte pour donner un point GPS avec un maximum de précision.
-                        Double-cliquez sur la position voulue, puis acceptez la position GPS proposée.
-                        <br>Vous pouvez alors remplir tous les champs pour donner un maximum d'information sur la nouvelle pente.
                     </div>
 
                     <div class="col-3">
@@ -240,6 +206,10 @@
                                 </ul>
                             </li>
                             <li>Visualisation publique des commentaires et pentes en attente de modération à la fin de la page d'aide</li>
+                            <li>Ajout d'une échelle sur la carte</li>
+                            <li>Blocage du zoom max pour éviter un affichage dégradé</li>
+                            <li>Ajout de l'option "Planeur motorisé" dans la description d'une pente</li>
+                            <li>Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
                         </ul>
                     </div>
                 </div>

@@ -11,15 +11,29 @@ const newslopeModal = new bootstrap.Modal(newslopeModalEl);
 var osmFrTile = L.tileLayer('//{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
     attribution: 'donn&eacute;es &copy; <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
     minZoom: 1,
-    maxZoom: 20
+    maxZoom: 17
 });
 
-var openTopoTile = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.osm.org/copyright">OpenStreetMap</a> contributors',
+
+var openTopoMapBackup = L.tileLayer('https://backup.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+    minZoom: 1,
+    maxZoom: 17,
+    tms: false,
 });
+
+var openTopoMap = L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+    minZoom: 1,
+    maxZoom: 17,
+    tms: false,
+});
+
 
 var ESRI_carto = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a>'
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a>',
+    minZoom: 1,
+    maxZoom: 17
 });
 
 // DEFINITION DES COUCHES DE DONNEES
@@ -35,13 +49,14 @@ var windLayerGroup = L.layerGroup(windMarkers);    // Couche Vent
 var map = L.map('map', {
     center: [46, 2],
     zoom: 7,
-    layers: [openTopoTile, slopesLayerGroup]
+    layers: [openTopoMapBackup, slopesLayerGroup]
 });
 
 // CHOIX DES CARTES ET COUCHES
 var cartoLayer = {
-    "Vue Topographique": openTopoTile,
-    "Vue Satellite": ESRI_carto,
+    "Vue Topographique (OpenTopoMap Backup)": openTopoMapBackup,
+    "Vue Topographique (OpenTopoMap)": openTopoMap,
+    "Vue Satellite ESRI": ESRI_carto,
     "Vue OSM Fr": osmFrTile,
 };
 
@@ -54,6 +69,8 @@ var infoLayer = {
 // ajout des groupe Cartes et couche en tant que control menu
 L.control.layers(cartoLayer,infoLayer).addTo(map);
 
+// Ajout d'un scale
+L.control.scale().addTo(map);
 
 // CHARGEMENT DES PENTES VIA API
 fetch('/api/slopes')

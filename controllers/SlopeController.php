@@ -283,7 +283,8 @@ class SlopeController
 
             $data['html'] .= '<div class="row mb-2">';
             $data['html'] .= '    <div class="col-12">';
-            $data['html'] .= "        <div class='divider'>Orientations de vent exploitables : {$orientations}</div>";
+            $orientationsStr = ($orientations == ""? 'nc.': $orientations);
+            $data['html'] .= "        <div class='divider'>Orientations de vent exploitables : {$orientationsStr}</div>";
             $data['html'] .= '    </div>';
             $data['html'] .= '</div> ' ;
 
@@ -635,6 +636,9 @@ class SlopeController
         }
         if (isset($body['newslope_slopeCompatibility'])) {
             $infoStr .= "<p>Compatible type de planeurs : " . trim($body['newslope_slopeCompatibility']) . "</p>";
+        }
+        if (isset($body['newslope_moulinette'])) {
+            $infoStr .= "<p>Planeur motorisé : " . trim($body['newslope_moulinette']) . "</p>";
         }
         if (isset($body['newslope_slopeSurface'])) {
             $infoStr .= "<p>Etat de surface zone de posé : " . trim($body['newslope_slopeSurface']) . "</p>";

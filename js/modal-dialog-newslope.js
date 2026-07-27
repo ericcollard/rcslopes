@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             newslope_slopeSize: formData.get('newslope_slopeSize'),
             newslope_slopeSurface: formData.get('newslope_slopeSurface'),
             newslope_slopeCompatibility: formData.get('newslope_slopeCompatibility'),
+            newslope_moulinette: formData.get('newslope_moulinette'),
             newslope_slopeGap: formData.get('newslope_slopeGap'),
             newslope_slopePark: formData.get('newslope_slopePark'),
             newslope_slopeAccess: formData.get('newslope_slopeAccess'),

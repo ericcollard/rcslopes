@@ -62,6 +62,12 @@
                     </button>
                 </li>
 
+                <li class="nav-item">
+                    <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
+                        Ajout
+                    </button>
+                </li>
+
                 <li class="nav-item d-none d-lg-block ms-lg-3">
                     <form class="position-relative rc-slope-search" role="search" autocomplete="off">
                         <input type="search" class="form-control rc-search-input ps-3 pe-5"
@@ -116,6 +122,9 @@
 
 <!-- Dialogue modal pour les légendes OpenWindMap -->
 <?php include 'modal-dialog-help.php';?>
+
+<!-- Dialogue modal pour les légendes OpenWindMap -->
+<?php include 'modal-dialog-add.php';?>
 
 <!-- Dialogue modal pour un ajout de nouvelle pente -->
 <?php include 'modal-dialog-newslope.php';?>
