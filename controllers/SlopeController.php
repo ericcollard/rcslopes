@@ -490,7 +490,7 @@ class SlopeController
 
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom(MAIL_ADMIN, 'FinessPlus');
+                $mail->setFrom('rcslopesadmin@windfoilfan.com', 'FinessPlus');
                 $mail->addAddress($input['addBy'], $input['addBy']);
                 $mail->addCC(MAIL_ADMIN);
                 $mail->Subject = 'FinessPlus - Enregistrement site #'.$slopeId;
