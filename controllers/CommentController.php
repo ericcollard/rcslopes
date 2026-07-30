@@ -129,16 +129,15 @@ class CommentController
 
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom(MAIL_ADMIN, 'FinessPlus');
+                $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
                 $mail->addAddress($input['email'], $input['email']);
                 $mail->addCC(MAIL_ADMIN);
-                $mail->Subject = 'FinessPlus - Nouveau commentaire pente #'.$input['slopeId'];
+                $mail->Subject = 'FinessePlus - Nouveau commentaire pente #'.$input['slopeId'];
                 $mail->isHTML(TRUE);
                 $mail->Body = $body;
                 $mail->AltBody = $altBody;
                 $mail->send();
             }
-
 
             jsonResponse(['success' => true,'id'  => $commentId], 201);
 
