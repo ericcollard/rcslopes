@@ -490,10 +490,10 @@ class SlopeController
 
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
+                $mail->setFrom(MAIL_ADMIN, 'FinessPlus');
                 $mail->addAddress($input['addBy'], $input['addBy']);
                 $mail->addCC(MAIL_ADMIN);
-                $mail->Subject = 'FinessePlus - Enregistrement site #'.$slopeId;
+                $mail->Subject = 'FinessPlus - Enregistrement site #'.$slopeId;
                 $mail->isHTML(TRUE);
                 $mail->Body = $body;
                 $mail->AltBody = $altBody;
