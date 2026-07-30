@@ -109,6 +109,7 @@ class CommentController
             $commentId = comment::insert($input['comment'], $input['email'], $input['slopeId']);
 
             // commentaire enregistré avec succès > envoi d'un mail récapitulatif à l'émetteur
+
             require_once 'helpers/mailer.php';
 
             if (!empty($input['email'])) {

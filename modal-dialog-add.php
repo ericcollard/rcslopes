@@ -37,7 +37,7 @@
                         l'ajout est réservé aux administrateurs.
                         L'objectif est de proposer un maximum de 5 photos par pente, permettant d'illustrer la zone de vol,
                         la zone d'atterrissage, et l'accès.
-                        <br>Pour soumettre des photos, envoyer un email à l'administrateur avec vos photos. Le titre du mail doit être :
+                        <br>Pour soumettre des photos, envoyer un email à l'administrateur : "rcslopes (at) finesseplus.org" avec vos photos. Le titre du mail doit être :
                         "Photos pente ref #XXX" ou #XXX est le numéro identifiant la pente. Vos photos doivent être impérativement au format
                         jpeg, avec des dimensions exactes de 1000x600px. Les photos de 5Go ou de dimensions fantaisistes seront ignorées.
                     </div>
