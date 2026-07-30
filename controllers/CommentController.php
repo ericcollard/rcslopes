@@ -128,17 +128,11 @@ class CommentController
                 $altBody = strip_tags($body);
 
 
-                define('MAIL_HOST',     'live.smtp.mailtrap.io');
-                define('SMTP_USER',     'api');
-                define('SMTP_PASSWORD', '03012958b985e1f9875f8f575c69f62a');
-                define('MAIL_PORT',     587);
-                define('MAIL_ADMIN',     'rcslopes@finesseplus.org');
-
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom('rcslopes@finesseplus.org', 'FinessePlus');
+                $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
                 $mail->addAddress($input['email'], $input['email']);
-                $mail->addCC('rcslopes@finesseplus.org');
+                $mail->addCC(MAIL_ADMIN);
                 $mail->Subject = 'FinessePlus - Nouveau commentaire pente #'.$input['slopeId'];
                 $mail->isHTML(TRUE);
                 $mail->Body = $body;
