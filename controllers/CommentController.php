@@ -130,7 +130,7 @@ class CommentController
 
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
+                $mail->setFrom('hello@windfoilfan.com', 'FinessePlus');
                 $mail->addAddress($input['email'], $input['email']);
                 $mail->addCC(MAIL_ADMIN);
                 $mail->Subject = 'FinessePlus - Nouveau commentaire pente #'.$input['slopeId'];
