@@ -394,8 +394,8 @@ class SlopeController
         if ($controls)
         {
             // ============================================================
-// 1) VÉRIFICATION DU TOKEN CSRF
-// ============================================================
+            // 1) VÉRIFICATION DU TOKEN CSRF
+            // ============================================================
 
             $submittedToken = $input['newslope_csrf_token'] ?? '';
 
@@ -408,9 +408,9 @@ class SlopeController
                 exit;
             }
 
-// ============================================================
-// 2) HONEYPOT — un bot remplit généralement tous les champs
-// ============================================================
+            // ============================================================
+            // 2) HONEYPOT — un bot remplit généralement tous les champs
+            // ============================================================
             if (!empty($input['newslope_website'])) {
                 // On répond "succès" pour ne pas indiquer au bot qu'il a été détecté,
                 // mais on n'insère rien en base.
@@ -419,9 +419,9 @@ class SlopeController
                 exit;
             }
 
-// ============================================================
-// 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
-// ============================================================
+            // ============================================================
+            // 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
+            // ============================================================
             $renderedAt = (int) ($input['newslope_form_rendered_at'] ?? 0);
             $elapsed    = time() - $renderedAt;
 
@@ -434,9 +434,9 @@ class SlopeController
                 exit;
             }
 
-// ============================================================
-// 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
-// ============================================================
+            // ============================================================
+            // 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
+            // ============================================================
             $now            = time();
             $window         = 600; // 10 minutes
             $maxSubmissions = 5;
@@ -472,6 +472,11 @@ class SlopeController
             // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
             require_once 'helpers/mailer.php';
 
+            $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+                === 'on' ? "https" : "http") .
+                "://" . $_SERVER['HTTP_HOST'];
+            $slopeUrl = $serverName . "/" . $slopeId;
+
             if (!empty($input['addBy'])) {
                 // Construction contenu email
                 $email_vars = array(
@@ -479,6 +484,7 @@ class SlopeController
                     'SLOPEID' => $slopeId,
                     'EMAIL' => $input['addBy'],
                     'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
+                    'SLOPEURL' => $slopeUrl
                 );
                 $body = file_get_contents('./mail-templates/newslope.html');
                 if(isset($email_vars)){
@@ -490,10 +496,10 @@ class SlopeController
 
                 // Expédition email
                 $mail = getMailer();
-                $mail->setFrom('rcslopesadmin@windfoilfan.com', 'FinessPlus');
+                $mail->setFrom('rcslopesadmin@windfoilfan.com', 'FinessePlus');
                 $mail->addAddress($input['addBy'], $input['addBy']);
                 $mail->addCC(MAIL_ADMIN);
-                $mail->Subject = 'FinessPlus - Enregistrement site #'.$slopeId;
+                $mail->Subject = 'FinessePlus - Enregistrement site #'.$slopeId;
                 $mail->isHTML(TRUE);
                 $mail->Body = $body;
                 $mail->AltBody = $altBody;
