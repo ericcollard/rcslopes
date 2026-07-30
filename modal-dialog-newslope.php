@@ -160,7 +160,7 @@
                                 <option value="Mousse (posé peu accueillant)">Mousse (posé peu accueillant)</option>
                                 <option value="Petit modèle (< 1.5m)">Petit & moyen modèle (< 1.5m)</option>
                                 <option value="Planeur moyen (<3m)">Planeur moyen (<3m)</option>
-                                <option value="Grand planeur (<5m)">Grand planeur (<5m)"</option>
+                                <option value="Grand planeur (<5m)">Grand planeur (<5m)</option>
                                 <option value="GPR (> 5m)">GPR (> 5m)</option>
                             </select>
 
