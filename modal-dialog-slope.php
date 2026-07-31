@@ -20,7 +20,9 @@
                         <div class="col-6 buttons-wrapper align-bottom">
                             <a class="btn btn-warning btn-sm" id="modal-edit-button"
                                href="#" target="_blank" role="button"><i class="bi bi-lock-fill"></i> Editer</a>
-                            <button class="btn btn-primary btn-sm" data-bs-target="#commentModal" data-bs-toggle="modal">Ajout commentaire</button>
+                            <button class="btn btn-info btn-sm" data-bs-target="#commentModal" data-bs-toggle="modal">Ajout commentaire</button>
+                            <a class="btn btn-info btn-sm" id="modal-picture-button"
+                               href="#" target="_blank" role="button"><i class="bi bi-images"></i> Ajout photos</a>
                             <button type="button" class="btn btn-primary  btn-sm" data-bs-dismiss="modal">Fermer</button>
                         </div>
                     </div>

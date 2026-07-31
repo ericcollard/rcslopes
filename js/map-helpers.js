@@ -55,6 +55,11 @@ function feedModalBySlope(slopeId) {
             var linkElement = document.getElementById("modal-edit-button");
             linkElement.href = getEditUrl('slopes',slopeId);
 
+            // Ajout du lien ajout photos
+            var pictureElement = document.getElementById("modal-picture-button");
+            pictureElement.href = "mailto:rcslopes@finesseplus.org?subject=Photos%20pente%20ref%20"+slopeId+"&body=Bonjour%0AVoici%20les%20photos%20de%20la%20pente%20ref%20%3A%20"+slopeId+"%0A5%20photos%20maxi%20en%201000x600%20pixels.";
+
+
             var SlopeIdFormElem = document.getElementById("slopeId");
             SlopeIdFormElem.value = slopeId;
 

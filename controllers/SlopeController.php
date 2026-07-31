@@ -9,11 +9,13 @@ use controllers\WeatherForecastController;
 use models\Comment;
 use models\Slope;
 use models\SlopePicture;
+use models\Statistic;
 use models\WeatherForecast;
 use function jsonResponse;
 
 require_once __DIR__ . '/../models/Comment.php';
 require_once __DIR__ . '/../models/Slope.php';
+require_once __DIR__ . '/../models/Statistic.php';
 require_once __DIR__ . '/../models/SlopePicture.php';
 require_once __DIR__ . '/../models/WeatherForecast.php';
 require_once __DIR__ . '/../helpers/response.php';
@@ -240,6 +242,8 @@ class SlopeController
 
     public function showHtml(int $slopeId): void
     {
+        // update statistics
+        Statistic::register($slopeId,0);
 
         $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
             === 'on' ? "https" : "http") .

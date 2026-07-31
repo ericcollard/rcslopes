@@ -39,7 +39,9 @@
                         la zone d'atterrissage, et l'accès.
                         <br>Pour soumettre des photos, envoyer un email à l'administrateur : "rcslopes (at) finesseplus.org" avec vos photos. Le titre du mail doit être :
                         "Photos pente ref #XXX" ou #XXX est le numéro identifiant la pente. Vos photos doivent être impérativement au format
-                        jpeg, avec des dimensions exactes de 1000x600px. Les photos de 5Go ou de dimensions fantaisistes seront ignorées.
+                        jpeg, avec des dimensions exactes de 1000x600px. Idéalement, ajoutez une ligne de description pour chaque photo.
+                        <br>Les photos de 5Go ou de dimensions fantaisistes seront ignorées.
+                        <br>Pour plus de simplicité, en bas de la fiche d'une pente, vous aurez un bouton qui pré-rempli l'email : vous n'aurez qu'à ajouter vos photos.
                     </div>
                 </div>
             </div>

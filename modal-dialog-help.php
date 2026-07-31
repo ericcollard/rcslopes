@@ -211,6 +211,7 @@
                             <li>V2.1 > Ajout de l'option "Planeur motorisé" dans la description d'une pente</li>
                             <li>V2.1 > Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
                             <li>V2.1 > Nouveau menu spécifique pour l'aide aux ajouts / commentaires</li>
+                            <li>V2.1 > Pré-remplissage du mail pour l'ajout de photos</li>
                         </ul>
                     </div>
                 </div>

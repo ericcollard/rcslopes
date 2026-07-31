@@ -5,16 +5,18 @@ require_once __DIR__ . '/controllers/WeatherForecastController.php';
 require_once __DIR__ . '/controllers/SlopeController.php';
 require_once __DIR__ . '/models/Slope.php';
 require_once __DIR__ . '/models/SlopePicture.php';
-
+require_once __DIR__ . '/models/Statistic.php';
 use controllers\SlopeController;
 use controllers\WeatherForecastController;
 use helpers\OpenMeteoHelper;
 use models\Slope;
 use models\SlopePicture;
 use models\WeatherForecast;
+use models\Statistic;
 
-
-
+/*
+Statistic::register(59,0);
+*/
 /*
 require_once 'helpers/mailer.php';
 $mail = getMailer();
@@ -39,7 +41,7 @@ if (!$mail->send()) {
 
 
 
-
+/*
 
 $params=[
     'newslope_lat'=> 45.2,
@@ -78,12 +80,12 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
-
+*/
 
 //$slopes = Slope::normalize();
 //var_dump($slopes);
-//$slopeController = new SlopeController();
-//var_dump($slopeController->showHtml(59));
+$slopeController = new SlopeController();
+var_dump($slopeController->showHtml(59));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);
