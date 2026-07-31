@@ -64,7 +64,17 @@
 
                 <li class="nav-item">
                     <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
-                        <i class="bi bi-plus-circle-fill"></i> Ajout
+                        <i class="bi bi-plus-circle-fill"></i> Nouvelle pente
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
+                        <i class="bi bi-pencil-square"></i> Modifier
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
+                        <i class="bi bi-images"></i> Photos
                     </button>
                 </li>
 

@@ -11,7 +11,7 @@
                     <h2>Interragir et participer</h2>
 
                     <div class="col-3">
-                        <h3>Ajouter une pente</h3>
+                        <h3><i class="bi bi-plus-circle-fill"></i> Ajouter une pente</h3>
                     </div>
                     <div class="col-9 mb-3">
                         Si vous désirez soumettre une nouvelle pente, zoomez sur la carte (pour donner un point GPS avec un maximum de précision).
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="col-3">
-                        <h3>Modifier une pente</h3>
+                        <h3><i class="bi bi-pencil-square"></i> Modifier une pente</h3>
                     </div>
                     <div class="col-9 mb-3">
                         En cliquant sur le bouton "Commenter" qui est affiché sur chaque fiche descriptive de pente, vous pouvez nous faire part
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="col-3">
-                        <h3>Photos</h3>
+                        <h3><i class="bi bi-images"></i> Photos</h3>
                     </div>
                     <div class="col-9 mb-3">
                         Il est désormais possible d'ajouter des photos de description pour chaque pente. Pour des questions de sécurité,
