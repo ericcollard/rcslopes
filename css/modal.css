@@ -147,8 +147,28 @@ td.slope-comment-date {
 
 
 .statistics {
-    text-justify: auto;
+    display: flex;
+    justify-content: center;
     color: #333;
+}
+
+.statistics .value {
+    font-weight: bold;
+    color: #111;
+    font-size: 1.1rem;
+    margin-left: 5px;
+}
+
+.statistics .label {
+    color: #666;
+    font-size: 0.8rem;
+    line-height: 1.9rem;
+    margin-left: 5px;
+    vertical-align: baseline;
+}
+
+.statistics .icon {
+    font-size: 16px;
 }
 
 
@@ -174,12 +194,3 @@ td.slope-comment-date {
     font-size: 16px;
 }
 
-.stat-item .value {
-    font-weight: bold;
-    color: #111;
-}
-
-.stat-item .label {
-    color: #666;
-    font-size: 12px;
-}

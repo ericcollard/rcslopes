@@ -306,10 +306,29 @@ class SlopeController
             else
                 $data['html'] .= "<div class='alert alert-danger mb-4' role='alert'>Cette pente ne possède pas d'AIP</div>";
 
+
+            $data['html'] .= "<div class='container-fluid mb-4' style='padding-left:0;padding-right:0'>";
+            $data['html'] .=   "<div class='row gx-5'>";
+            $data['html'] .=     "<div class='col'>";
+            $data['html'] .=       "<div class='bg-light p-2 rounded statistics'>";
+            $data['html'] .=         "<span class='icon'>👁️</span>";
+            $data['html'] .=         "<span class='value'>{$nbViews}</span>";
+            $data['html'] .=        " <span class='label'> Vues</span>";
+            $data['html'] .=       "</div>";
+            $data['html'] .=     "</div>";
+            $data['html'] .=    "<div class='col'>";
+            $data['html'] .=      "<div class='bg-light p-2 rounded statistics'>";
+            $data['html'] .=       " <span class='icon'>⭐</span>";
+            $data['html'] .=        "<span class='value'>nc.</span>";
+            $data['html'] .=        "<span class='label'>/5</span>";
+            $data['html'] .=      "</div>";
+            $data['html'] .=    "</div>";
+            $data['html'] .=  "</div>";
+            $data['html'] .= "</div>";
+
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En bref</h2>";
             $data['html'] .= ($slope['desc_summary_fr'] ? $slope['desc_summary_fr'] : 'Nc.');
-            $data['html'] .= "<p>Nombre de vues (sur 1 an glissant) : {$nbViews}</p>";
             if ($slope['rating'] > 0)
                 $data['html'] .= "<p>Rating : ".number_format($slope['rating'], 1, ',', ' ')."</p>";
             $data['html'] .= "</div>";
