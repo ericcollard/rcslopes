@@ -14,9 +14,9 @@ use models\SlopePicture;
 use models\WeatherForecast;
 use models\Statistic;
 
-/*
-Statistic::register(59,0);
-*/
+
+Statistic::countViewBySlopeId(59);
+
 /*
 require_once 'helpers/mailer.php';
 $mail = getMailer();
@@ -84,8 +84,8 @@ if(curl_error($ch)) {
 
 //$slopes = Slope::normalize();
 //var_dump($slopes);
-$slopeController = new SlopeController();
-var_dump($slopeController->showHtml(59));
+//$slopeController = new SlopeController();
+//var_dump($slopeController->showHtml(59));
 //$slopesData = $slopeController->get(10,700, 1);
 //var_dump($slopesData);
 //$data = $meteoHelper->fetchForSlopes($slopesData);

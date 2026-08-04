@@ -260,6 +260,8 @@ class SlopeController
         if ($slope['type'] == 'pente')
         {
             $orientations = join(", ",$slope['orient']);
+            $nbViews = Statistic::countViewBySlopeId($slopeId);
+
 
             $data['html'] = "<div class='container-fluid'>";
 
@@ -307,6 +309,9 @@ class SlopeController
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En bref</h2>";
             $data['html'] .= ($slope['desc_summary_fr'] ? $slope['desc_summary_fr'] : 'Nc.');
+            $data['html'] .= "<p>Nombre de vues (sur 1 an glissant) : {$nbViews}</p>";
+            if ($slope['rating'] > 0)
+                $data['html'] .= "<p>Rating : ".number_format($slope['rating'], 1, ',', ' ')."</p>";
             $data['html'] .= "</div>";
 
             $data['html'] .= "<div class='slope-gestion mb-4'>";

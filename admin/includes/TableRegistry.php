@@ -163,8 +163,11 @@ final class TableRegistry
                         'label' => 'ID', 'type' => 'hidden', 'editable' => false,
                     ],
                     'slopeId' => [
+                        //'label' => 'Site (slopeId)', 'type' => 'lookup', 'required' => true,
+                        //'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'name',
+                        //'label' => 'Site (slopeId)', 'type' => 'number', 'required' => true
                         'label' => 'Site (slopeId)', 'type' => 'lookup', 'required' => true,
-                        'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'name',
+                        'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'slopeId',
                     ],
                     'path' => [
                         // Le fichier est envoyé via <input type="file" name="path">, uploadé par

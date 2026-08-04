@@ -18,19 +18,17 @@ class Statistic
     /**
      * Retourne les images site par son slopeId, ou null.
      */
-    public static function getBySlopeId(int $slopeId): ?array
+    public static function countViewBySlopeId(int $slopeId): int
     {
         $stmt = getDB()->prepare(
-            'SELECT *
+            'SELECT count(*) as cnt
              FROM statistics
-             WHERE slopeId = ?'
+             WHERE slopeId = ? and typeId = 0'
         );
         $stmt->execute([$slopeId]);
-        $row = $stmt->fetchAll();
+        $row = $stmt->fetch();
 
-        if (!$row) return null;
-
-        return $row;
+        return $row['cnt'];
     }
 
     public static function clean() {
