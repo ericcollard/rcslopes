@@ -42,6 +42,10 @@
     color: #aaaaaa;
 }
 
+.modal .carousel-caption h5 {
+    color: #ffffff;
+}
+
 .modal h6 {
     font-size: 1.0rem !important;
     color: #aaaaaa;
