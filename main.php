@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="css/weather.css" />
     <link rel="stylesheet" href="css/modal.css" />
     <link rel="stylesheet" href="css/share.css" />
+    <link rel="stylesheet" href="css/rate.css" />
 </head>
 <body  class="rc-body">
 
@@ -150,7 +151,6 @@
 <script src="js/map.js"></script>
 <script src="js/modal-dialog-comment.js"></script>
 <script src="js/modal-dialog-newslope.js"></script>
-
 <script src="js/slope-search.js"></script>
 
 </body>

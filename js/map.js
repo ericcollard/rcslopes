@@ -124,6 +124,7 @@ fetch('/api/slopes')
 
                     marker.on('click', function () {
                         feedModalBySlope(slopeId);
+                        //await import("./rate.js");
                         markerModal.show();
                     });
 

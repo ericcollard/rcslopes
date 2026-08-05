@@ -15,9 +15,6 @@ require_once __DIR__ . '/../helpers/CacheHelper.php';
 class Statistic
 {
 
-    /**
-     * Retourne les images site par son slopeId, ou null.
-     */
     public static function countViewBySlopeId(int $slopeId): int
     {
         $stmt = getDB()->prepare(
@@ -25,10 +22,24 @@ class Statistic
              FROM statistics
              WHERE slopeId = ? and typeId = 0'
         );
+
         $stmt->execute([$slopeId]);
         $row = $stmt->fetch();
-
         return $row['cnt'];
+    }
+
+    public static function getRateBySlopeId(int $slopeId): float
+    {
+        $stmt = getDB()->prepare(
+            'select avg(rate) as rating from statistics where slopeId = ? and typeId = 1'
+        );
+        $stmt->execute([$slopeId]);
+        $row = $stmt->fetch();
+        //var_dump($row);
+        if ($row and ! is_null($row['rating']))
+            return $row['rating'];
+        else
+            return -1;
     }
 
     public static function clean() {
@@ -41,11 +52,11 @@ class Statistic
 
     }
 
-    public static function register(int $slopeId, int $typeId) {
+    public static function register(int $slopeId, int $typeId = 0, int $rate = 0) {
         $db = getDB();
 
         // $typeId ... 0 = vue
-        // $typeId ... 1 = like
+        // $typeId ... 1 = rate
 
 
         $cacheHelper = new CacheHelper("cache/last_stat.txt");
@@ -62,16 +73,28 @@ class Statistic
             echo $e->getMessage();
         }
 
-        $query = "INSERT INTO statistics
+        if ($typeId == 0) {
+            $query = "INSERT INTO statistics
                 (slopeId, typeId)
                 VALUES
-                (:slopeId, :typeId)" ;
-        $stmt = $db->prepare($query);
+                (:slopeId, 0)" ;
+            $stmt = $db->prepare($query);
+            if ($slopeId > 0)
+                $stmt->bindParam(":slopeId", $slopeId);
+        }
+        else
+        {
+            $query = "INSERT INTO statistics
+                (slopeId, typeId, rate)
+                VALUES
+                (:slopeId, 1, :rate)" ;
+            $stmt = $db->prepare($query);
+            if ($slopeId > 0)
+                $stmt->bindParam(":slopeId", $slopeId);
+            if ($rate >= 0)
+                $stmt->bindParam(":rate", $rate);
+        }
 
-        if ($slopeId > 0)
-            $stmt->bindParam(":slopeId", $slopeId);
-        if ($typeId >= 0)
-            $stmt->bindParam(":typeId", $typeId);
         $stmt->execute();
     }
 

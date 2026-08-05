@@ -153,6 +153,39 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <h4>Dernières modifications</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Id Pente</th>
+                                    <th>Nom</th>
+                                    <th>Mise à jour</th>
+                                    <th>Date</th>
+                                </tr>
+                                <?php
+                                use models\Slopes;
+                                require_once __DIR__ . '/models/Slope.php';
+                                $updates = Slope::getlastUpdate();
+
+                                $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+                                    === 'on' ? "https" : "http") .
+                                    "://" . $_SERVER['HTTP_HOST'];
+
+                                foreach ((array) $updates as $update ) {
+                                    echo "<tr>";
+                                    echo "<td>".$update['slopeId']."</td>";
+                                    echo "<td><a href='".$serverName."/".$update['slopeId']."'>".$update['name']."</a></td>";
+                                    echo "<td>".$update['source']."</td>";
+                                    $created = new \DateTime($update['updated_at']);
+                                    echo "<td>".date_format($created,'d/m/Y')."</td>";
+                                    echo "</tr>";
+                                }
+
+                                ?>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="divider-help">

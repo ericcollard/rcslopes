@@ -15,7 +15,9 @@ use models\WeatherForecast;
 use models\Statistic;
 
 
-Statistic::countViewBySlopeId(59);
+$rating = Statistic::getRateBySlopeId(125);
+
+var_dump($rating);
 
 /*
 require_once 'helpers/mailer.php';

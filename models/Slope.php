@@ -134,6 +134,27 @@ class Slope
         return $row;
     }
 
+    public static function getlastUpdate(): ?array
+    {
+        $stmt = getDB()->prepare(
+            "(SELECT slope_pictures.slopeId, slope_pictures.updated_at, slopes.name, 'Ajout photos' AS source 
+ FROM slope_pictures inner join slopes on slopes.slopeId = slope_pictures.slopeId
+ ORDER BY updated_at DESC)
+UNION ALL
+(SELECT slopes.slopeId, slopes.updated_at, slopes.name, 'Modification pente' AS source 
+ FROM slopes 
+ ORDER BY updated_at DESC )
+ORDER BY updated_at DESC 
+LIMIT 10"
+        );
+
+        $stmt->execute();
+        $row = $stmt->fetchAll();
+        if (!$row) return null;
+
+        return $row;
+    }
+
     public static function insert(array $input): int
     {
 

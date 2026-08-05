@@ -125,6 +125,9 @@ if ($method === 'GET' && $uri === '/slopes') {
 
 } elseif ($method === 'POST' && $uri === '/newslope') {
     $slopeController->store(false);
+} elseif ($method === 'POST' && $uri === '/rate') {
+    $slopeController->rate();
+// ── Route inconnue ───────────────────────────────────────────
 // ── Route inconnue ───────────────────────────────────────────
 } else {
     jsonResponse(['success' => false, 'error' => 'Route introuvable.'], 404);

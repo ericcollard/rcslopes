@@ -240,6 +240,31 @@ class SlopeController
         return $serverName."/admin/table.php?t=".$datatable."&mode=edit&pk=".$id;
     }
 
+    public function getRateHtml(): string {
+        $formRenderedAt = time();
+        $html = "    <div class='row'>";
+        $html .= "        <div class='col-6 text-end'>";
+        $html .= "              <h4>Notez cette pente : </h4>";
+        $html .= "        </div>";
+        $html .= "        <div class='col-6'>";
+        $html .= "            <form id='form_rating'>";
+        $html .= "                <div class='star-rating'>";
+        $html .= "                    <input type='radio' name='rating' value='1'><i></i>";
+        $html .= "                    <input type='radio' name='rating' value='2'><i></i>";
+        $html .= "                    <input type='radio' name='rating' value='3'><i></i>";
+        $html .= "                    <input type='radio' name='rating' value='4'><i></i>";
+        $html .= "                    <input type='radio' name='rating' value='5'><i></i>";
+        $html .= "                    <input type='hidden' id='slope_rendered_at' name='slope_rendered_at' value=".$formRenderedAt.">";
+        $html .= "                </div>";
+        //$html .= "                <div class='mt-3'>";
+        //$html .= "                    <span id='rating-value' class='h4'>0</span> out of 5 stars";
+        //$html .= "                </div>";
+        $html .= "            </form>";
+        $html .= "        </div>";
+        $html .= "    </div>";
+        return $html;
+    }
+
     public function showHtml(int $slopeId): void
     {
         // update statistics
@@ -261,7 +286,7 @@ class SlopeController
         {
             $orientations = join(", ",$slope['orient']);
             $nbViews = Statistic::countViewBySlopeId($slopeId);
-
+            $rating = Statistic::getRateBySlopeId($slopeId);
 
             $data['html'] = "<div class='container-fluid'>";
 
@@ -308,7 +333,7 @@ class SlopeController
 
 
             $data['html'] .= "<div class='container-fluid mb-4' style='padding-left:0;padding-right:0'>";
-            $data['html'] .=   "<div class='row gx-5'>";
+            $data['html'] .=   "<div class='row gx-5 mb-2'>";
             $data['html'] .=     "<div class='col'>";
             $data['html'] .=       "<div class='bg-light p-2 rounded statistics'>";
             $data['html'] .=         "<span class='icon'>👁️</span>";
@@ -319,12 +344,17 @@ class SlopeController
             $data['html'] .=    "<div class='col'>";
             $data['html'] .=      "<div class='bg-light p-2 rounded statistics'>";
             $data['html'] .=       " <span class='icon'>⭐</span>";
-            $data['html'] .=        "<span class='value'>nc.</span>";
+            $data['html'] .=        "<span class='value'>".($rating<0 ? 'nc':number_format($rating, 1, '.', ''))."</span>";
             $data['html'] .=        "<span class='label'>/5</span>";
             $data['html'] .=      "</div>";
             $data['html'] .=    "</div>";
             $data['html'] .=  "</div>";
+
+            $data['html'] .= $this->getRateHtml();
+
             $data['html'] .= "</div>";
+
+
 
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En bref</h2>";
@@ -469,12 +499,21 @@ class SlopeController
             $window         = 600; // 10 minutes
             $maxSubmissions = 5;
 
-            $_SESSION['slope_submissions'] = array_filter(
-                $_SESSION['slope_submissions'] ?? [],
-                fn(int $timestamp) => ($now - $timestamp) < $window
-            );
+            if (!array_key_exists('slope_submissions_timestamp', $_SESSION))
+                $_SESSION['slope_submissions_timestamp'] = $now;
 
-            if (count($_SESSION['slope_submissions']) >= $maxSubmissions) {
+            if (!array_key_exists('slope_submissions_count', $_SESSION))
+                $_SESSION['slope_submissions_count'] = 1;
+            else
+                $_SESSION['slope_submissions_count'] = $_SESSION['slope_submissions_count'] + 1;
+
+            if ($now - $_SESSION['slope_submissions_timestamp'] > $window)
+            {
+                $_SESSION['slope_submissions_timestamp'] = $now;
+                $_SESSION['slope_submissions_count'] = 0;
+            }
+
+            if (count($_SESSION['slope_submissions_count']) >= $maxSubmissions) {
                 http_response_code(429); // Too Many Requests
                 echo json_encode([
                     'success' => false,
@@ -544,6 +583,111 @@ class SlopeController
         }
     }
 
+    // ── POST /api/rate ──────────────────────────────────────
+
+    public function rate(bool $controls = true): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        // N'accepter que la méthode POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            jsonResponse(['success' => false,'errors'  => ['Méthode non autorisée.']], 405);
+            exit;
+        }
+
+        // Lecture du corps JSON envoyé par fetch()
+        $rawInput = file_get_contents('php://input');
+        $input    = json_decode($rawInput, true);
+
+        if (!is_array($input)) {
+            jsonResponse(['success' => false,'errors'  => ['Requête invalide.']], 400);
+            exit;
+        }
+
+        if ($controls)
+        {
+            // ============================================================
+            // 3) DÉLAI MINIMUM DE SOUMISSION — un bot soumet quasi instantanément
+            // ============================================================
+            $renderedAt = (int) ($input['slope_rendered_at'] ?? 0);
+            $elapsed    = time() - $renderedAt;
+
+            if ($renderedAt <= 0 || $elapsed < 2) {
+                http_response_code(422);
+                echo json_encode([
+                    'success' => false,
+                    'errors'  => ['Soumission trop rapide, veuillez réessayer.']
+                ]);
+                exit;
+            }
+
+            // ============================================================
+            // 4) RATE LIMITING SIMPLE PAR SESSION (ex : 5 commentaires / 10 min)
+            // ============================================================
+            $now = time();
+            $window         = 120; // 2 minutes
+            $maxSubmissions = 5;
+            if (!array_key_exists('slope_rating_timestamp', $_SESSION))
+                $_SESSION['slope_rating_timestamp'] = $now;
+
+            if (!array_key_exists('slope_rating_count', $_SESSION))
+                $_SESSION['slope_rating_count'] = 1;
+            else
+                $_SESSION['slope_rating_count'] = $_SESSION['slope_rating_count'] + 1;
+
+            if ($now - $_SESSION['slope_rating_timestamp'] > $window)
+            {
+                $_SESSION['slope_rating_timestamp'] = $now;
+                $_SESSION['slope_rating_count'] = 0;
+            }
+
+            if ($_SESSION['slope_rating_count'] > $maxSubmissions)
+            {
+                http_response_code(429); // Too Many Requests
+                echo json_encode([
+                    'success' => false,
+                    'errors'  => ['Trop de votes envoyés récemment, veuillez patienter quelques minutes avant de réessayer.']
+                ]);
+                exit;
+            }
+        }
+
+        $errors = [];
+        if (empty($input['slope_slopeId'])) {
+            $errors[] = 'L identifiant est obligatoire.';
+        }
+        if (empty($input['slope_rating'])) {
+            $errors[] = 'La note est obligatoire.';
+        }
+
+        if (empty($errors))
+        {
+            $data = [];
+            if (isset($input['slope_slopeId'])) {
+                $data['slopeId'] = intval($input['slope_slopeId']);
+            }
+            if (isset($input['slope_rating'])) {
+                $data['rate'] = intval($input['slope_rating']);
+            }
+        }
+
+        if (!empty($errors)) {
+            jsonResponse(['success' => false,'errors'  => $errors], 422);
+            exit;
+        }
+
+        try {
+            Statistic::register($data['slopeId'], 1, $data['rate']);
+
+           jsonResponse(['success' => true], 201);
+
+
+        } catch (PDOException $e) {
+            // Ne jamais renvoyer le message d'erreur SQL brut au client en production
+            error_log('Erreur rate : ' . $e->getMessage());
+            jsonResponse(['success' => false,'errors'  => ['Une erreur serveur est survenue, veuillez réessayer plus tard.']], 500);
+        }
+    }
 
     // ── Validation ────────────────────────────────────────────
 

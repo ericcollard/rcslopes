@@ -63,6 +63,50 @@ function feedModalBySlope(slopeId) {
             var SlopeIdFormElem = document.getElementById("slopeId");
             SlopeIdFormElem.value = slopeId;
 
+            // Gestion du rating
+            const starRating = document.querySelector('.star-rating');
+            //const ratingValue = document.getElementById('rating-value');
+            const ratingForm = document.getElementById('form_rating');
+
+            starRating.addEventListener('change', async function(e) {
+                //ratingValue.textContent = e.target.value;
+                //console.log(e.target.value);
+                const formData = new FormData(ratingForm);
+                //console.log(formData.get('slope_rendered_at'),);
+
+                const payload = {
+                    slope_slopeId: slopeId,
+                    slope_rating: e.target.value,
+                    slope_rendered_at: formData.get('slope_rendered_at'),
+                };
+                //console.log(payload);
+
+
+                try {
+                    const response = await fetch('/api/rate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.success) {
+                        //console.log("Succès");
+                        showFlash('Notation enregistrée, merci.','success')
+                    } else {
+                        //console.log(data.errors);
+                        showFlash('Erreur : ' + data.errors, 'danger')
+                    }
+
+                } catch (err) {
+                    //console.log(err);
+                    showFlash('Erreur : ' + err, 'danger')
+                }
+
+
+            });
+
         })
         .catch(() => {});
 }
