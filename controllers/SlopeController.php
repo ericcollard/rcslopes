@@ -280,7 +280,7 @@ class SlopeController
             jsonResponse(['success' => false, 'error' => 'Site introuvable.'], 404);
         }
         $data['title'] = $slope['name'];
-        if ($slope['dpt']) $data['title'] .= '-'.$slope['dpt'];
+        if ($slope['dpt']) $data['title'] .= ' ('.sprintf('%02d',$slope['dpt']).')';
 
         if ($slope['type'] == 'pente')
         {

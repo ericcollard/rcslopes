@@ -60,7 +60,7 @@ final class TableRegistry
                         'allow_custom' => false,
                     ],
                     'desc_summary_fr' => [
-                        'label' => 'Description (FR)', 'type' => 'wysiwyg',
+                        'label' => 'Résumé (FR)', 'type' => 'wysiwyg',
                     ],
                     'desc_fr' => [
                         'label' => 'Description (FR)', 'type' => 'wysiwyg',
