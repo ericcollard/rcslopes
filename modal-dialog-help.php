@@ -245,6 +245,9 @@
                             <li>V2.1 > Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
                             <li>V2.1 > Nouveau menu spécifique pour l'aide aux ajouts / commentaires</li>
                             <li>V2.1 > Pré-remplissage du mail pour l'ajout de photos</li>
+                            <li>V2.1 > Comptage des vues sues sur 1 an glissant</li>
+                            <li>V2.1 > Possibilité de noter les pentes (rating)</li>
+                            <li>V2.1 > Identification en rouge des pentes avec photos</li>
                         </ul>
                     </div>
                 </div>
