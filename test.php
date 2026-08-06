@@ -43,7 +43,7 @@ if (!$mail->send()) {
 
 
 
-
+/*
 
 $params=[
     'newslope_lat'=> 45.2,
@@ -84,7 +84,7 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
-
+*/
 
 //$slopes = Slope::normalize();
 //var_dump($slopes);

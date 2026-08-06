@@ -21,20 +21,22 @@ class Slope
      */
     public static function getAll($limit = -1, $offset = -1, $slopeType = false, $status = 'active'): array
     {
-        if ($limit == -1)
+        $sql = "select slopes.slopeId, slopes.name, slopes.orient, slopes.lng, slopes.lat, 
+       slopes.status, slopes.type, count(slope_pictures.id) as cnt_pictures 
+        from slopes 
+        left join slope_pictures on slopes.slopeId = slope_pictures.slopeId
+        where slopes.status = '".$status."'";
+        if ($slopeType)
         {
-            $sql = "SELECT * FROM slopes where status='".$status."' ORDER BY slopeId ASC";
-            if ($slopeType) $sql = "SELECT * FROM slopes where status='".$status."' and type = 'pente' ORDER BY slopeId ASC";
-            $stmt = getDB()->query($sql);
+            $sql .= " and type = 'pente' ";
         }
-        else
+        $sql .= " group by slopes.slopeId, slopes.name, slopes.orient, slopes.lng, slopes.lat, slopes.status, slopes.type
+        order by cnt_pictures asc,  slopes.slopeId asc";
+        if ($limit > -1)
         {
-            $sql = "SELECT * FROM slopes where status='".$status."' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
-            if ($slopeType) $sql = "SELECT * FROM slopes where status='".$status."' and type = 'pente' ORDER BY slopeId ASC LIMIT " .$limit . " OFFSET ".$offset;
-            $stmt = getDB()->query($sql);
-
+            $sql .= " LIMIT " .$limit . " OFFSET ".$offset;
         }
-
+        $stmt = getDB()->query($sql);
         $rows = $stmt->fetchAll();
 
         foreach ($rows as &$row) {

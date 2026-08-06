@@ -111,12 +111,13 @@ function feedModalBySlope(slopeId) {
         .catch(() => {});
 }
 
-function generateWindRoseSVG(sectors) {
+function generateWindRoseSVG(sectors,pictures) {
     // Définition des 16 secteurs de la rose des vents dans l'ordre horaire (secteur 1 = N en haut)
+    // pictures = true si la pente a des photos
     const allSectors = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
         'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
 
-    // Paramètres du cercle (basés sur votre code)
+    // Paramètres du cercle
     const radius = 18;
     const circumference = 2 * Math.PI * radius; // ≈ 113.097
     const sectorLength = circumference / 16; // ≈ 7.069
@@ -145,12 +146,20 @@ function generateWindRoseSVG(sectors) {
     });
 
     // Générer le SVG complet
-    const svg = `        <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="25" cy="25" r="13" fill="none" stroke="rgb(131, 220, 26)" stroke-width="12"/>
-
-            <!-- Secteurs actifs en bleu -->
-${sectorCircles.join('\n\n')}
-        </svg>`;
+    var svg ="<svg width='50' height='50' xmlns='http://www.w3.org/2000/svg'>";
+    //svg +=   "<circle cx='25' cy='25' r='13' fill='none' stroke='rgb(131, 220, 26)' stroke-width='12'/>";
+    if (pictures) {
+        svg +=   "<g fill='red' transform=' translate(19 19) scale(20 20)'>";
+        svg += "<path d='M0.475 0.163h-0.032l-0.008 -0.025a0.075 0.075 0 0 0 -0.071 -0.05H0.236A0.075 0.075 0 0 0 0.165 0.139l-0.008 0.025H0.125a0.075 0.075 0 0 0 -0.075 0.075v0.2a0.075 0.075 0 0 0 0.075 0.075h0.35a0.075 0.075 0 0 0 0.075 -0.075v-0.2a0.075 0.075 0 0 0 -0.075 -0.076m0.025 0.275a0.025 0.025 0 0 1 -0.025 0.025H0.125a0.025 0.025 0 0 1 -0.025 -0.025v-0.2a0.025 0.025 0 0 1 0.025 -0.025h0.05a0.025 0.025 0 0 0 0.025 -0.017l0.014 -0.041a0.025 0.025 0 0 1 0.024 -0.017h0.128a0.025 0.025 0 0 1 0.024 0.017l0.014 0.041a0.025 0.025 0 0 0 0.023 0.017h0.05a0.025 0.025 0 0 1 0.025 0.025Zm-0.2 -0.225a0.1 0.1 0 1 0 0.1 0.1 0.1 0.1 0 0 0 -0.1 -0.1m0 0.15a0.05 0.05 0 1 1 0.05 -0.05 0.05 0.05 0 0 1 -0.05 0.05'/>";
+        svg += "</g>";
+        svg +=  "<circle cx='25' cy='25' r='13' fill='none' stroke='red' stroke-width='12' stroke-opacity = '0.6' />";
+    }
+    else
+    {
+        svg +=   "<circle cx='25' cy='25' r='13' fill='none' stroke='rgb(131, 220, 26)' stroke-width='12' stroke-opacity = '0.8' />";
+    }
+    svg += sectorCircles.join('\n\n');
+    svg += "</svg>";
 
     return svg;
 }

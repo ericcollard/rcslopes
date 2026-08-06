@@ -99,17 +99,22 @@ fetch('/api/slopes')
             popupAnchor:  [0, -10]
         });
 
+        var site_index = 0;
+
         json.data.forEach(site =>
             {
+                site_index = site_index + 1;
                 var slopeId = site.slopeId;
                 var name = site.name;
                 var lat = site.lat;
                 var lng = site.lng;
                 var type = site.type;
+                var pictures = false;
+                if (site.cnt_pictures > 0) pictures = true;
 
                 if (type == "pente") {
                     //var sectors = ['N', 'NNE', 'NE'];
-                    var svgIcon =generateWindRoseSVG(site.orient);
+                    var svgIcon =generateWindRoseSVG(site.orient,pictures);
                     // Encoder le SVG en Data URI
                     var svgUrl = 'data:image/svg+xml;base64,' + btoa(svgIcon);
 
@@ -120,7 +125,7 @@ fetch('/api/slopes')
                         iconAnchor: [25, 25],    // Point d'ancrage (centre)
                         popupAnchor: [0, -20]    // Position du popup par rapport à l'icône
                     });
-                    marker = L.marker([lat, lng], {icon: slope_pnt}).addTo(slopesLayerGroup);
+                    marker = L.marker([lat, lng], {icon: slope_pnt, zIndexOffset: site_index + 1000}).addTo(slopesLayerGroup);
 
                     marker.on('click', function () {
                         feedModalBySlope(slopeId);
