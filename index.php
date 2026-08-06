@@ -124,7 +124,7 @@ if ($method === 'GET' && $uri === '/slopes') {
     $commentController->store();
 
 } elseif ($method === 'POST' && $uri === '/newslope') {
-    $slopeController->store(false);
+    $slopeController->store();
 } elseif ($method === 'POST' && $uri === '/rate') {
     $slopeController->rate();
 // ── Route inconnue ───────────────────────────────────────────

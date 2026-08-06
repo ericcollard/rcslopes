@@ -291,8 +291,6 @@ map.on('dblclick', function(event){
                 return response.json();
             })
             .then(data => {
-                // Work with your data here
-                console.log('Received data:', data);
                 var country = data['address']['country'];
                 if (country === 'France') {
                     document.getElementById("newslope_dept").value = data['address']['postcode'].substr(0, 2);

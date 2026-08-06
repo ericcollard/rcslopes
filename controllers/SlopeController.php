@@ -457,6 +457,7 @@ class SlopeController
 
             $submittedToken = $input['newslope_csrf_token'] ?? '';
 
+
             if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $submittedToken)) {
                 http_response_code(419); // "Page Expired" (convention courante pour CSRF invalide)
                 echo json_encode([
@@ -513,7 +514,7 @@ class SlopeController
                 $_SESSION['slope_submissions_count'] = 0;
             }
 
-            if (count($_SESSION['slope_submissions_count']) >= $maxSubmissions) {
+            if ($_SESSION['slope_submissions_count'] >= $maxSubmissions) {
                 http_response_code(429); // Too Many Requests
                 echo json_encode([
                     'success' => false,

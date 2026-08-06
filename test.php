@@ -15,9 +15,9 @@ use models\WeatherForecast;
 use models\Statistic;
 
 
-$rating = Statistic::getRateBySlopeId(125);
+//$rating = Statistic::getRateBySlopeId(125);
 
-var_dump($rating);
+//var_dump($rating);
 
 /*
 require_once 'helpers/mailer.php';
@@ -43,7 +43,7 @@ if (!$mail->send()) {
 
 
 
-/*
+
 
 $params=[
     'newslope_lat'=> 45.2,
@@ -68,6 +68,8 @@ $params=[
     'newslope_slopeAccess'=> 'chemin 4x4',
     'newslope_slopeInfo'=> 'Superbe dynamique',
     'newslope_slopeInfoEn'=> 'High pleazsure',
+    'newslope_form_rendered_at' => '2026-08-05',
+
 ];
 
 $defaults = array(
@@ -82,7 +84,7 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
-*/
+
 
 //$slopes = Slope::normalize();
 //var_dump($slopes);
