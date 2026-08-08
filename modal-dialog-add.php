@@ -35,11 +35,11 @@
                     <div class="col-9 mb-3">
                         Il est désormais possible d'ajouter des photos de description pour chaque pente. Pour des questions de sécurité,
                         l'ajout est réservé aux administrateurs.
-                        L'objectif est de proposer un maximum de 5 photos par pente, permettant d'illustrer la zone de vol,
-                        la zone d'atterrissage, et l'accès.
+                        L'objectif est de proposer un maximum de 5 photos par pente. Pour un maxiumum d'utilité, essayez d'illustrer : la zone de vol,
+                        la zone d'atterrissage, et l'accès. Idéalement, ajoutez une ligne de description pour chaque photo, car elle apparaitra en commentaire sur la photo.
                         <br>Pour soumettre des photos, envoyer un email à l'administrateur : "rcslopes (at) finesseplus.org" avec vos photos. Le titre du mail doit être :
                         "Photos pente ref #XXX" ou #XXX est le numéro identifiant la pente. Vos photos doivent être impérativement au format
-                        jpeg, avec des dimensions exactes de 1000x600px. Idéalement, ajoutez une ligne de description pour chaque photo.
+                        jpeg, avec des dimensions exactes de 1000x600px.
                         <br>Les photos de 5Go ou de dimensions fantaisistes seront ignorées.
                         <br>Pour plus de simplicité, en bas de la fiche d'une pente, vous aurez un bouton qui pré-rempli l'email : vous n'aurez qu'à ajouter vos photos.
                     </div>

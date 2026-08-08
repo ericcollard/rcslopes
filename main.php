@@ -28,7 +28,7 @@
     <div class="container-fluid rc-navbar-inner">
 
         <!-- Logo + titre -->
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="https://www.finesseplus.org">
             <img src="/assets/logo.svg" alt="Logo RcSlopes"/>
             <p class="site-name">
                 RC-SlopeS <span class="site-version">v2.1</span></br>
@@ -64,13 +64,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
-                        <i class="bi bi-plus-circle-fill"></i> Nouvelle pente
+                    <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#ProtectModal">
+                        <i class="bi bi-shield-fill-exclamation text-danger"></i> Défendre le Vdp
                     </button>
                 </li>
                 <li class="nav-item">
                     <button type="button" class="btn btn-link nav-link" data-bs-toggle="modal" data-bs-target="#AddModal">
-                        <i class="bi bi-pencil-square"></i> Modifier
+                        <i class="bi bi-pencil-square"></i> Modifier / Ajouter
                     </button>
                 </li>
                 <li class="nav-item">
@@ -139,6 +139,9 @@
 
 <!-- Dialogue modal pour un ajout de nouvelle pente -->
 <?php include 'modal-dialog-newslope.php';?>
+
+<!-- Dialogue modal pour un ajout de nouvelle pente -->
+<?php include 'modal-dialog-protect.php';?>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
