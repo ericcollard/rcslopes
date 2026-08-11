@@ -1,8 +1,13 @@
-Options -Indexes
+# Options -Indexes
 
 RewriteEngine On
 
 # Redirige tout vers index.php sauf les fichiers/dossiers existants
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^ index.php [QSA,L]
+
+RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+RewriteRule ^(.*)$ /index.php/$1 [L]

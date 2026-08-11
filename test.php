@@ -14,6 +14,21 @@ use models\SlopePicture;
 use models\WeatherForecast;
 use models\Statistic;
 
+$method = $_SERVER['REQUEST_METHOD'];
+$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+    === 'on' ? "https" : "http") .
+    "://" . $_SERVER['HTTP_HOST'] .
+    $_SERVER['REQUEST_URI'];
+$serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+    === 'on' ? "https" : "http") .
+    "://" . $_SERVER['HTTP_HOST'];
+// Supprime le préfixe si l'API est dans un sous-dossier
+$uri = preg_replace('#^/api#', '', $uri);
+$uri = rtrim($uri, '/');
+
+
+var_dump($method, $uri, $fullUrl, $serverName, $uri);
 
 //$rating = Statistic::getRateBySlopeId(125);
 

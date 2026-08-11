@@ -3,10 +3,10 @@
 // config/database.php  –  Configuration de la base de données
 // ============================================================
 
-define('DB_HOST',     'localhost');
-define('DB_NAME',     'rcslopes');
-define('DB_USER',     'rcslopes_user');       // ← à modifier
-define('DB_PASSWORD', 'rcslopes_pss58*');           // ← à modifier
+define('DB_HOST',     'db5021133649.hosting-data.io');
+define('DB_NAME',     'dbs15987380');
+define('DB_USER',     'dbu3829996');       // ← à modifier
+define('DB_PASSWORD', 'vadbux-poffo9-sunVuq');           // ← à modifier
 define('DB_CHARSET',  'utf8mb4');
 
 /**

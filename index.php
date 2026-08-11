@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
 $fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
     === 'on' ? "https" : "http") .
     "://" . $_SERVER['HTTP_HOST'] .
@@ -59,16 +60,6 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
     include_once('main.php');
 exit;
 }
-/*
- *
- * preg_match('#^/slope/(\d+)$#', $uri, $m)
- *
-// ── GET /slopes ──────────────────────────────────────────────
-if ($method === 'GET' && preg_match('#^/slope/(\d+)$#', $uri, $m)) {
-    include_once('main.html');
-    exit;
-}
-*/
 
 // ── Routes API ────────────────────────────────────────────────
 // En-têtes JSON + CORS (uniquement pour les routes /api/*)

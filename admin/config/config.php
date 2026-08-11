@@ -9,11 +9,11 @@
 // ---------------------------------------------------------------------------
 // Connexion base de données
 // ---------------------------------------------------------------------------
-define('DB_HOST', getenv('RCS_DB_HOST') ?: '127.0.0.1');
+define('DB_HOST', getenv('RCS_DB_HOST') ?: 'db5021133649.hosting-data.io');
 define('DB_PORT', getenv('RCS_DB_PORT') ?: '3306');
-define('DB_NAME', getenv('RCS_DB_NAME') ?: 'rcslopes');
-define('DB_USER', getenv('RCS_DB_USER') ?: 'rcslopes_user');
-define('DB_PASS', getenv('RCS_DB_PASS') ?: 'rcslopes_pss58*');
+define('DB_NAME', getenv('RCS_DB_NAME') ?: 'dbs15987380');
+define('DB_USER', getenv('RCS_DB_USER') ?: 'dbu3829996');
+define('DB_PASS', getenv('RCS_DB_PASS') ?: 'vadbux-poffo9-sunVuq');
 define('DB_CHARSET', 'utf8mb4');
 
 // ---------------------------------------------------------------------------

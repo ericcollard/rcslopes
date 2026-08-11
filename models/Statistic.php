@@ -64,7 +64,7 @@ class Statistic
             // Check if cache should be refreshed
             if ($cacheHelper->shouldRefreshCache(86400)) {
                 // Clean Statistics every day
-                echo "Clean";
+                // echo "Clean";
                 self::clean();
                 $cacheHelper->updateCacheTime();
             }

@@ -65,11 +65,6 @@ class OpenMeteoHelper {
 
             return $this->formatSlopesData($slopesWeatherData);
         }
-        else
-        {
-            echo ('$httpCode : '.$httpCode.'</br>');
-            echo ('$response : '.$response.'</br>');
-        }
 
         return null;
     }
