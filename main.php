@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta property="og:url" content="<?= $fullUrl ?>" />
-    <meta property="og:type"          content="website" />
-    <meta property="og:title"         content="<?= $og_title ?>" />
-    <meta property="og:description"   content="<?= $og_description ?>" />
-    <meta property="og:image"         content="<?= $og_image ?>" />
     <title>RC Slopes – Sites de vol de pente</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -119,42 +114,14 @@
 </div>
 
 <main class="rc-main">
-    <div id="map"></div>
+    <div class="d-flex justify-content-center align-items-center vh-100 text-center">
+        <div>
+            <h1>Bonne nouvelle</h1>
+            <p>RcSlopes 2 est désormais en statut "pré-production" sur son serveur définitif. </p>
+            <p>Rendez vous sur <a href="https://rcslopes2.finesseplus.org">https://rcslopes2.finesseplus.org</a></p>
+        </div>
+    </div>
 </main>
-
-<!-- Conteneur des messages flash -->
-<div id="flashContainer"></div>
-
-<!-- Dialogue modal pour les markers -->
-<?php include 'modal-dialog-slope.php';?>
-
-<!-- Dialogue modal pour les commentaires -->
-<?php include 'modal-dialog-comment.php';?>
-
-<!-- Dialogue modal pour les légendes OpenWindMap -->
-<?php include 'modal-dialog-help.php';?>
-
-<!-- Dialogue modal pour les légendes OpenWindMap -->
-<?php include 'modal-dialog-add.php';?>
-
-<!-- Dialogue modal pour un ajout de nouvelle pente -->
-<?php include 'modal-dialog-newslope.php';?>
-
-<!-- Dialogue modal pour un ajout de nouvelle pente -->
-<?php include 'modal-dialog-protect.php';?>
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="js/leaflet-gps.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-
-<!-- main JS -->
-<script src="js/map-helpers.js"></script>
-<script src="js/map.js"></script>
-<script src="js/modal-dialog-comment.js"></script>
-<script src="js/modal-dialog-newslope.js"></script>
-<script src="js/slope-search.js"></script>
 
 </body>
 </html>

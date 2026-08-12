@@ -40,8 +40,11 @@ class Slope
         $rows = $stmt->fetchAll();
 
         foreach ($rows as &$row) {
-            $row['orient'] = windSetToArray($row['orient']);
-            $row['lat'] = (float)$row['lat'];
+            if ($row['orient'])
+                $row['orient'] = windSetToArray($row['orient']);
+            else
+                $row['orient'] = [];
+                $row['lat'] = (float)$row['lat'];
             $row['lng'] = (float)$row['lng'];
         }
         return $rows;

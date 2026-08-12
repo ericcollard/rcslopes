@@ -20,7 +20,7 @@ final class HtmlSanitizer
         'ul', 'ol', 'li',
         'a', 'img',
         'table', 'thead', 'tbody', 'tr', 'th', 'td',
-        'blockquote', 'pre', 'code', 'hr',
+        'blockquote', 'pre', 'code', 'hr','iframe'
     ];
 
     /** Attributs autorisés, par balise ('*' = toutes balises autorisées ci-dessus) */
@@ -30,6 +30,7 @@ final class HtmlSanitizer
         'img' => ['src', 'alt', 'width', 'height', 'loading'],
         'td'  => ['colspan', 'rowspan'],
         'th'  => ['colspan', 'rowspan'],
+        'iframe' => ['src', 'frameborder', 'marginwidth', 'marginheight', 'scrolling'],
     ];
 
     /** Propriétés CSS autorisées dans un attribut style="" */
