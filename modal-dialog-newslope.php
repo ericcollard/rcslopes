@@ -49,7 +49,8 @@
                         </div>
                     </div>
 
-                    <div class="divider">
+                    <div class="divider mb-2">
+                        DENOMINATION
                         <div class="divider-fade"></div>
                     </div>
 
@@ -79,7 +80,7 @@
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="newslope_type"
+                                    <input class="form-check-input mb-2" type="radio" name="newslope_type"
                                            id="newslope_type_parking" value="parking" >
                                     <label class="form-check-label" for="newslope_type_parking">
                                         Parking
@@ -88,7 +89,8 @@
                         </div>
                     </div>
 
-                    <div class="divider">
+                    <div class="divider mb-2">
+                        GENERALITES
                         <div class="divider-fade"></div>
                     </div>
 
@@ -171,6 +173,10 @@
                                 <option value="Indispensable">Indispensable</option>
                             </select>
 
+                            <div class="checkbox mb-2">
+                                <label><input type="checkbox" id="newslope_paragliding" name="newslope_paragliding"> Présence de parapentistes</label>
+                            </div>
+
 
                         </div>
                         <div class="col-4">
@@ -198,10 +204,21 @@
                                 <option value="Véhicule tout terrain recommandé">Véhicule tout terrain recommandé</option>
                             </select>
 
+                            <label for="newslope_season">Période utilisabilité</label>
+                            <select class="form-control mb-3" id="newslope_season" name="newslope_season">
+                                <option value="Accessible toute l’année">Accessible toute l’année</option>
+                                <option value="Des périodes de fermeture">Des périodes de fermeture</option>
+                            </select>
+
+                            <label for="newslope_plafond" class="form-label">Plafond (m / sol)</label>
+                            <input type="text" class="form-control mb-3" id="newslope_plafond" name="newslope_plafond">
+                            <div class="invalid-feedback" id="newslope_plafond-error"></div>
+
                         </div>
                     </div>
 
-                    <div class="divider">
+                    <div class="divider mb-2">
+                        GESTION DU SITE
                         <div class="divider-fade"></div>
                     </div>
 
@@ -230,18 +247,31 @@
                             <div class="invalid-feedback" id="newslope_slopeURL-error"></div>
 
                             <label for="newslope_clubName">Nom du club gestionnaire</label>
-                            <input type="text" name="newslope_clubName" id="newslope_clubName" class="form-control">
+                            <input type="text" name="newslope_clubName" id="newslope_clubName" class="form-control mb-3">
                             <div class="invalid-feedback" id="newslope_clubName-error"></div>
                         </div>
                     </div>
 
-                    <div class="divider">
+                    <div class="divider mb-2">
+                        EN DETAIL
                         <div class="divider-fade"></div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
-                            <label for="newslope_slopeInfo">Description et photos</label>
+                            <label for="desc_fr_access">Détail accès (voiture puis à pied)</label>
+                            <textarea class="form-control" rows="3" id="newslope_access" name="newslope_access"></textarea>
+                            <div class="invalid-feedback" id="newslope_access-error"></div>
+
+                            <label for="desc_fr_flight">Détail conditions de vol</label>
+                            <textarea class="form-control" rows="3" id="newslope_flight" name="newslope_flight"></textarea>
+                            <div class="invalid-feedback" id="newslope_flight-error"></div>
+
+                            <label for="desc_fr_landing">Conseils zone de posé et procédure</label>
+                            <textarea class="form-control" rows="3" id="newslope_landing" name="newslope_landing"></textarea>
+                            <div class="invalid-feedback" id="newslope_landing-error"></div>
+
+                            <label for="newslope_slopeInfo">Autres détails</label>
                             <textarea class="form-control" rows="3" id="newslope_slopeInfo" name="newslope_slopeInfo"></textarea>
                             <div class="invalid-feedback" id="newslope_slopeInfo-error"></div>
 

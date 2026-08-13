@@ -53,17 +53,77 @@ final class TableRegistry
                         'required' => true,
                         'allow_custom' => false,
                     ],
+                    'slope_size' => [
+                        'label' => 'Hauteur de la pente', 'type' => 'select',
+                        'options' => ['Petite pente' => 'Petite pente', 'Moyenne pente' => 'Moyenne pente', 'Grande pente' => 'Grande pente'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_surface' => [
+                        'label' => 'Surface posé', 'type' => 'select',
+                        'options' => ['Herbe' => 'Herbe', 'Cailloux' => 'Cailloux', 'Herbe et cailloux' => 'Herbe et cailloux'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_compatibility' => [
+                        'label' => 'Compatibilité planeur', 'type' => 'select',
+                        'options' => ['Mousse (posé peu accueillant)' => 'Mousse (posé peu accueillant)', 'Petit & moyen modèle (< 1.5m)' => 'Petit & moyen modèle (< 1.5m)', 'Planeur moyen (<3m)' => 'Planeur moyen (<3m)', 'Grand planeur (<5m)'=> 'Grand planeur (<5m)', 'GPR (> 5m)' => 'GPR (> 5m)'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_motor' => [
+                        'label' => 'Motorisation', 'type' => 'select',
+                        'options' => ['Superflu' => 'Superflu', 'Confortable' => 'Confortable', 'Indispensable' => 'Indispensable'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_gap' => [
+                        'label' => 'Accès au trou', 'type' => 'select',
+                        'options' => ['Facile' => 'Facile', 'Sportif' => 'Sportif', 'Impossible' => 'Impossible'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_park' => [
+                        'label' => 'Accès à pied', 'type' => 'select',
+                        'options' => ['Proximité immédiate' => 'Proximité immédiate', 'Moins de 30mn de marche' => 'Moins de 30mn de marche', 'De 30 à 60mn de marche' => 'De 30 à 60mn de marche', 'Plus de 60mn de marche'=>'Plus de 60mn de marche'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_season' => [
+                        'label' => 'Périodes', 'type' => 'select',
+                        'options' => ['Accessible toute l’année' => 'Accessible toute l’année', 'Des périodes de fermeture' => 'Des périodes de fermeture'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_car_access' => [
+                        'label' => 'Accès en voiture', 'type' => 'select',
+                        'options' => ['Chemin court - tout véhicule' => 'Chemin court - tout véhicule', 'Piste caillouteuse, moins de 1km' => 'Piste caillouteuse, moins de 1km', 'Piste caillouteuse, plus de 1km'=> 'Piste caillouteuse, plus de 1km', 'Véhicule tout terrain recommandé' => 'Véhicule tout terrain recommandé'],
+                        'required' => false,
+                        'allow_custom' => true,
+                    ],
+                    'slope_paragliding' => [
+                        'label' => 'Parapentes', 'type' => 'checkbox'
+                    ],
+                    'slope_plafond' => [
+                        'label' => 'Plafond', 'type' => 'number'
+                    ],
                     'status' => [
                         'label' => 'Statut', 'type' => 'select',
                         'options' => ['active' => 'Actif', 'disabled' => 'Archivé', 'new' => 'A modérer'],
                         'required' => true,
                         'allow_custom' => false,
                     ],
-                    'desc_summary_fr' => [
-                        'label' => 'Résumé (FR)', 'type' => 'wysiwyg',
+                    'desc_fr_access' => [
+                        'label' => 'Accès', 'type' => 'wysiwyg',
+                    ],
+                    'desc_fr_flight' => [
+                        'label' => 'Vol', 'type' => 'wysiwyg',
+                    ],
+                    'desc_fr_landing' => [
+                        'label' => 'Aterro', 'type' => 'wysiwyg',
                     ],
                     'desc_fr' => [
-                        'label' => 'Description (FR)', 'type' => 'wysiwyg',
+                        'label' => 'Autre', 'type' => 'wysiwyg',
                     ],
                     'desc_en' => [
                         'label' => 'Description (EN)', 'type' => 'wysiwyg',

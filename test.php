@@ -14,21 +14,6 @@ use models\SlopePicture;
 use models\WeatherForecast;
 use models\Statistic;
 
-$method = $_SERVER['REQUEST_METHOD'];
-$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
-    === 'on' ? "https" : "http") .
-    "://" . $_SERVER['HTTP_HOST'] .
-    $_SERVER['REQUEST_URI'];
-$serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
-    === 'on' ? "https" : "http") .
-    "://" . $_SERVER['HTTP_HOST'];
-// Supprime le préfixe si l'API est dans un sous-dossier
-$uri = preg_replace('#^/api#', '', $uri);
-$uri = rtrim($uri, '/');
-
-
-var_dump($method, $uri, $fullUrl, $serverName, $uri);
 
 //$rating = Statistic::getRateBySlopeId(125);
 
@@ -58,7 +43,7 @@ if (!$mail->send()) {
 
 
 
-/*
+
 
 $params=[
     'newslope_lat'=> 45.2,
@@ -81,6 +66,13 @@ $params=[
     'newslope_slopeGap'=> 'Accès au trou impossible',
     'newslope_slopePark'=> 'A plus de 60mn',
     'newslope_slopeAccess'=> 'chemin 4x4',
+    'newslope_paragliding'=> 'on',
+    'newslope_moulinette'=> 'Confortable',
+    'newslope_season'=> 'Des inteerdcations',
+    'newslope_plafond' => 150,
+    'newslope_access' => 'Détail de l access en voiture',
+    'newslope_flight' => 'Détail des conditions de vol',
+    'newslope_landing' => 'Détail du posé',
     'newslope_slopeInfo'=> 'Superbe dynamique',
     'newslope_slopeInfoEn'=> 'High pleazsure',
     'newslope_form_rendered_at' => '2026-08-05',
@@ -99,7 +91,7 @@ curl_exec($ch);
 if(curl_error($ch)) {
     echo curl_error($ch);
 }
-*/
+
 
 //$slopes = Slope::normalize();
 //var_dump($slopes);

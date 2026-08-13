@@ -168,9 +168,21 @@ LIMIT 10"
 
 
         $query = "INSERT INTO slopes
-                (lat, lng, name, type, orient, addBy, status, club,club_name, cotisation, licence, url, aip, desc_summary_fr, desc_fr, desc_en, country, dpt)
+                (lat, lng, name, type, orient, addBy, status, 
+                 club,club_name, cotisation, licence, url, aip, 
+                 desc_summary_fr, desc_fr, desc_en, country, dpt, 
+                 slope_size, slope_surface, slope_compatibility, slope_motor,
+                 slope_gap, slope_park, slope_season, slope_paragliding,
+                 slope_car_access, slope_plafond, desc_fr_access, 
+                 desc_fr_flight, desc_fr_landing)
                 VALUES
-                (:lat, :lng, :name , :type, :orient, :addBy, :status, :club,:club_name, :cotisation, :licence, :url, :aip, :desc_summary_fr, :desc_fr, :desc_en, :country, :dpt)" ;
+                (:lat, :lng, :name , :type, :orient, :addBy, :status, 
+                 :club,:club_name, :cotisation, :licence, :url, :aip, 
+                 :desc_summary_fr, :desc_fr, :desc_en, :country, :dpt,
+                 :slope_size, :slope_surface, :slope_compatibility, :slope_motor,
+                 :slope_gap, :slope_park, :slope_season, :slope_paragliding,
+                 :slope_car_access, :slope_plafond, :desc_fr_access, 
+                 :desc_fr_flight, :desc_fr_landing)" ;
         $stmt = $db->prepare($query);
 
         if (!isset($input['lat'])) $input['lat'] = null;
@@ -192,6 +204,23 @@ LIMIT 10"
         if (!isset($input['country'])) $input['country'] = null;
         if (!isset($input['dpt'])) $input['dpt'] = null;
 
+        if (!isset($input['slope_size'])) $input['slope_size'] = null;
+        if (!isset($input['slope_surface'])) $input['slope_surface'] = null;
+        if (!isset($input['slope_compatibility'])) $input['slope_compatibility'] = null;
+        if (!isset($input['slope_motor'])) $input['slope_motor'] = null;
+        if (!isset($input['slope_gap'])) $input['slope_gap'] = null;
+        if (!isset($input['slope_park'])) $input['slope_park'] = null;
+        if (!isset($input['slope_season'])) $input['slope_season'] = null;
+        if (!isset($input['slope_paragliding'])) $input['slope_paragliding'] = null;
+        if (!isset($input['slope_car_access'])) $input['slope_car_access'] = null;
+        if (!isset($input['slope_plafond'])) $input['slope_plafond'] = null;
+        if (!isset($input['desc_fr_access'])) $input['desc_fr_access'] = null;
+        if (!isset($input['desc_fr_flight'])) $input['desc_fr_flight'] = null;
+        if (!isset($input['desc_fr_landing'])) $input['desc_fr_landing'] = null;
+
+
+
+
 
         $stmt->bindParam(":lat", $input['lat']);
         $stmt->bindParam(":lng", $input['lng']);
@@ -211,6 +240,27 @@ LIMIT 10"
         $stmt->bindParam(":desc_en", $input['desc_en']);
         $stmt->bindParam(":country", $input['country']);
         $stmt->bindParam(":dpt", $input['dpt']);
+
+        $stmt->bindParam(":slope_size", $input['slope_size']);
+        $stmt->bindParam(":slope_surface", $input['slope_surface']);
+        $stmt->bindParam(":slope_compatibility", $input['slope_compatibility']);
+        $stmt->bindParam(":slope_motor", $input['slope_motor']);
+        $stmt->bindParam(":slope_gap", $input['slope_gap']);
+        $stmt->bindParam(":slope_park", $input['slope_park']);
+        $stmt->bindParam(":slope_season", $input['slope_season']);
+        $stmt->bindParam(":slope_paragliding", $input['slope_paragliding']);
+        $stmt->bindParam(":slope_car_access", $input['slope_car_access']);
+        $stmt->bindParam(":slope_plafond", $input['slope_plafond']);
+        $stmt->bindParam(":desc_fr_access", $input['desc_fr_access']);
+        $stmt->bindParam(":desc_fr_flight", $input['desc_fr_flight']);
+        $stmt->bindParam(":desc_fr_landing", $input['desc_fr_landing']);
+
+
+
+
+
+
+
 
 
         $stmt->execute();

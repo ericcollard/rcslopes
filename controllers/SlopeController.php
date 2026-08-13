@@ -354,11 +354,20 @@ class SlopeController
 
             $data['html'] .= "</div>";
 
-
-
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En bref</h2>";
-            $data['html'] .= ($slope['desc_summary_fr'] ? $slope['desc_summary_fr'] : 'Nc.');
+            $data['html'] .= "<h3>Conditions de vol</h3>";
+            $data['html'] .= "<p>Hauteur de la pente : ".($slope['slope_size'] ? $slope['slope_size'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Compatible type de planeurs : ".($slope['slope_compatibility'] ? $slope['slope_compatibility'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Planeur motorisé : ".($slope['slope_motor'] ? $slope['slope_motor'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Etat de surface zone de posé : ".($slope['slope_surface'] ? $slope['slope_surface'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Accès au trou : ".($slope['slope_gap'] ? $slope['slope_gap'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Présence de parapentes : ".($slope['slope_paragliding'] == 1 ? 'Oui' : 'Non')."</p>";
+            $data['html'] .= "<h3>Conditions d'accès à la pente</h3>";
+            $data['html'] .= "<p>Accès pente depuis le stationnement : ".($slope['slope_park'] ? $slope['slope_park'] : 'Nc.')."</p>";
+            $data['html'] .= "<p>Accès à la zone de stationnement : ".($slope['slope_car_access'] ? $slope['slope_car_access'] : 'Nc.')."</p>";
+
+
             if ($slope['rating'] > 0)
                 $data['html'] .= "<p>Rating : ".number_format($slope['rating'], 1, ',', ' ')."</p>";
             $data['html'] .= "</div>";
@@ -375,8 +384,20 @@ class SlopeController
 
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En Détail</h2>";
+            $data['html'] .= "<h3>Conditions de vol</h3>";
+            $data['html'] .= ($slope['desc_fr_flight'] ? $slope['desc_fr_flight'] : 'Nc.');
+
+            $data['html'] .= "<h3>Posé et procédure d'approche</h3>";
+            $data['html'] .= ($slope['desc_fr_landing'] ? $slope['desc_fr_landing'] : 'Nc.');
+
+            $data['html'] .= "<h3>Accès au parking puis à la pente</h3>";
+            $data['html'] .= ($slope['desc_fr_access'] ? $slope['desc_fr_access'] : 'Nc.');
+
+            $data['html'] .= "<h3>Autres détails</h3>";
             $data['html'] .= ($slope['desc_fr'] ? $slope['desc_fr'] : 'Nc.');
             $data['html'] .= "</div>";
+
+
             $data['html'] .= "<div class='slope-summary mb-4'>";
             $data['html'] .= "<h2>En anglais</h2>";
             $data['html'] .= ($slope['desc_en'] ? $slope['desc_en'] : 'Nc.');
@@ -809,55 +830,57 @@ class SlopeController
             $data['club_name'] = trim(strip_tags($body['newslope_clubName']));
         }
 
-        $infoStr = "<h3>Conditions de vol</h3>";
+
+        if (isset($body['newslope_paragliding']) && $body['newslope_slopeLicence'] == 'on') {
+            $data['slope_paragliding'] = 1;
+        }
+        else
+        {
+            $data['slope_paragliding'] = 0;
+        }
+        if (isset($body['newslope_plafond'])) {
+            $data['slope_plafond'] = (int)$body['newslope_plafond'];
+        }
+
         if (isset($body['newslope_slopeSize'])) {
-            $infoStr .= "<p>Hauteur de la pente : " . trim($body['newslope_slopeSize']) . "</p>";
+            $data['slope_size'] = trim($body['newslope_slopeSize']);
         }
         if (isset($body['newslope_slopeCompatibility'])) {
-            $infoStr .= "<p>Compatible type de planeurs : " . trim($body['newslope_slopeCompatibility']) . "</p>";
+            $data['slope_compatibility'] = trim($body['newslope_slopeCompatibility']);
         }
         if (isset($body['newslope_moulinette'])) {
-            $infoStr .= "<p>Planeur motorisé : " . trim($body['newslope_moulinette']) . "</p>";
+            $data['slope_motor'] = trim($body['newslope_moulinette']);
         }
         if (isset($body['newslope_slopeSurface'])) {
-            $infoStr .= "<p>Etat de surface zone de posé : " . trim($body['newslope_slopeSurface']) . "</p>";
+            $data['slope_surface'] = trim($body['newslope_slopeSurface']);
         }
         if (isset($body['newslope_slopeGap'])) {
-            $infoStr .= "<p>Accès au trou : " . trim($body['newslope_slopeGap']) . "</p>";
+            $data['slope_gap'] = trim($body['newslope_slopeGap']);
         }
-        $infoStr .= "<h3>Conditions d'accès à la pente</h3>";
         if (isset($body['newslope_slopePark'])) {
-            $infoStr .= "<p>Accès pente depuis le stationnement : " . trim($body['newslope_slopePark']) . "</p>";
+            $data['slope_park'] = trim($body['newslope_slopePark']);
         }
         if (isset($body['newslope_slopeAccess'])) {
-            $infoStr .= "<p>Accès zone de stationnement : " . trim($body['newslope_slopeAccess']) . "</p>";
+            $data['slope_car_access'] = trim($body['newslope_slopeAccess']);
         }
-
-        $data['desc_summary_fr'] = $infoStr;
-
-        $infoStr = "";
+        if (isset($body['newslope_season'])) {
+            $data['slope_season'] = trim($body['newslope_season']);
+        }
         if (isset($body['newslope_slopeInfo'])) {
-            $infoStr .= trim($body['newslope_slopeInfo']);
+            $data['desc_fr'] = trim($body['newslope_slopeInfo']);
         }
-        $data['desc_fr'] = $infoStr;
-
         if (isset($body['newslope_slopeInfoEn'])) {
             $data['desc_en'] = trim($body['newslope_slopeInfoEn']);
         }
-
-
-        /*
-        if (array_key_exists('desc_fr', $body)) {
-            // On autorise le HTML – filtrer selon tes besoins de sécurité
-            $data['desc_fr'] = $body['desc_fr'] !== null
-                ? trim($body['desc_fr'])
-                : null;
+        if (isset($body['newslope_access'])) {
+            $data['desc_fr_access'] = trim($body['newslope_access']);
         }
-        if (array_key_exists('weather_url', $body)) {
-            $url = filter_var($body['weather_url'], FILTER_VALIDATE_URL);
-            $data['weather_url'] = $url !== false ? $url : null;
+        if (isset($body['newslope_flight'])) {
+            $data['desc_fr_flight'] = trim($body['newslope_flight']);
         }
-*/
+        if (isset($body['newslope_landing'])) {
+            $data['desc_fr_landing'] = trim($body['newslope_landing']);
+        }
         return $data;
     }
 
