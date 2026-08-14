@@ -31,7 +31,7 @@
         <a class="navbar-brand d-flex align-items-center" href="https://www.finesseplus.org">
             <img src="/assets/logo.svg" alt="Logo RcSlopes"/>
             <p class="site-name">
-                RC-SlopeS <span class="site-version">v2.1</span></br>
+                RC-SlopeS <span class="site-version">v2.2</span></br>
                 <span class="site-by">by Finesse+</span>
             </p>
         </a>

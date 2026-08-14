@@ -10,6 +10,74 @@ document.addEventListener('DOMContentLoaded', function () {
     const newslopeSubmitSpinner= document.getElementById('newslope_submitSpinner');
     const newslopeFormErrorsBox= document.getElementById('newslopeformErrors');
 
+    const slopEditButton = document.getElementById('slope-edit-button');
+    slopEditButton.addEventListener("click", EditSlope);
+
+
+    function EditSlope() {
+        slopeId = document.getElementById('slopeId').innerHTML;
+        //console.log('click : ', slopeId);
+
+        // Ferme de modal Slope
+        markerModal.hide();
+
+        fetch('/api/slopes/'+slopeId)
+            .then(r => r.ok ? r.json() : null)
+            .then(json => {
+                console.log(json.data);
+                if (json?.data?.lat) document.getElementById("newslope_lat").value= json.data.lat;
+                if (json?.data?.lng) document.getElementById("newslope_lng").value= json.data.lng;
+                if (json?.data?.country) document.getElementById("newslope_country").value= json.data.country;
+                if (json?.data?.dpt) document.getElementById("newslope_dept").value= json.data.dpt;
+                if (json?.data?.name) document.getElementById("newslope_name").value= json.data.name;
+                if (json?.data?.type) document.getElementsByName("newslope_type").forEach(el => el.checked = el.value == json.data.type )
+                if (json?.data?.slope_size) document.getElementById("newslope_slopeSize").value= json.data.slope_size;
+                if (json?.data?.slope_surface) document.getElementById("newslope_slopeSurface").value= json.data.slope_surface;
+                if (json?.data?.slope_compatibility) document.getElementById("newslope_slopeCompatibility").value= json.data.slope_compatibility;
+                if (json?.data?.slope_motor) document.getElementById("newslope_moulinette").value= json.data.slope_motor;
+                if (json?.data?.slope_paragliding) document.getElementById("newslope_paragliding").checked= json.data.slope_paragliding;
+                if (json?.data?.slope_gap) document.getElementById("newslope_slopeGap").value= json.data.slope_gap;
+                if (json?.data?.slope_park) document.getElementById("newslope_slopePark").value= json.data.slope_park;
+                if (json?.data?.slope_car_access) document.getElementById("newslope_slopeAccess").value= json.data.slope_car_access;
+                if (json?.data?.slope_season) document.getElementById("newslope_season").value= json.data.slope_season;
+                if (json?.data?.slope_plafond) document.getElementById("newslope_plafond").value= json.data.slope_plafond;
+
+                if (json?.data?.aip) document.getElementById("newslope_slopeAIP").value= json.data.aip;
+                if (json?.data?.club) document.getElementById("newslope_slopeClub").checked= json.data.club;
+                if (json?.data?.cotisation) document.getElementById("newslope_slopeCotisation").checked= json.data.cotisation;
+                if (json?.data?.licence) document.getElementById("newslope_slopeLicence").checked= json.data.licence;
+                if (json?.data?.url) document.getElementById("newslope_slopeURL").value= json.data.url;
+                if (json?.data?.club_name) document.getElementById("newslope_clubName").value= json.data.club_name;
+
+                if (json?.data?.desc_fr_access) document.getElementById("newslope_access").value= strip(json.data.desc_fr_access);
+                if (json?.data?.desc_fr_flight) document.getElementById("newslope_flight").value= strip(json.data.desc_fr_flight);
+                if (json?.data?.desc_fr_landing) document.getElementById("newslope_landing").value= strip(json.data.desc_fr_landing);
+                if (json?.data?.desc_fr) document.getElementById("newslope_slopeInfo").value= strip(json.data.desc_fr);
+                if (json?.data?.desc_en) document.getElementById("newslope_slopeInfoEn").value= strip(json.data.desc_en);
+
+                if (json?.data?.orient) {
+                    console.log(json.data.orient);
+                    json.data.orient.forEach(sec => addSector(sec))
+                }
+            })
+            .catch(() => {});
+
+        // feed modal with current data
+        document.getElementById('newslopeModalLabel').innerHTML = "Proposer une modification pour la pente Ref " + slopeId;
+        document.getElementById('edit_slopeId').value = slopeId;
+        // change the submit behaviour
+
+        // Affiche le modal Newslope
+        //var newslopeModalEl = document.getElementById('newslopeModal');
+        //var newslopeModal = new bootstrap.Modal(newslopeModalEl);
+        newslopeModal.show();
+    };
+
+
+    function strip(html){
+        let doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
 
     // Nettoie les erreurs affichées à chaque nouvelle tentative / ouverture
     function resetErrorsNewslope() {
@@ -94,9 +162,11 @@ document.addEventListener('DOMContentLoaded', function () {
             newslope_email: formData.get('newslope_email'),
             newslope_csrf_token: formData.get('newslope_csrf_token'),
             newslope_form_rendered_at: formData.get('newslope_form_rendered_at'),
-            newslope_website: formData.get('newslope_website') // honeypot : doit rester vide côté humain
+            newslope_website: formData.get('newslope_website'), // honeypot : doit rester vide côté humain
+            edit_slopeId: formData.get('edit_slopeId') // Rempli si edit d'une pente existante
         };
 
+        // Soumission nouvelle pente
         try {
             console.log(payload);
 
@@ -113,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Succès : on ferme le modal, on vide le formulaire, on affiche le flash
                 bootstrap.Modal.getInstance(document.getElementById('newslopeModal')).hide();
                 newslopeForm.reset();
-                showFlash('Votre pente a bien été ajouté, un email vous a été envoyé.', 'success');
+                showFlash('Votre demande a bien été traitée, un email vous a été envoyé.', 'success');
             } else {
                 // Erreur(s) : le modal reste ouvert, on affiche les erreurs
                 displayServerErrorsNewslope(data.errors || ['Une erreur est survenue, veuillez réessayer.']);
@@ -127,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
             newslopeSubmitBtn.disabled = false;
             newslopeSubmitSpinner.classList.add('d-none');
         }
+
+
     });
 
 });

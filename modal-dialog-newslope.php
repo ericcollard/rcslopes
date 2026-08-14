@@ -24,6 +24,8 @@
                         <input type="text" id="newslope_website" name="newslope_website" tabindex="-1" autocomplete="off">
                     </div>
 
+                    <input type="hidden" id="edit_slopeId" name="edit_slopeId" value="">
+
                     <div class="row">
                         <!-- Longitude et lattitude. -->
                         <div class="col-3 mb-3">
@@ -145,6 +147,7 @@
                         <div class="col-4">
                             <label for="newslope_slopeSize">Hauteur de la pente</label>
                             <select class="form-control mb-3" id="newslope_slopeSize" name="newslope_slopeSize">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Petite pente">Petite pente</option>
                                 <option value="Moyenne pente">Moyenne pente</option>
                                 <option value="Grande pente">Grande pente</option>
@@ -152,6 +155,7 @@
 
                             <label for="newslope_slopeSurface">Surface posé</label>
                             <select class="form-control mb-3" id="newslope_slopeSurface" name="newslope_slopeSurface">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Herbe">Herbe</option>
                                 <option value="Cailloux">Cailloux</option>
                                 <option value="Herbe et cailloux">Herbe et cailloux</option>
@@ -159,6 +163,7 @@
 
                             <label for="newslope_slopeCompatibility">Comptabilité modèles</label>
                             <select class="form-control mb-3" id="newslope_slopeCompatibility" name="newslope_slopeCompatibility">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Mousse (posé peu accueillant)">Mousse (posé peu accueillant)</option>
                                 <option value="Petit modèle (< 1.5m)">Petit & moyen modèle (< 1.5m)</option>
                                 <option value="Planeur moyen (<3m)">Planeur moyen (<3m)</option>
@@ -168,6 +173,7 @@
 
                             <label for="newslope_moulinette">Planeur motorisé</label>
                             <select class="form-control mb-3" id="newslope_moulinette" name="newslope_moulinette">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Superflu">Superflu</option>
                                 <option value="Confortable">Confortable</option>
                                 <option value="Indispensable">Indispensable</option>
@@ -182,6 +188,7 @@
                         <div class="col-4">
                             <label for="newslope_slopeGap">Accès au trou</label>
                             <select class="form-control mb-3" id="newslope_slopeGap" name="newslope_slopeGap">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Facile">Facile</option>
                                 <option value="Sportif">Sportif</option>
                                 <option value="Impossible">Impossible</option>
@@ -189,14 +196,16 @@
 
                             <label for="newslope_slopePark">Accès depuis stationnement</label>
                             <select class="form-control mb-3" id="newslope_slopePark" name="newslope_slopePark">
-                                <option value="proximité immédiate">Proximité immédiate</option>
-                                <option value="moins de 30 minutes de marche">- de 30mn de marche</option>
-                                <option value="30 à 60 minutes de marche">30 à 60mn de marche</option>
-                                <option value="plus de 60 minutes de marche">+ de 60mn de marche</option>
+                                <option disabled selected value> -- choisir une option -- </option>
+                                <option value="Proximité immédiate">Proximité immédiate</option>
+                                <option value="Moins de 30 minutes de marche">Moins de 30 minutes de marche</option>
+                                <option value="De 30 à 60 minutes de marche">De 30 à 60 minutes de marche</option>
+                                <option value="Plus de 60 minutes de marche">Plus de 60 minutes de marche</option>
                             </select>
 
                             <label for="newslope_slopeAccess">Accès véhicule au stationnement</label>
                             <select class="form-control mb-3" id="newslope_slopeAccess" name="newslope_slopeAccess">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Route">Route</option>
                                 <option value="Chemin court - tout véhicule">Chemin court tout véhicule</option>
                                 <option value="Piste caillouteuse, moins de 1km">Piste caillouteuse - de 1km</option>
@@ -206,6 +215,7 @@
 
                             <label for="newslope_season">Période utilisabilité</label>
                             <select class="form-control mb-3" id="newslope_season" name="newslope_season">
+                                <option disabled selected value> -- choisir une option -- </option>
                                 <option value="Accessible toute l’année">Accessible toute l’année</option>
                                 <option value="Des périodes de fermeture">Des périodes de fermeture</option>
                             </select>

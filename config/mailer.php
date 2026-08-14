@@ -14,6 +14,6 @@ define('MAIL_ADMIN',     'admin@finesseplus.org');
 
 define('MAIL_HOST',     'live.smtp.mailtrap.io');
 define('SMTP_USER',     'api');
-define('SMTP_PASSWORD', '03012958b985e1f9875f8f575c69f62a');
+define('SMTP_PASSWORD', '6083edc62b50fc380fc2728c42e0b375');
 define('MAIL_PORT',     587);
 define('MAIL_ADMIN',     'rcslopes@finesseplus.org');

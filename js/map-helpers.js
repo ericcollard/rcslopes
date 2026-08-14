@@ -19,7 +19,7 @@ function feedModalBySlope(slopeId) {
 
             let currentLocation = window.location;
             footerLinkHtml = '';
-            footerLinkHtml+= '<p>Identifiant du site : '+slopeId+'</p>';
+            footerLinkHtml+= '<p>Identifiant du site : <span id="slopeId">'+slopeId+'</span></p>';
             footerLinkHtml+= '<p>Lien direct : <a href="'+currentLocation.origin+'/'+slopeId+'">'+currentLocation.origin+'/'+slopeId+'</a></p>';
 
             document.getElementById("markerModalLabel").innerHTML= json.data.title;

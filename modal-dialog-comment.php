@@ -13,7 +13,6 @@
                     <div id="formErrors" class="alert alert-danger d-none"></div>
                     <input type="hidden" id="slopeId" name="slopeId">
 
-
                     <!-- Token CSRF -->
                     <input type="hidden" id="csrf_token" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES) ?>">
 
@@ -26,7 +25,7 @@
                         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                     </div>
 
-
+                    <div>Votre commentaire sera visible immédiatement sur la fiche de la pente. Il sera modéré ultérieurement.</div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>

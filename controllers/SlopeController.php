@@ -8,6 +8,7 @@ use IntlDateFormatter;
 use controllers\WeatherForecastController;
 use models\Comment;
 use models\Slope;
+use models\SlopeUpdate;
 use models\SlopePicture;
 use models\Statistic;
 use models\WeatherForecast;
@@ -15,6 +16,7 @@ use function jsonResponse;
 
 require_once __DIR__ . '/../models/Comment.php';
 require_once __DIR__ . '/../models/Slope.php';
+require_once __DIR__ . '/../models/SlopeUpdate.php';
 require_once __DIR__ . '/../models/Statistic.php';
 require_once __DIR__ . '/../models/SlopePicture.php';
 require_once __DIR__ . '/../models/WeatherForecast.php';
@@ -556,43 +558,98 @@ class SlopeController
         }
 
         try {
-            $slopeId = slope::insert($input);
 
-            // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
-            require_once 'helpers/mailer.php';
 
-            $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
-                === 'on' ? "https" : "http") .
-                "://" . $_SERVER['HTTP_HOST'];
-            $slopeUrl = $serverName . "/" . $slopeId;
+            if (isset($input['edit_slopeId']) && $input['edit_slopeId'] > 0) {
+                // Edit pente existante
+                // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
+                require_once 'helpers/mailer.php';
 
-            if (!empty($input['addBy'])) {
-                // Construction contenu email
-                $email_vars = array(
-                    'NAME' => $input['name'],
-                    'SLOPEID' => $slopeId,
-                    'EMAIL' => $input['addBy'],
-                    'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
-                    'SLOPEURL' => $slopeUrl
-                );
-                $body = file_get_contents('./mail-templates/newslope.html');
-                if(isset($email_vars)){
-                    foreach($email_vars as $k=>$v){
-                        $body = str_replace('{'.strtoupper($k).'}', $v, $body);
+                $slopeId = $input['edit_slopeId'];
+
+                $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+                    === 'on' ? "https" : "http") .
+                    "://" . $_SERVER['HTTP_HOST'];
+
+
+                $requestId = SlopeUpdate::insert($slopeId, $input);
+                $slopeUrl = $serverName . "/" . $slopeId;
+                $slopeReviewUrl= $serverName . "/diff/" . $requestId;
+
+                if (!empty($input['addBy'])) {
+                    // Construction contenu email
+                    $email_vars = array(
+                        'NAME' => $input['name'],
+                        'SLOPEID' => $slopeId,
+                        'EMAIL' => $input['addBy'],
+                        'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
+                        'REQUESTID' => $requestId,
+                        'EDITREVIEWURL' => $slopeReviewUrl,
+                        'SLOPEURL' => $slopeUrl,
+                        'DATA' => json_encode($input)
+                    );
+                    $body = file_get_contents('./mail-templates/editslope.html');
+                    if(isset($email_vars)){
+                        foreach($email_vars as $k=>$v){
+                            $body = str_replace('{'.strtoupper($k).'}', $v, $body);
+                        }
                     }
-                }
-                $altBody = strip_tags($body);
+                    $altBody = strip_tags($body);
 
-                // Expédition email
-                $mail = getMailer();
-                $mail->setFrom('rcslopesadmin@windfoilfan.com', 'FinessePlus');
-                $mail->addAddress($input['addBy'], $input['addBy']);
-                $mail->addCC(MAIL_ADMIN);
-                $mail->Subject = 'FinessePlus - Enregistrement site #'.$slopeId;
-                $mail->isHTML(TRUE);
-                $mail->Body = $body;
-                $mail->AltBody = $altBody;
-                $mail->send();
+                    // Expédition email
+                    $mail = getMailer();
+                    $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
+                    $mail->addAddress($input['addBy'], $input['addBy']);
+                    $mail->addCC(MAIL_ADMIN);
+                    $mail->Subject = 'FinessePlus - Edit site #'.$slopeId;
+                    $mail->isHTML(TRUE);
+                    $mail->Body = $body;
+                    $mail->AltBody = $altBody;
+                    $mail->send();
+                }
+            }
+            else
+            {
+                // Nouvelle pente
+                $slopeId = slope::insert($input);
+
+                // pente enregistrée avec succès > envoi d'un mail récapitulatif à l'émetteur
+                require_once 'helpers/mailer.php';
+
+                $serverName = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+                    === 'on' ? "https" : "http") .
+                    "://" . $_SERVER['HTTP_HOST'];
+                $slopeUrl = $serverName . "/" . $slopeId;
+
+                if (!empty($input['addBy'])) {
+                    // Construction contenu email
+                    $email_vars = array(
+                        'NAME' => $input['name'],
+                        'SLOPEID' => $slopeId,
+                        'EMAIL' => $input['addBy'],
+                        'MAILADMIN' => MAIL_ADMIN,   // défini dans le fichier config du mailer
+                        'SLOPEURL' => $slopeUrl
+                    );
+                    $body = file_get_contents('./mail-templates/newslope.html');
+                    if(isset($email_vars)){
+                        foreach($email_vars as $k=>$v){
+                            $body = str_replace('{'.strtoupper($k).'}', $v, $body);
+                        }
+                    }
+                    $altBody = strip_tags($body);
+
+                    // Expédition email
+                    $mail = getMailer();
+                    $mail->setFrom(MAIL_ADMIN, 'FinessePlus');
+                    $mail->addAddress($input['addBy'], $input['addBy']);
+                    $mail->addCC(MAIL_ADMIN);
+                    $mail->Subject = 'FinessePlus - Enregistrement site #'.$slopeId;
+                    $mail->isHTML(TRUE);
+                    $mail->Body = $body;
+                    $mail->AltBody = $altBody;
+                    $mail->send();
+                }
+
             }
 
             jsonResponse(['success' => true,'id'  => $slopeId], 201);
@@ -742,6 +799,32 @@ class SlopeController
                 $errors[] = "L'adresse email n'est pas valide.";
             }
         }
+        if (empty($body['newslope_slopeSize'])) {
+            $errors[] = 'Indiquez svp la hauteur de la pente.';
+        }
+        if (empty($body['newslope_slopeSurface'])) {
+            $errors[] = 'Indiquez svp la surface de posé.';
+        }
+        if (empty($body['newslope_slopeCompatibility'])) {
+            $errors[] = 'Indiquez svp la compatibilité type de planeur.';
+        }
+        if (empty($body['newslope_moulinette'])) {
+            $errors[] = 'Indiquez svp la nécessité de motorisation.';
+        }
+        if (empty($body['newslope_slopeGap'])) {
+            $errors[] = 'Indiquez svp l\'accès au trou.';
+        }
+        if (empty($body['newslope_slopePark'])) {
+            $errors[] = 'Indiquez svp l\'accès depuis le stationnement.';
+        }
+        if (empty($body['newslope_slopeAccess'])) {
+            $errors[] = 'Indiquez svp l\'accès au stationnement.';
+        }
+        if (empty($body['newslope_season'])) {
+            $errors[] = 'Indiquez svp les période d\'utilisabilité.';
+        }
+
+
         if (isset($body['newslope_orient']) &&  strlen($body['newslope_orient'])>0 ) {
             $orientStr = trim(preg_replace ("/\s+/", " ", $body['newslope_orient'])); // suppression des doubles espaces
             $orients = explode(" ", $orientStr);
@@ -767,6 +850,10 @@ class SlopeController
     private function sanitize(array $body): array
     {
         $data = [];
+
+        if (isset($body['edit_slopeId'])) {
+            $data['edit_slopeId'] = (int)$body['edit_slopeId'];
+        }
 
         if (isset($body['newslope_name'])) {
             $data['name'] = trim(strip_tags($body['newslope_name']));
@@ -867,19 +954,19 @@ class SlopeController
             $data['slope_season'] = trim($body['newslope_season']);
         }
         if (isset($body['newslope_slopeInfo'])) {
-            $data['desc_fr'] = trim($body['newslope_slopeInfo']);
+            $data['desc_fr'] = strip_tags($body['newslope_slopeInfo']);
         }
         if (isset($body['newslope_slopeInfoEn'])) {
-            $data['desc_en'] = trim($body['newslope_slopeInfoEn']);
+            $data['desc_en'] = strip_tags($body['newslope_slopeInfoEn']);
         }
         if (isset($body['newslope_access'])) {
-            $data['desc_fr_access'] = trim($body['newslope_access']);
+            $data['desc_fr_access'] = strip_tags($body['newslope_access']);
         }
         if (isset($body['newslope_flight'])) {
-            $data['desc_fr_flight'] = trim($body['newslope_flight']);
+            $data['desc_fr_flight'] = strip_tags($body['newslope_flight']);
         }
         if (isset($body['newslope_landing'])) {
-            $data['desc_fr_landing'] = trim($body['newslope_landing']);
+            $data['desc_fr_landing'] = strip_tags($body['newslope_landing']);
         }
         return $data;
     }

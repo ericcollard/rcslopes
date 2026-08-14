@@ -61,6 +61,18 @@ if ($method === 'GET' && ($uri === '' || preg_match('#^/(\d+)$#', $uri, $request
 exit;
 }
 
+// Route mise à jour données pentes
+
+use controllers\SlopeUpdateController;
+require_once __DIR__ . '/controllers/SlopeUpdateController.php';
+if ($method === 'GET' && preg_match('#^/diff/(\d+)$#', $uri, $m)) {
+    $SlopeUpdateController = new SlopeUpdateController();
+    $id = (int) $m[1];
+    $SlopeUpdateController->ShowDiff($id);
+    exit;
+}
+
+
 // ── Routes API ────────────────────────────────────────────────
 // En-têtes JSON + CORS (uniquement pour les routes /api/*)
 

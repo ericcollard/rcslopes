@@ -65,6 +65,16 @@ $formErrors = $formErrors ?? [];
                       <?= !empty($colDef['required']) ? 'required' : '' ?>><?= e((string) $value) ?></textarea>
                         <?php break;
 
+                    case 'json': ?>
+                        <textarea class="form-control <?= $hasError ? 'is-invalid' : '' ?>"
+                                  id="field_<?= e($colName) ?>" name="<?= e($colName) ?>" rows="10"
+                      <?= !empty($colDef['required']) ? 'required' : '' ?>><?= e((string) $value) ?></textarea>
+                        <div >Données des-encodées </div>
+                        <?php foreach (json_decode($value) as $key => $value): ?>
+                            <div><b><?= e($key) ?></b> : <?= e($value) ?></div>
+                        <?php endforeach; ?>
+                        <?php break;
+
                     case 'wysiwyg': ?>
                         <textarea class="form-control rcs-wysiwyg <?= $hasError ? 'is-invalid' : '' ?>"
                                   id="field_<?= e($colName) ?>" name="<?= e($colName) ?>" rows="10"><?= /* HTML non échappé : c'est le contenu HTML lui-même destiné à TinyMCE */ ($value ?? '') ?></textarea>

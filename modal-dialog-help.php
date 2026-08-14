@@ -245,11 +245,14 @@
                             <li>V2.1 > Fond de carte OpenTopoMap backup par défaut (suite pb du server OpenTopoMap)</li>
                             <li>V2.1 > Nouveau menu spécifique pour l'aide aux ajouts / commentaires</li>
                             <li>V2.1 > Pré-remplissage du mail pour l'ajout de photos</li>
-                            <li>V2.1 > Comptage des vues sur sur 1 an glissant</li>
+                            <li>V2.1 > Comptage des vues sur 1 an glissant</li>
                             <li>V2.1 > Possibilité de noter les pentes (rating)</li>
                             <li>V2.1 > Identification en rouge des pentes avec photos</li>
                             <li>V2.1 > marqueurs semi-transparents pour plus de lisibilité</li>
                             <li>V2.1 > Liste des dernières modifications (page aide)</li>
+                            <li>V2.2 > Mise à jour des champs dans la base de donnée</li>
+                            <li>V2.2 > Nouveau formulaire de mise à jour des pentes</li>
+                            <li>V2.2 > Envoi des emails via le SMTP validé pour le domaine FinessePlus.org</li>
                         </ul>
                     </div>
                 </div>

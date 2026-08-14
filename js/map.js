@@ -1,11 +1,11 @@
 
 
 // Instance Bootstrap réutilisable
-const markerModalEl = document.getElementById('markerModal');
-const markerModal = new bootstrap.Modal(markerModalEl);
+var markerModalEl = document.getElementById('markerModal');
+var markerModal = new bootstrap.Modal(markerModalEl);
 
-const newslopeModalEl = document.getElementById('newslopeModal');
-const newslopeModal = new bootstrap.Modal(newslopeModalEl);
+var newslopeModalEl = document.getElementById('newslopeModal');
+var newslopeModal = new bootstrap.Modal(newslopeModalEl);
 
 // DEFINITION DES FONDS DE CARTE
 var osmFrTile = L.tileLayer('//{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {

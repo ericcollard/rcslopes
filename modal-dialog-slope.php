@@ -18,8 +18,9 @@
                         </div>
                         <div class="col-6 buttons-wrapper align-bottom">
                             <a class="btn btn-warning btn-sm mb-2" id="modal-edit-button"
-                               href="#" target="_blank" role="button"><i class="bi bi-lock-fill"></i> Editer</a>
-                            <button class="btn btn-info btn-sm mb-2" data-bs-target="#commentModal" data-bs-toggle="modal">Ajout commentaire</button>
+                               href="#" target="_blank" role="button"><i class="bi bi-lock-fill"></i> Admin</a>
+                            <button class="btn btn-info btn-sm mb-2" id="slope-edit-button">Modifier</button>
+                            <button class="btn btn-info btn-sm mb-2" data-bs-target="#commentModal" data-bs-toggle="modal">Commenter</button>
                             <a class="btn btn-info btn-sm mb-2" id="modal-picture-button"
                                href="#" target="_blank" role="button"><i class="bi bi-images"></i> Ajout photos</a>
                             <button type="button" class="btn btn-primary  btn-sm mb-2" data-bs-dismiss="modal">Fermer</button>

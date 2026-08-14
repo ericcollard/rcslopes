@@ -85,7 +85,7 @@ final class TableRegistry
                     ],
                     'slope_park' => [
                         'label' => 'Accès à pied', 'type' => 'select',
-                        'options' => ['Proximité immédiate' => 'Proximité immédiate', 'Moins de 30mn de marche' => 'Moins de 30mn de marche', 'De 30 à 60mn de marche' => 'De 30 à 60mn de marche', 'Plus de 60mn de marche'=>'Plus de 60mn de marche'],
+                        'options' => ['Proximité immédiate' => 'Proximité immédiate', 'Moins de 30 minutes de marche' => 'Moins de 30 minutes de marche', 'De 30 à 60 minutes de marche' => 'De 30 à 60 minutes de marche', 'Plus de 60 minutes de marche'=>'Plus de 60 minutes de marche'],
                         'required' => false,
                         'allow_custom' => true,
                     ],
@@ -97,7 +97,7 @@ final class TableRegistry
                     ],
                     'slope_car_access' => [
                         'label' => 'Accès en voiture', 'type' => 'select',
-                        'options' => ['Chemin court - tout véhicule' => 'Chemin court - tout véhicule', 'Piste caillouteuse, moins de 1km' => 'Piste caillouteuse, moins de 1km', 'Piste caillouteuse, plus de 1km'=> 'Piste caillouteuse, plus de 1km', 'Véhicule tout terrain recommandé' => 'Véhicule tout terrain recommandé'],
+                        'options' => ['Route' => 'Route', 'Chemin court - tout véhicule' => 'Chemin court - tout véhicule', 'Piste caillouteuse, moins de 1km' => 'Piste caillouteuse, moins de 1km', 'Piste caillouteuse, plus de 1km'=> 'Piste caillouteuse, plus de 1km', 'Véhicule tout terrain recommandé' => 'Véhicule tout terrain recommandé'],
                         'required' => false,
                         'allow_custom' => true,
                     ],
@@ -243,6 +243,44 @@ final class TableRegistry
                         'options' => ['active' => 'Actif', 'disabled' => 'Archivé', 'new' => 'A modérer'],
                         'required' => true,
                         'allow_custom' => false,
+                    ],
+                ],
+            ],
+
+            // -----------------------------------------------------------
+            // Table : slope_updates
+            // -----------------------------------------------------------
+            'slope_updates' => [
+                'label'       => 'Demande de modifications',
+                'icon'        => 'bi-image-fill',
+                'primary_key' => 'id',
+                'pk_auto'     => true, // PAS d'AUTO_INCREMENT : géré manuellement (MAX+1)
+                'order_by'    => 'id DESC',
+                'list_columns' => ['id', 'slopeId', 'text','status','created_at'],
+                'search_columns' => ['slopeId'],
+                'columns' => [
+                    'id' => [
+                        'label' => 'ID', 'type' => 'hidden', 'editable' => false,
+                    ],
+                    'slopeId' => [
+                        'label' => 'Site (slopeId)', 'type' => 'lookup', 'required' => true,
+                        'lookup_table' => 'slopes', 'lookup_pk' => 'slopeId', 'lookup_label' => 'name',
+                    ],
+                    'status' => [
+                        'label' => 'Statut', 'type' => 'select',
+                        'options' => ['closed' => 'Traité', 'new' => 'A modérer'],
+                        'required' => true,
+                        'allow_custom' => false,
+                    ],
+                    'text' => [
+                        'label' => 'Demande', 'type' => 'json',
+                    ],
+
+                    'created_at' => [
+                        'label' => 'Créé le', 'type' => 'datetime', 'editable' => false, 'auto_on_create' => true,
+                    ],
+                    'updated_at' => [
+                        'label' => 'Mis à jour le', 'type' => 'datetime', 'editable' => false, 'auto_always' => true,
                     ],
                 ],
             ],

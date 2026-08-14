@@ -140,6 +140,7 @@ final class FormProcessor
 
                 case 'textarea':
                 case 'text':
+                case 'json':
                 default:
                     $value = trim((string) ($raw ?? ''));
                     if (isset($colDef['maxlength']) && mb_strlen($value) > $colDef['maxlength']) {
