@@ -19,34 +19,8 @@ use models\WeatherForecast;
 use models\Statistic;
 
 
-echo SlopeUpdateController::showUpdateTable(6);
-
-
-//$rating = Statistic::getRateBySlopeId(125);
-
-//var_dump($rating);
-
-/*
-require_once 'helpers/mailer.php';
-$mail = getMailer();
-
-
-$mail->setFrom('admin@finesseplus.org', 'FinessPlus');
-$mail->addAddress('destinataire@gmail.com', 'Moi');
-$mail->Subject = 'Test envoi mail 7';
-// Définir le HTML
-$mail->isHTML(TRUE);
-$mail->Body = '<html>Bonjour, nous sommes heureux de <br>confirmer votre réservation.</br> Veuillez vérifier le document en pièce jointe.</html>';
-$mail->AltBody = 'Bonjour, nous sommes heureux de confirmer votre réservation. Veuillez vérifier le document en pièce jointe.';
-
-// envoyer le message
-if (!$mail->send()) {
-    echo 'Le message n\'a pas pu être envoyé . ';
-    echo 'Erreur du Mailer : ' . $mail->ErrorInfo;
-} else {
-    echo 'Le message a été envoyé';
-}
-*/
+$slopeController = new SlopeController();
+var_dump($slopeController->showHtml(59));
 
 
 /*
@@ -100,35 +74,5 @@ if(curl_error($ch)) {
 }
 */
 
-//$slopes = Slope::normalize();
-//var_dump($slopes);
-//$slopeController = new SlopeController();
-//var_dump($slopeController->showHtml(59));
-//$slopesData = $slopeController->get(10,700, 1);
-//var_dump($slopesData);
-//$data = $meteoHelper->fetchForSlopes($slopesData);
-//var_dump($data);
-
-//$slopeWeatherData = WeatherForecast::getBySlopeId(3);
-//var_dump($slopeWeatherData);
-
-//var_dump($slopeController->get());
-
-//$controller = new WeatherForecastController();
-//$slopeWeatherData =  $controller->getBySlopeId(3,1);
-//var_dump($slopeWeatherData);
-//$weatherStr = $slopeController->getWeatherforecastHtml($slopeWeatherData);
-//var_dump($weatherStr);
-/*
-$slopesData = [
-    ['slope_id' => 1, 'latitude' => 52.52, 'longitude' =>13.41 ],
-    ['slope_id' => 2, 'latitude' => 50.12, 'longitude' =>8.68 ],
-    ['slope_id' => 3, 'latitude' => 53.55, 'longitude' =>9.99 ]
-];
-
-$data = $meteoHelper->fetchForSlopes($slopesData);
-$formatted = $meteoHelper->formatSlopesData($data);
-var_dump($formatted);
-*/
 
 

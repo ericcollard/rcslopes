@@ -46,7 +46,7 @@ class OpenMeteoHelper {
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        curl_close($ch);
+        //curl_close($ch);  // déprécié depuis PHP 8.5
 
         if ($httpCode == 200 && $response) {
             $apiSlopesWeatherData = json_decode($response, true);
